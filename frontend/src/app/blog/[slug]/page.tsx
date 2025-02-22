@@ -1,48 +1,24 @@
-import path from "node:path";
-import { readFile, readdir } from "node:fs/promises";
-import { compileMDX } from "next-mdx-remote/rsc";
+import { notFound } from "next/navigation";
+import { Metadata } from "next/types";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
+import { TbRefresh, TbCalendar } from "react-icons/tb";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import remarkGfm from "remark-gfm";
+import rehypeToc, { HtmlElementNode } from "rehype-toc";
 
-type FrontMatter = {
-  title: string;
-  slug: string;
-  tags: string[];
-  published: boolean;
-  deleted: boolean;
-  publishedAt: string;
-  lastEditedAt: string;
-  views: number;
-};
+import { getSlugs, loadMDX } from "@/libs/posts";
+import { Tag } from "@/components/Tag";
+import { Datetime } from "@/components/Datetime";
+import { PcToc } from "@/components/PcToc";
+import { Paragraph } from "@/components/MarkdownRenderer/Paragraph";
+import { Adsense } from "@/components/Adsense";
 
 export async function generateStaticParams() {
-  const postDirPath = path.join(
-    process.cwd(),
-    `../../blog-contents/contents/tech-blog`
-  );
-  const postFiles = await readdir(postDirPath);
-  const postFilesWithoutExtension = postFiles.map((file) =>
-    path.basename(file, path.extname(file))
-  );
-
-  return postFilesWithoutExtension.map((slug) => {
+  const slugs = await getSlugs();
+  return slugs.map((slug) => {
     return { slug };
-  });
-}
-
-async function loadMDX(filename: string) {
-  const filepath = path.join(
-    process.cwd(),
-    // TODO: mdがない場合、mdxを読み込むようにする
-    `../blog-contents/contents/tech-blog/${filename}.md`
-  );
-  console.log("filepath", filepath);
-  const data = await readFile(filepath, { encoding: "utf-8" });
-  // TODO: remark,rehypeのプラグインを指定する場合、
-  // front-matterもパースする場合、ここで指定する
-  return compileMDX<FrontMatter>({
-    source: data,
-    options: {
-      parseFrontmatter: true,
-    },
   });
 }
 
@@ -50,10 +26,185 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+export const generateMetadata = async ({
+  params,
+}: Props): Promise<Metadata> => {
+  const { slug } = await params;
+  const mdx = await loadMDX(slug);
+
+  if (!mdx) return notFound();
+
+  const { frontmatter } = mdx;
+
+  return {
+    title: frontmatter.title,
+    description: frontmatter.title,
+    alternates: {
+      canonical: `https://sokes-nook.net/blog/${params.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      url: `/blog/${slug}`,
+      title: frontmatter.title,
+      description: frontmatter.title,
+      publishedTime: frontmatter.publishedAt,
+      modifiedTime: frontmatter.updatedAt,
+      tags: frontmatter.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      creator: `@soken_nowi`,
+    },
+  };
+};
+
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const mdx = await loadMDX(slug);
-  const metaInfo = mdx.frontmatter;
-  console.log("metaInfo", metaInfo);
-  return <>{mdx.content}</>;
+
+  if (!mdx) return notFound();
+
+  const { frontmatter, content } = mdx;
+
+  const publishedDate = new Date(frontmatter.publishedAt);
+  const lastEditedDate = new Date(frontmatter.updatedAt);
+  const isShowEditTime =
+    publishedDate < lastEditedDate &&
+    publishedDate.toISOString().slice(0, 10) !==
+      lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
+
+  return (
+    <article
+      className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32"
+      data-pagefind-body // pagefindの検索対象に指定
+    >
+      <div className="flex w-full md:w-9/12 flex-col mx-auto mb-2 text-left">
+        <div className="mb-5 border-b border-gray-200">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <div className="text-gray-600 flex dark:text-neutral-400 mr-3">
+              <TbCalendar size={20} className="" />
+              <Datetime
+                className="text-gray-600  dark:text-neutral-400"
+                datetime={frontmatter.publishedAt}
+                format="yyyy/MM/dd"
+              />
+              {isShowEditTime && <TbRefresh size={20} className="ml-3" />}
+              {frontmatter.updatedAt && isShowEditTime && (
+                <Datetime
+                  datetime={frontmatter.updatedAt}
+                  format="yyyy/MM/dd"
+                />
+              )}
+            </div>
+
+            <div className="flex">
+              {frontmatter.tags.map((tag, i) => (
+                <span key={i} className="pb-1 ml-1">
+                  <Tag tag={tag} />
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <header className="flex flex-col-reverse gap-1 mb-4">
+          <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
+        </header>
+        <div className="post prose dark:prose-invert">
+          <ReactMarkdown
+            urlTransform={(value: string) => value} // base64形式の画像に対応 ref. https://github.com/remarkjs/react-markdown/issues/774
+            rehypePlugins={[
+              rehypeRaw,
+              rehypeSlug,
+              [
+                // スマホ画面用の目次
+                rehypeToc as any,
+                {
+                  headings: ["h1", "h2", "h3"],
+                  cssClasses: {
+                    toc: "sp-toc",
+                    list: "sp-toc-list",
+                    listItem: "sp-toc-list-item",
+                    link: "sp-toc-link",
+                  },
+                  customizeTOC: (toc: HtmlElementNode) => {
+                    return {
+                      type: "element",
+                      tagName: "div",
+                      properties: {
+                        className:
+                          "mb-4 border-b border-neutral-300 dark:border-neutral-800",
+                        id: "sp-toc",
+                      },
+                      children: [
+                        {
+                          type: "element",
+                          tagName: "p",
+                          properties: {
+                            className:
+                              "mt-0 mb-0 text-xl font-bold tracking-tight translate-y-4",
+                          },
+                          children: [
+                            {
+                              type: "text",
+                              value: "目次",
+                            },
+                          ],
+                        },
+                        ...(toc.children || []),
+                      ],
+                    };
+                  },
+                },
+              ],
+            ]}
+            remarkPlugins={[remarkGfm]}
+            components={{
+              p: Paragraph,
+              h1: ({ ...props }) => {
+                return (
+                  <h1 {...props.node?.properties} className="mt-6">
+                    {props.children}
+                  </h1>
+                );
+              },
+              code: ({ node, className, children, style, ref, ...props }) => {
+                const match = /language-(\w+)/.exec(className || "");
+                return match ? (
+                  <SyntaxHighlighter
+                    language={match[1]}
+                    PreTag="div"
+                    {...props}
+                    style={oneDark}
+                  >
+                    {String(children).replace(/\n$/, "")}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              },
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
+
+        <div className="relative left-0 mt-10">
+          <div className="border-t absolute left-0 w-full border-gray-200 dark:border-neutral-700" />
+          <div className="mt-4">
+            <Adsense isVertical={false} />
+          </div>
+        </div>
+      </div>
+      <div className="hidden sticky top-0 self-start md:block md:w-3/12">
+        <div className="pt-16 ml-8">
+          <PcToc />
+        </div>
+        {/* <div className="pt-10 ml-10">
+        <Adsense isVertical={true} />
+      </div> */}
+      </div>
+    </article>
+  );
 }
