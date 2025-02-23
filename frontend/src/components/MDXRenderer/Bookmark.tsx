@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import he from "he";
 import { SITE_URL } from "@/constants";
 import { fetchSiteMetadata, getFaviconUrl } from "./utils";
 
@@ -18,6 +19,8 @@ const BookmarkInner: React.FC<Props> = async ({ href }) => {
   const url = new URL(href, SITE_URL); // hrefを相対パスで指定された場合は SITE_URL利用されるようにする
   const metadata = await fetchSiteMetadata(url.href);
 
+  console.log("bookmark metadata", metadata);
+
   if (!metadata) {
     return <BookmarkError href={href} />;
   }
@@ -31,7 +34,7 @@ const BookmarkInner: React.FC<Props> = async ({ href }) => {
     >
       <div className="flex flex-col p-2 flex-1 h-full hover:opacity-80">
         <div className="font-bold line-clamp-3 break-words">
-          {metadata.title ? metadata.title : metadata.url}
+          {he.decode(metadata.title ? metadata.title : metadata.url)}
         </div>
 
         <div className="flex-1 mt-2">
