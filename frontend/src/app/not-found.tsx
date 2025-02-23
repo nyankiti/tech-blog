@@ -1,5 +1,4 @@
 "use client";
-import { Metadata } from "next";
 import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { useEffect } from "react";
@@ -51,14 +50,3 @@ export default function NotFound() {
     </div>
   );
 }
-
-export const metadata: Metadata = {
-  robots: "noindex",
-  title: "Not Found",
-  description: "指定されたページが見つかりませんでした",
-  openGraph: {
-    type: "website",
-    title: "Not Found",
-    description: "指定されたページが見つかりませんでした",
-  },
-};

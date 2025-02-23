@@ -15,7 +15,7 @@ export const Adsense = ({ isVertical }: Props) => {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
     }
-  }, []);
+  }, [isProdEnv]);
 
   return (
     <div>
