@@ -5,7 +5,7 @@ import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { FrontMatter, readFileFromMdorMds } from "@/libs/posts";
-import { Paragraph } from "@/components/MDXRenderer/Paragraph";
+// import { Paragraph } from "@/components/MDXRenderer/Paragraph";
 
 export const loadMDX = async (slug: string) => {
   try {
@@ -15,7 +15,7 @@ export const loadMDX = async (slug: string) => {
     return compileMDX<FrontMatter>({
       source: fileContent,
       components: {
-        p: Paragraph,
+        // p: Paragraph,
         h1: ({ ...props }) => {
           return (
             <h1 {...props.node?.properties} className="mt-6">
