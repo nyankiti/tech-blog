@@ -61,26 +61,6 @@ export const getSlugs = async (): Promise<string[]> => {
   return postFiles.map((file) => path.basename(file, path.extname(file)));
 };
 
-export const loadMDX = async (filename: string) => {
-  try {
-    const filepath = path.join(
-      process.cwd(),
-      // TODO: mdがない場合、mdxを読み込むようにする
-      `../blog-contents/contents/tech-blog/${filename}.md`
-    );
-    console.log("filepath", filepath);
-    const data = await readFile(filepath, { encoding: "utf-8" });
-    return compileMDX<FrontMatter>({
-      source: data,
-      options: {
-        parseFrontmatter: true,
-      },
-    });
-  } catch {
-    return undefined;
-  }
-};
-
 // 全てのタグ
 export const TAGS = Array.from(
   new Set(

@@ -1,19 +1,12 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import { TbRefresh, TbCalendar } from "react-icons/tb";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import remarkGfm from "remark-gfm";
-import rehypeToc, { HtmlElementNode } from "rehype-toc";
-
-import { getSlugs, loadMDX } from "@/libs/posts";
+import { getSlugs } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { PcToc } from "@/components/PcToc";
-import { Paragraph } from "@/components/MarkdownRenderer/Paragraph";
 import { Adsense } from "@/components/Adsense";
+import { loadMDX } from "./mdx-loader";
 
 export async function generateStaticParams() {
   const slugs = await getSlugs();
@@ -40,7 +33,7 @@ export const generateMetadata = async ({
     title: frontmatter.title,
     description: frontmatter.title,
     alternates: {
-      canonical: `https://sokes-nook.net/blog/${params.slug}`,
+      canonical: `https://sokes-nook.net/blog/${slug}`,
     },
     openGraph: {
       type: "article",
@@ -109,86 +102,7 @@ export default async function Page({ params }: Props) {
         <header className="flex flex-col-reverse gap-1 mb-4">
           <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
         </header>
-        <div className="post prose dark:prose-invert">
-          <ReactMarkdown
-            urlTransform={(value: string) => value} // base64形式の画像に対応 ref. https://github.com/remarkjs/react-markdown/issues/774
-            rehypePlugins={[
-              rehypeRaw,
-              rehypeSlug,
-              [
-                // スマホ画面用の目次
-                rehypeToc as any,
-                {
-                  headings: ["h1", "h2", "h3"],
-                  cssClasses: {
-                    toc: "sp-toc",
-                    list: "sp-toc-list",
-                    listItem: "sp-toc-list-item",
-                    link: "sp-toc-link",
-                  },
-                  customizeTOC: (toc: HtmlElementNode) => {
-                    return {
-                      type: "element",
-                      tagName: "div",
-                      properties: {
-                        className:
-                          "mb-4 border-b border-neutral-300 dark:border-neutral-800",
-                        id: "sp-toc",
-                      },
-                      children: [
-                        {
-                          type: "element",
-                          tagName: "p",
-                          properties: {
-                            className:
-                              "mt-0 mb-0 text-xl font-bold tracking-tight translate-y-4",
-                          },
-                          children: [
-                            {
-                              type: "text",
-                              value: "目次",
-                            },
-                          ],
-                        },
-                        ...(toc.children || []),
-                      ],
-                    };
-                  },
-                },
-              ],
-            ]}
-            remarkPlugins={[remarkGfm]}
-            components={{
-              p: Paragraph,
-              h1: ({ ...props }) => {
-                return (
-                  <h1 {...props.node?.properties} className="mt-6">
-                    {props.children}
-                  </h1>
-                );
-              },
-              code: ({ node, className, children, style, ref, ...props }) => {
-                const match = /language-(\w+)/.exec(className || "");
-                return match ? (
-                  <SyntaxHighlighter
-                    language={match[1]}
-                    PreTag="div"
-                    {...props}
-                    style={oneDark}
-                  >
-                    {String(children).replace(/\n$/, "")}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                );
-              },
-            }}
-          >
-            {content}
-          </ReactMarkdown>
-        </div>
+        <div className="post prose dark:prose-invert">{content}</div>
 
         <div className="relative left-0 mt-10">
           <div className="border-t absolute left-0 w-full border-gray-200 dark:border-neutral-700" />
