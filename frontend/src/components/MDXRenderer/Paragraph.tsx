@@ -25,7 +25,11 @@ function isAnchorElement(
   );
 }
 
-export const Paragraph = ({ children }: { children: React.ReactNode }) => {
+export const Paragraph = async ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   // 配列チェック
   if (!children || Array.isArray(children)) {
     return <p>{children}</p>;
