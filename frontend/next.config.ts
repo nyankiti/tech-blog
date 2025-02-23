@@ -1,17 +1,8 @@
 import type { NextConfig } from "next";
-import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
   /* config options here */
   pageExtensions: ["md", "mdx", "ts", "tsx"],
-  transpilePackages: ["next-mdx-remote"],
-  images: {
-    // Googleのプロフィール画像を表示するために追加
-    domains: ["lh3.googleusercontent.com"],
-  },
-  env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  },
   reactStrictMode: true,
   async headers() {
     return [
@@ -53,9 +44,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-const withMDX = createMDX({
-  // ⚠️ next-mdx-remote で読み込むページにはここのoptionが対応していない
-});
-
-// Merge MDX config with Next.js config
-export default withMDX(nextConfig);
+export default nextConfig;

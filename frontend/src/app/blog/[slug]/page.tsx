@@ -7,6 +7,7 @@ import { Datetime } from "@/components/Datetime";
 import { PcToc } from "@/components/PcToc";
 import { Adsense } from "@/components/Adsense";
 import { loadMDX } from "./mdx-loader";
+import { MDXComponent } from "./MdxComponent";
 
 export async function generateStaticParams() {
   const slugs = await getSlugs();
@@ -57,7 +58,7 @@ export default async function Page({ params }: Props) {
 
   if (!mdx) return notFound();
 
-  const { frontmatter, content } = mdx;
+  const { frontmatter, code } = mdx;
 
   const publishedDate = new Date(frontmatter.publishedAt);
   const lastEditedDate = new Date(frontmatter.updatedAt);
@@ -102,7 +103,9 @@ export default async function Page({ params }: Props) {
         <header className="flex flex-col-reverse gap-1 mb-4">
           <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
         </header>
-        <div className="post prose dark:prose-invert">{content}</div>
+        <div className="post prose dark:prose-invert">
+          <MDXComponent code={code} />
+        </div>
 
         <div className="relative left-0 mt-10">
           <div className="border-t absolute left-0 w-full border-gray-200 dark:border-neutral-700" />

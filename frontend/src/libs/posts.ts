@@ -1,7 +1,7 @@
 import { compareDesc } from "date-fns";
 import path from "node:path";
 import { readFile, readdir } from "node:fs/promises";
-import { compileMDX } from "next-mdx-remote/rsc";
+import { bundleMDX } from "mdx-bundler";
 
 export type FrontMatter = {
   title: string;
@@ -54,9 +54,8 @@ async function compilePost(slug: string): Promise<FrontMatter | null> {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return null;
 
-    const compiledData = await compileMDX<FrontMatter>({
+    const compiledData = await bundleMDX<FrontMatter>({
       source: fileContent,
-      options: { parseFrontmatter: true },
     });
 
     return compiledData.frontmatter;
