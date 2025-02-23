@@ -1,24 +1,19 @@
-import path from "node:path";
-import { readFile } from "node:fs/promises";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { FrontMatter } from "@/libs/posts";
+import { FrontMatter, readFileFromMdorMds } from "@/libs/posts";
 import { Paragraph } from "@/components/MDXRenderer/Paragraph";
 
-export const loadMDX = async (filename: string) => {
+export const loadMDX = async (slug: string) => {
   try {
-    const filepath = path.join(
-      process.cwd(),
-      // TODO: mdがない場合、mdxを読み込むようにする
-      `../blog-contents/contents/tech-blog/${filename}.md`
-    );
-    const data = await readFile(filepath, { encoding: "utf-8" });
+    const fileContent = await readFileFromMdorMds(slug);
+    if (!fileContent) return undefined;
+
     return compileMDX<FrontMatter>({
-      source: data,
+      source: fileContent,
       components: {
         p: Paragraph,
         h1: ({ ...props }) => {

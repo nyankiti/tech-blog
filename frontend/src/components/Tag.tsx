@@ -10,7 +10,6 @@ type Props = {
 export const Tag = ({ tag, linkTo }: Props) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  // TODO: この辺りはtailwindだけで解決するのでは？ すると サーバーコンポーネントに寄せれる
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
 

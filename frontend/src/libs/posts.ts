@@ -22,28 +22,35 @@ const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
 const getPostDirPath = () =>
   path.join(process.cwd(), "../../blog-contents/contents/tech-blog");
 
+export async function readFileFromMdorMds(
+  slug: string
+): Promise<string | null> {
+  const extensions = [".md", ".mdx"];
+  let fileContent: string | null = null;
+  let usedExt: string | null = null;
+
+  for (const ext of extensions) {
+    const filepath = path.join(getPostDirPath(), `${slug}${ext}`);
+    try {
+      fileContent = await readFile(filepath, "utf-8");
+      usedExt = ext;
+      break;
+    } catch {
+      continue;
+    }
+  }
+
+  if (!fileContent || !usedExt) {
+    console.warn(`No valid file found for slug: ${slug}`);
+    return null;
+  }
+  return fileContent;
+}
+
 async function compilePost(slug: string): Promise<FrontMatter | null> {
   try {
-    // .md か .mdx ファイルを探す
-    const extensions = [".md", ".mdx"];
-    let fileContent: string | null = null;
-    let usedExt: string | null = null;
-
-    for (const ext of extensions) {
-      const filepath = path.join(getPostDirPath(), `${slug}${ext}`);
-      try {
-        fileContent = await readFile(filepath, "utf-8");
-        usedExt = ext;
-        break;
-      } catch {
-        continue;
-      }
-    }
-
-    if (!fileContent || !usedExt) {
-      console.warn(`No valid file found for slug: ${slug}`);
-      return null;
-    }
+    const fileContent = await readFileFromMdorMds(slug);
+    if (!fileContent) return null;
 
     const compiledData = await compileMDX<FrontMatter>({
       source: fileContent,
