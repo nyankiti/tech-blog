@@ -13,7 +13,6 @@ const nextConfig: NextConfig = {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
   reactStrictMode: true,
-  swcMinify: true,
   async headers() {
     return [
       {

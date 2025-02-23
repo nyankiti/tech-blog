@@ -1,9 +1,9 @@
 import { Feed } from "feed";
-import { getSortedPost } from "./posts";
+import { getSortedPosts } from "./posts";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/constants";
 
 export const generateFeed = async () => {
-  const posts = await getSortedPost();
+  const posts = await getSortedPosts();
 
   const feed = new Feed({
     id: SITE_URL.toString(),

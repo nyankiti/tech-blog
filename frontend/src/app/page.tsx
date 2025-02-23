@@ -1,10 +1,11 @@
 import { PostCard } from "@/components/PostCard";
 import { Tag } from "@/components/Tag";
 import { TitleSection } from "@/components/TitleSection";
-import { getSortedPost, TAGS } from "@/libs/posts";
+import { getSortedPosts, getTags } from "@/libs/posts";
 
 export default async function Page() {
-  const posts = await getSortedPost();
+  const posts = await getSortedPosts();
+  const tags = await getTags();
   return (
     <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
       <TitleSection />
@@ -27,7 +28,7 @@ export default async function Page() {
           <div className="my-6 border-t border-slate-200 w-full" />
           <div>
             <p>Tags</p>
-            {TAGS.map((tag, i) => (
+            {tags.map((tag, i) => (
               <Tag key={i} tag={tag} />
             ))}
           </div>

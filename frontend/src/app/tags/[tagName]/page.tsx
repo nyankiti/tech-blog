@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { TAGS, getSortedPost } from "@/libs/posts";
+import { getSortedPosts, getTags } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { PostCard } from "@/components/PostCard";
 import { TitleSection } from "@/components/TitleSection";
@@ -10,7 +10,8 @@ type Props = {
 };
 
 export const generateStaticParams = async () => {
-  return TAGS.map((tag) => ({ tagName: tag }));
+  const tags = await getTags();
+  return tags.map((tag) => ({ tagName: tag }));
 };
 
 export const generateMetadata = async ({
@@ -18,7 +19,7 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   const tagName = decodeURIComponent((await params).tagName);
 
-  const articles = (await getSortedPost()).filter((post) =>
+  const articles = (await getSortedPosts()).filter((post) =>
     post.tags.includes(tagName)
   );
 
@@ -51,9 +52,11 @@ export const generateMetadata = async ({
 const TagPage: React.FC<Props> = async ({ params }) => {
   const tagName = decodeURIComponent((await params).tagName);
 
-  const posts = (await getSortedPost()).filter((post) =>
+  const posts = (await getSortedPosts()).filter((post) =>
     post.tags.includes(tagName)
   );
+
+  const tags = await getTags();
 
   if (posts.length === 0) notFound();
 
@@ -70,7 +73,7 @@ const TagPage: React.FC<Props> = async ({ params }) => {
           )}
           <div>
             <p>Tags</p>
-            {TAGS.map((tag, i) => (
+            {tags.map((tag, i) => (
               <Tag key={i} tag={tag} />
             ))}
           </div>

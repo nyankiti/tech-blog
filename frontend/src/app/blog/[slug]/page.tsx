@@ -115,9 +115,6 @@ export default async function Page({ params }: Props) {
         <div className="pt-16 ml-8">
           <PcToc />
         </div>
-        {/* <div className="pt-10 ml-10">
-        <Adsense isVertical={true} />
-      </div> */}
       </div>
     </article>
   );

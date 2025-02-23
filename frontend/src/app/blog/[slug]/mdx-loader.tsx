@@ -53,7 +53,7 @@ export const loadMDX = async (filename: string) => {
           rehypePlugins: [
             rehypeSlug,
             [
-              rehypeToc, // TODO: この部分はapp/blog/[slug]/page.tsxに移動するべきか？
+              rehypeToc,
               {
                 headings: ["h1", "h2", "h3"],
                 cssClasses: {

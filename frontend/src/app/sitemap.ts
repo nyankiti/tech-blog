@@ -1,11 +1,11 @@
 import { SITE_URL } from "@/constants";
-import { getSortedPost } from "@/libs/posts";
+import { getSortedPosts } from "@/libs/posts";
 import type { MetadataRoute } from "next";
 
 // /sitemap.xml にアクセスすると表示される
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = SITE_URL.toString();
-  const blogs = (await getSortedPost()).map((post) => {
+  const blogs = (await getSortedPosts()).map((post) => {
     return {
       url: `${siteUrl}blog/${post.slug}`,
       lastModified: new Date(post.updatedAt ?? post.publishedAt),
