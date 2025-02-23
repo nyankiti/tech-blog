@@ -1,2 +1,10 @@
+[build]
+  command = "cd .. &&  git submodule update --remote blog-contents && cd frontend && npm run build"
+  publish = ".next"
+
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[[webhook]]
+  url = "https://api.netlify.com/build_hooks/67badafc71d0f746a8a404b3"
+  events = ["push"]
