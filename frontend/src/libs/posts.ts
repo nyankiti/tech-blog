@@ -20,10 +20,9 @@ let lastCacheTime = 0;
 const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
 
 const baseDir = process.env.BASE_DIR || process.cwd();
-console.log("baseDir", baseDir);
 
 const getPostDirPath = () =>
-  path.join(baseDir, "../../blog-contents/contents/tech-blog");
+  path.join(baseDir, "../blog-contents/contents/tech-blog");
 
 export async function readFileFromMdorMds(
   slug: string
