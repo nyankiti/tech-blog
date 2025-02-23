@@ -1,5 +1,4 @@
 import { compareDesc } from "date-fns";
-import { fileURLToPath } from "url";
 import path from "node:path";
 import { readFile, readdir } from "node:fs/promises";
 import { compileMDX } from "next-mdx-remote/rsc";
@@ -20,14 +19,11 @@ let postsCache: FrontMatter[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// ルートディレクトリを求める（このファイルが `utils` フォルダなどにあると想定）
-const projectRoot = path.resolve(__dirname, "../../../..");
+const baseDir = process.env.BASE_DIR || process.cwd();
+console.log("baseDir", baseDir);
 
 const getPostDirPath = () =>
-  path.join(projectRoot, "blog-contents/contents/tech-blog");
+  path.join(baseDir, "../../blog-contents/contents/tech-blog");
 
 export async function readFileFromMdorMds(
   slug: string
