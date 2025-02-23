@@ -5,13 +5,6 @@ const nextConfig: NextConfig = {
   /* config options here */
   pageExtensions: ["md", "mdx", "ts", "tsx"],
   transpilePackages: ["next-mdx-remote"],
-  images: {
-    // Googleのプロフィール画像を表示するために追加
-    domains: ["lh3.googleusercontent.com"],
-  },
-  env: {
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  },
   reactStrictMode: true,
   async headers() {
     return [
