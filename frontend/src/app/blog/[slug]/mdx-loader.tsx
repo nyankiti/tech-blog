@@ -76,7 +76,9 @@ export const loadMDX = async (fileContent: string) => {
         return { ...options, providerImportSource: "@mdx-js/react" };
       },
     });
-  } catch {
+  } catch (e) {
+    console.error("Failed to load MDX:", e);
+    console.log(e);
     return undefined;
   }
 };
