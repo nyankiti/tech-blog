@@ -60,10 +60,10 @@ export const generateMetadata = async ({
 export default async function Page({ params }: Props) {
   const { slug } = await params;
   const fileContent = await readFileFromMdorMds(slug);
-  if (!fileContent) return notFound();
+  // if (!fileContent) return notFound();
 
-  const mdx = await loadMDX(fileContent);
-  if (!mdx) return notFound();
+  const mdx = await loadMDX(fileContent ?? "");
+  // if (!mdx) return notFound();
 
   const { frontmatter, code } = mdx;
 
@@ -75,7 +75,7 @@ export default async function Page({ params }: Props) {
       lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
 
   // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
-  const mookmarkUrls = await extractBookmarkUrls(fileContent);
+  const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
 
   const globalMetadataMap: Record<string, SiteMetadata | null> =
     await Promise.all(
