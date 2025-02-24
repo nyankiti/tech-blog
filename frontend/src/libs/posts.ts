@@ -56,6 +56,7 @@ async function compilePost(slug: string): Promise<FrontMatter | null> {
 
     const compiledData = await bundleMDX<FrontMatter>({
       source: fileContent,
+      cwd: getPostDirPath(),
     });
 
     return compiledData.frontmatter;
