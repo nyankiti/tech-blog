@@ -1,98 +1,84 @@
-import { compileMDX } from "next-mdx-remote/rsc";
+import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { FrontMatter, readFileFromMdorMds } from "@/libs/posts";
-import { Paragraph } from "@/components/MDXRenderer/Paragraph";
+import { FrontMatter, getPostDirPath } from "@/libs/posts";
 
-export const loadMDX = async (slug: string) => {
+export const loadMDX = async (fileContent: string) => {
   try {
-    const fileContent = await readFileFromMdorMds(slug);
-    if (!fileContent) return undefined;
-
-    return compileMDX<FrontMatter>({
+    return bundleMDX<FrontMatter>({
       source: fileContent,
-      components: {
-        p: Paragraph,
-        h1: ({ ...props }) => {
-          return (
-            <h1 {...props.node?.properties} className="mt-6">
-              {props.children}
-            </h1>
-          );
+      globals: {
+        globalMetadataMap: {
+          varName: "globalMetadataMap",
         },
-        code: ({ className, children, ...props }) => {
-          const match = /language-(\w+)/.exec(className || "");
-          return match ? (
-            <SyntaxHighlighter
-              language={match[1]}
-              PreTag="div"
-              {...props}
-              style={oneDark}
-            >
-              {String(children).replace(/\n$/, "")}
-            </SyntaxHighlighter>
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          );
+        he: "he",
+        "@mdx-js/react": {
+          varName: "MdxJsReact",
+          namedExports: ["useMDXComponents"],
+          defaultExport: false,
         },
       },
-      options: {
-        parseFrontmatter: true,
-        mdxOptions: {
-          remarkPlugins: [remarkGfm],
-          rehypePlugins: [
-            rehypeSlug,
-            [
-              rehypeToc,
-              {
-                headings: ["h1", "h2", "h3"],
-                cssClasses: {
-                  toc: "sp-toc",
-                  list: "sp-toc-list",
-                  listItem: "sp-toc-list-item",
-                  link: "sp-toc-link",
-                },
-                customizeTOC: (toc: HtmlElementNode) => {
-                  return {
-                    type: "element",
-                    tagName: "div",
-                    properties: {
-                      className:
-                        "mb-4 border-b border-neutral-300 dark:border-neutral-800",
-                      id: "sp-toc",
-                    },
-                    children: [
-                      {
-                        type: "element",
-                        tagName: "p",
-                        properties: {
-                          className:
-                            "mt-0 mb-0 text-xl font-bold tracking-tight translate-y-4",
-                        },
-                        children: [
-                          {
-                            type: "text",
-                            value: "目次",
-                          },
-                        ],
-                      },
-                      ...(toc.children || []),
-                    ],
-                  };
-                },
+      esbuildOptions(options) {
+        options.define = {
+          "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV), // Reactのモードを固定
+        };
+        return options;
+      },
+      cwd: getPostDirPath(),
+      mdxOptions(options) {
+        options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
+        options.rehypePlugins = [
+          ...(options.rehypePlugins ?? []),
+          rehypeSlug,
+          [
+            rehypeToc,
+            {
+              headings: ["h1", "h2", "h3"],
+              cssClasses: {
+                toc: "sp-toc",
+                list: "sp-toc-list",
+                listItem: "sp-toc-list-item",
+                link: "sp-toc-link",
               },
-            ],
+              customizeTOC: (toc: HtmlElementNode) => {
+                return {
+                  type: "element",
+                  tagName: "div",
+                  properties: {
+                    className:
+                      "mb-4 border-b border-neutral-300 dark:border-neutral-800",
+                    id: "sp-toc",
+                  },
+                  children: [
+                    {
+                      type: "element",
+                      tagName: "p",
+                      properties: {
+                        className:
+                          "mt-0 mb-0 text-xl font-bold tracking-tight translate-y-4",
+                      },
+                      children: [
+                        {
+                          type: "text",
+                          value: "目次",
+                        },
+                      ],
+                    },
+                    ...(toc.children || []),
+                  ],
+                };
+              },
+            },
           ],
-          format: "mdx",
-        },
+        ];
+
+        return { ...options, providerImportSource: "@mdx-js/react" };
       },
     });
-  } catch {
+  } catch (e) {
+    console.error("Failed to load MDX:", e);
+    console.log(e);
     return undefined;
   }
 };

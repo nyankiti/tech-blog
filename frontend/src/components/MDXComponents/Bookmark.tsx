@@ -1,15 +1,23 @@
 "use client";
-import he from "he";
+
 import { getFaviconUrl, SiteMetadata } from "./utils";
-import { SITE_URL } from "@/constants";
+import he from "he";
 
 type Props = {
-  metadata: SiteMetadata;
   href: string;
+  siteUrl: string;
 };
 
-export const BookmarkClient = ({ metadata, href }: Props) => {
-  const url = new URL(href, SITE_URL);
+declare const globalMetadataMap: Record<string, SiteMetadata | undefined>;
+
+export const Bookmark: React.FC<Props> = ({ href, siteUrl }) => {
+  const url = new URL(href, siteUrl); // hrefを相対パスで指定された場合は SITE_URL利用されるようにする
+  // metadataMapはMDXのスコープから注入される。
+  const metadata = globalMetadataMap[url.toString()];
+  if (!metadata) {
+    return <BookmarkError href={href} />;
+  }
+
   return (
     <a
       className="not-prose flex my-1 gap-2 h-36 w-full rounded-lg border border-link-card-border overflow-hidden transition-colors duration-200 hover:border-link-card-border-hover hover:bg-link-card-bg-hover"
@@ -24,7 +32,7 @@ export const BookmarkClient = ({ metadata, href }: Props) => {
 
         <div className="flex-1 mt-2">
           <div className="text-sm line-clamp-2 overflow-wrap break-words">
-            {metadata.description}
+            {he.decode(metadata.description ?? "")}
           </div>
         </div>
 
@@ -51,6 +59,20 @@ export const BookmarkClient = ({ metadata, href }: Props) => {
           />
         </div>
       )}
+    </a>
+  );
+};
+
+const BookmarkError: React.FC<{ href: string }> = ({ href }) => {
+  return (
+    <a
+      className="flex flex-col gap-2 p-4 rounded-lg border border-link-card-border text-text-primary transition-colors duration-200 hover:border-link-card-border-hover hover:bg-link-card-bg-hover"
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+    >
+      <p className="font-medium">ページを読み込めませんでした</p>
+      <div className="text-sm text-text-secondary">{href}</div>
     </a>
   );
 };

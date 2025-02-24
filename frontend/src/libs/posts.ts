@@ -1,7 +1,7 @@
 import { compareDesc } from "date-fns";
 import path from "node:path";
 import { readFile, readdir } from "node:fs/promises";
-import { compileMDX } from "next-mdx-remote/rsc";
+import matter from "gray-matter";
 
 export type FrontMatter = {
   title: string;
@@ -19,9 +19,9 @@ let postsCache: FrontMatter[] | null = null;
 let lastCacheTime = 0;
 const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
 
-const baseDir = process.env.BASE_DIR || process.cwd();
+export const baseDir = process.env.BASE_DIR || process.cwd();
 
-const getPostDirPath = () =>
+export const getPostDirPath = () =>
   path.join(baseDir, "../blog-contents/contents/tech-blog");
 
 export async function readFileFromMdorMds(
@@ -49,22 +49,36 @@ export async function readFileFromMdorMds(
   return fileContent;
 }
 
-async function compilePost(slug: string): Promise<FrontMatter | null> {
+async function getFrontMatter(slug: string): Promise<FrontMatter | null> {
   try {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return null;
+    const { data } = matter(fileContent);
 
-    const compiledData = await compileMDX<FrontMatter>({
-      source: fileContent,
-      options: { parseFrontmatter: true },
-    });
-
-    return compiledData.frontmatter;
+    // 型アサーションで FrontMatter 型を適用
+    return data as FrontMatter;
   } catch (error) {
-    console.error(`Error compiling post ${slug}:`, error);
+    console.error("Error reading Markdown file:", error);
     return null;
   }
 }
+
+// async function compilePost(slug: string): Promise<FrontMatter | null> {
+//   try {
+//     const fileContent = await readFileFromMdorMds(slug);
+//     if (!fileContent) return null;
+
+//     const compiledData = await bundleMDX<FrontMatter>({
+//       source: fileContent,
+//       cwd: getPostDirPath(),
+//     });
+
+//     return compiledData.frontmatter;
+//   } catch (error) {
+//     console.error(`Error compiling post ${slug}:`, error);
+//     return null;
+//   }
+// }
 
 export const getAllPosts = async (): Promise<FrontMatter[]> => {
   // キャッシュが有効な場合はキャッシュを返す
@@ -79,7 +93,7 @@ export const getAllPosts = async (): Promise<FrontMatter[]> => {
     path.basename(file, path.extname(file))
   );
 
-  const frontMattersPromises = slugs.map((slug) => compilePost(slug));
+  const frontMattersPromises = slugs.map((slug) => getFrontMatter(slug));
   const frontMatters = (await Promise.all(frontMattersPromises)).filter(
     (post): post is FrontMatter => post !== null
   );

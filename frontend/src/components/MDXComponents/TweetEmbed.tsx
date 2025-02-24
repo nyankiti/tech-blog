@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, FC } from "react";
+import React from "react";
 
-// layout.tsxにて https://platform.twitter.com/widgets.js を読み込んでいる
+// layout.tsx等で https://platform.twitter.com/widgets.js を読み込む必要がある
 declare const twttr: {
   widgets: {
     load: (element?: Element) => Promise<void>;
@@ -22,12 +22,14 @@ type EmbeddedTweetProps = {
   dnt?: true;
 };
 
-export const TweetEmbed: FC<EmbeddedTweetProps> = (props) => {
-  const rootRef = useRef<HTMLDivElement>(null);
+export const TweetEmbed: React.FC<EmbeddedTweetProps> = (props) => {
+  // x.comは適切にembedされないため、twitter.comに変換する必要がある
+  const xlink = props.url.replace("x.com", "twitter.com");
+  const rootRef = React.useRef<HTMLDivElement>(null);
 
   const key = JSON.stringify(props);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (rootRef.current !== null) {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       typeof twttr !== "undefined" && twttr.widgets.load(rootRef.current);
@@ -47,8 +49,8 @@ export const TweetEmbed: FC<EmbeddedTweetProps> = (props) => {
         data-lang={props.lang}
         data-dnt={props.dnt}
       >
-        <a href={props.url} target="_blank" rel="noreferrer noopener">
-          {props.url}
+        <a href={xlink} target="_blank" rel="noreferrer noopener">
+          {xlink}
         </a>
       </blockquote>
     </div>
