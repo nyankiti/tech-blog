@@ -2,7 +2,8 @@ import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
-import { FrontMatter, getPostDirPath } from "@/libs/posts";
+import { baseDir, FrontMatter, getPostDirPath } from "@/libs/posts";
+import path from "path";
 
 export const loadMDX = async (fileContent: string) => {
   try {
@@ -21,6 +22,18 @@ export const loadMDX = async (fileContent: string) => {
           namedExports: ["useMDXComponents"],
           defaultExport: false,
         },
+      },
+      esbuildOptions(options) {
+        options.outdir = path.join(baseDir, "public");
+        options.loader = {
+          ...options.loader,
+          ".png": "file",
+          ".jpg": "file",
+          ".gif": "file",
+        };
+        // options.publicPath = imagesUrl
+        options.write = true;
+        return options;
       },
       cwd: getPostDirPath(),
       mdxOptions(options) {
