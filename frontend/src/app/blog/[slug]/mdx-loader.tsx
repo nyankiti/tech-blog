@@ -2,24 +2,22 @@ import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
-import { FrontMatter, getPostDirPath, readFileFromMdorMds } from "@/libs/posts";
+import { FrontMatter, getPostDirPath } from "@/libs/posts";
 
-const globals = {
-  "@mdx-js/react": {
-    varName: "MdxJsReact",
-    namedExports: ["useMDXComponents"],
-    defaultExport: false,
-  },
-};
-
-export const loadMDX = async (slug: string) => {
+export const loadMDX = async (fileContent: string) => {
   try {
-    const fileContent = await readFileFromMdorMds(slug);
-    if (!fileContent) return undefined;
-
     return bundleMDX<FrontMatter>({
       source: fileContent,
-      globals,
+      globals: {
+        globalMetadataMap: {
+          varName: "globalMetadataMap",
+        },
+        "@mdx-js/react": {
+          varName: "MdxJsReact",
+          namedExports: ["useMDXComponents"],
+          defaultExport: false,
+        },
+      },
       cwd: getPostDirPath(),
       mdxOptions(options) {
         options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
@@ -69,7 +67,6 @@ export const loadMDX = async (slug: string) => {
         ];
 
         return { ...options, providerImportSource: "@mdx-js/react" };
-        return options;
       },
     });
   } catch {

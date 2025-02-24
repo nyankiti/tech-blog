@@ -1,13 +1,18 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
 import { TbRefresh, TbCalendar } from "react-icons/tb";
-import { getSlugs } from "@/libs/posts";
+import { getSlugs, readFileFromMdorMds } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { PcToc } from "@/components/PcToc";
 import { Adsense } from "@/components/Adsense";
 import { loadMDX } from "./mdx-loader";
 import { MDXComponent } from "./MdxComponent";
+import { extractBookmarkUrls } from "./extract-bookmark-urls";
+import {
+  fetchSiteMetadata,
+  SiteMetadata,
+} from "@/components/MDXRenderer/utils";
 
 export async function generateStaticParams() {
   const slugs = await getSlugs();
@@ -54,8 +59,10 @@ export const generateMetadata = async ({
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const mdx = await loadMDX(slug);
+  const fileContent = await readFileFromMdorMds(slug);
+  if (!fileContent) return notFound();
 
+  const mdx = await loadMDX(fileContent);
   if (!mdx) return notFound();
 
   const { frontmatter, code } = mdx;
@@ -66,6 +73,22 @@ export default async function Page({ params }: Props) {
     publishedDate < lastEditedDate &&
     publishedDate.toISOString().slice(0, 10) !==
       lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
+
+  // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
+  const mookmarkUrls = await extractBookmarkUrls(fileContent);
+
+  const globalMetadataMap: Record<string, SiteMetadata | null> =
+    await Promise.all(
+      mookmarkUrls.map(async (url) => {
+        try {
+          const metadata = await fetchSiteMetadata(url);
+          return [url, metadata];
+        } catch (error) {
+          console.error(`Failed to fetch metadata for ${url}:`, error);
+          return [url, null];
+        }
+      })
+    ).then(Object.fromEntries);
 
   return (
     <article
@@ -104,7 +127,7 @@ export default async function Page({ params }: Props) {
           <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
         </header>
         <div className="post prose dark:prose-invert">
-          <MDXComponent code={code} />
+          <MDXComponent code={code} globalMetadataMap={globalMetadataMap} />
         </div>
 
         <div className="relative left-0 mt-10">

@@ -7,8 +7,9 @@ import { getMDXComponent } from "mdx-bundler/client";
 
 import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 import { useMemo } from "react";
+import { SiteMetadata } from "@/components/MDXRenderer/utils";
 
-const MDX_GLOBAL_CONFIG = {
+const GLOBAL_CONFIG = {
   MdxJsReact: {
     useMDXComponents,
   },
@@ -16,12 +17,13 @@ const MDX_GLOBAL_CONFIG = {
 
 type Props = {
   code: string;
+  globalMetadataMap: Record<string, SiteMetadata | null>;
 };
 
-export function MDXComponent({ code }: Props) {
+export function MDXComponent({ code, globalMetadataMap }: Props) {
   const Component = useMemo(
-    () => getMDXComponent(code, MDX_GLOBAL_CONFIG),
-    [code]
+    () => getMDXComponent(code, { ...GLOBAL_CONFIG, globalMetadataMap }),
+    [code, globalMetadataMap]
   );
 
   return (
