@@ -49,7 +49,9 @@ export async function readFileFromMdorMds(
   return fileContent;
 }
 
-async function getFrontMatter(slug: string): Promise<FrontMatter | null> {
+export async function getFrontMatter(
+  slug: string
+): Promise<FrontMatter | null> {
   try {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return null;

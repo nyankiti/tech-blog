@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
 import { TbRefresh, TbCalendar } from "react-icons/tb";
-import { getSlugs, readFileFromMdorMds } from "@/libs/posts";
+import { getFrontMatter, getSlugs, readFileFromMdorMds } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { PcToc } from "@/components/PcToc";
@@ -29,11 +29,9 @@ export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
   const { slug } = await params;
-  const mdx = await loadMDX(slug);
+  const frontmatter = await getFrontMatter(slug);
 
-  if (!mdx) return notFound();
-
-  const { frontmatter } = mdx;
+  if (!frontmatter) return notFound();
 
   return {
     title: frontmatter.title,
@@ -58,87 +56,90 @@ export const generateMetadata = async ({
 };
 
 export default async function Page({ params }: Props) {
-  const { slug } = await params;
-  const fileContent = await readFileFromMdorMds(slug);
-  // if (!fileContent) return notFound();
+  try {
+    const { slug } = await params;
+    const fileContent = await readFileFromMdorMds(slug);
+    if (!fileContent) return notFound();
 
-  const mdx = await loadMDX(fileContent ?? "");
-  // if (!mdx) return notFound();
+    const mdx = await loadMDX(fileContent);
+    const { frontmatter, code } = mdx;
 
-  const { frontmatter, code } = mdx;
+    const publishedDate = new Date(frontmatter.publishedAt);
+    const lastEditedDate = new Date(frontmatter.updatedAt);
+    const isShowEditTime =
+      publishedDate < lastEditedDate &&
+      publishedDate.toISOString().slice(0, 10) !==
+        lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
 
-  const publishedDate = new Date(frontmatter.publishedAt);
-  const lastEditedDate = new Date(frontmatter.updatedAt);
-  const isShowEditTime =
-    publishedDate < lastEditedDate &&
-    publishedDate.toISOString().slice(0, 10) !==
-      lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
+    // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
+    const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
 
-  // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
-  const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
+    const globalMetadataMap: Record<string, SiteMetadata | null> =
+      await Promise.all(
+        mookmarkUrls.map(async (url) => {
+          try {
+            const metadata = await fetchSiteMetadata(url);
+            return [url, metadata];
+          } catch (error) {
+            console.error(`Failed to fetch metadata for ${url}:`, error);
+            return [url, null];
+          }
+        })
+      ).then(Object.fromEntries);
 
-  const globalMetadataMap: Record<string, SiteMetadata | null> =
-    await Promise.all(
-      mookmarkUrls.map(async (url) => {
-        try {
-          const metadata = await fetchSiteMetadata(url);
-          return [url, metadata];
-        } catch (error) {
-          console.error(`Failed to fetch metadata for ${url}:`, error);
-          return [url, null];
-        }
-      })
-    ).then(Object.fromEntries);
-
-  return (
-    <article className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
-      <div className="flex w-full md:w-9/12 flex-col mx-auto mb-2 text-left">
-        <div className="mb-5 border-b border-gray-200">
-          <div className="flex flex-col md:flex-row md:items-center">
-            <div className="text-gray-600 flex dark:text-neutral-400 mr-3">
-              <TbCalendar size={20} className="" />
-              <Datetime
-                className="text-gray-600  dark:text-neutral-400"
-                datetime={frontmatter.publishedAt}
-                format="yyyy/MM/dd"
-              />
-              {isShowEditTime && <TbRefresh size={20} className="ml-3" />}
-              {frontmatter.updatedAt && isShowEditTime && (
+    return (
+      <article className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
+        <div className="flex w-full md:w-9/12 flex-col mx-auto mb-2 text-left">
+          <div className="mb-5 border-b border-gray-200">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <div className="text-gray-600 flex dark:text-neutral-400 mr-3">
+                <TbCalendar size={20} className="" />
                 <Datetime
-                  datetime={frontmatter.updatedAt}
+                  className="text-gray-600  dark:text-neutral-400"
+                  datetime={frontmatter.publishedAt}
                   format="yyyy/MM/dd"
                 />
-              )}
-            </div>
+                {isShowEditTime && <TbRefresh size={20} className="ml-3" />}
+                {frontmatter.updatedAt && isShowEditTime && (
+                  <Datetime
+                    datetime={frontmatter.updatedAt}
+                    format="yyyy/MM/dd"
+                  />
+                )}
+              </div>
 
-            <div className="flex">
-              {frontmatter.tags.map((tag, i) => (
-                <span key={i} className="pb-1 ml-1">
-                  <Tag tag={tag} />
-                </span>
-              ))}
+              <div className="flex">
+                {frontmatter.tags.map((tag, i) => (
+                  <span key={i} className="pb-1 ml-1">
+                    <Tag tag={tag} />
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <header className="flex flex-col-reverse gap-1 mb-4">
+            <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
+          </header>
+          <div className="post prose dark:prose-invert">
+            <MDXComponent code={code} globalMetadataMap={globalMetadataMap} />
+          </div>
+
+          <div className="relative left-0 mt-10">
+            <div className="border-t absolute left-0 w-full border-gray-200 dark:border-neutral-700" />
+            <div className="mt-4">
+              <Adsense isVertical={false} />
             </div>
           </div>
         </div>
-        <header className="flex flex-col-reverse gap-1 mb-4">
-          <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
-        </header>
-        <div className="post prose dark:prose-invert">
-          <MDXComponent code={code} globalMetadataMap={globalMetadataMap} />
-        </div>
-
-        <div className="relative left-0 mt-10">
-          <div className="border-t absolute left-0 w-full border-gray-200 dark:border-neutral-700" />
-          <div className="mt-4">
-            <Adsense isVertical={false} />
+        <div className="hidden sticky top-0 self-start md:block md:w-3/12">
+          <div className="pt-16 ml-8">
+            <PcToc />
           </div>
         </div>
-      </div>
-      <div className="hidden sticky top-0 self-start md:block md:w-3/12">
-        <div className="pt-16 ml-8">
-          <PcToc />
-        </div>
-      </div>
-    </article>
-  );
+      </article>
+    );
+  } catch (e) {
+    console.error("Failed to load MDX:", e);
+    return notFound();
+  }
 }

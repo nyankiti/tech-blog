@@ -5,7 +5,6 @@ import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import { FrontMatter, getPostDirPath } from "@/libs/posts";
 
 export const loadMDX = async (fileContent: string) => {
-  // try {
   return bundleMDX<FrontMatter>({
     source: fileContent,
     globals: {
@@ -76,9 +75,4 @@ export const loadMDX = async (fileContent: string) => {
       return { ...options, providerImportSource: "@mdx-js/react" };
     },
   });
-  // } catch (e) {
-  //   console.error("Failed to load MDX:", e);
-  //   console.log(e);
-  //   return undefined;
-  // }
 };
