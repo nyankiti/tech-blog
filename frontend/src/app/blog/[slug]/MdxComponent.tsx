@@ -1,14 +1,14 @@
 "use client";
-
+import { useMemo } from "react";
+import he from "he";
+import { getMDXComponent } from "mdx-bundler/client";
+import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
-import { Paragraph } from "@/components/MDXRenderer/Paragraph";
-import { getMDXComponent } from "mdx-bundler/client";
-import he from "he";
 
-import { MDXProvider, useMDXComponents } from "@mdx-js/react";
-import { useMemo } from "react";
-import { SiteMetadata } from "@/components/MDXRenderer/utils";
+import { SiteMetadata } from "@/components/MDXComponents/utils";
+import { TweetEmbed } from "@/components/MDXComponents/TweetEmbed";
+import { YouTubeEmbed } from "@/components/MDXComponents/YoutubeEmbed";
 
 const GLOBAL_CONFIG = {
   MdxJsReact: {
@@ -31,7 +31,6 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
   return (
     <MDXProvider
       components={{
-        p: Paragraph,
         h1: ({ ...props }) => {
           return (
             <h1 {...props.node?.properties} className="mt-6">
@@ -39,6 +38,9 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
             </h1>
           );
         },
+        // TODO: この辺りのComponentをblog-contents側によせたい
+        TweetEmbed: TweetEmbed,
+        YouTubeEmbed: YouTubeEmbed,
         code: ({ ...props }) => {
           const { className, children } = props;
           const match = /language-(\w+)/.exec(className || "");
