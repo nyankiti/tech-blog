@@ -12,7 +12,7 @@ import { extractBookmarkUrls } from "./extract-bookmark-urls";
 import {
   fetchSiteMetadata,
   SiteMetadata,
-} from "@/components/MDXRenderer/utils";
+} from "@/components/MDXComponents/utils";
 
 export async function generateStaticParams() {
   const slugs = await getSlugs();
