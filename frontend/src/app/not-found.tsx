@@ -8,7 +8,7 @@ export default function NotFound() {
   useEffect(() => {
     setTimeout(() => {
       router.push("/");
-    }, 1000);
+    }, 100000);
   });
   return (
     <div className="max-w-[50rem] flex flex-col mx-auto size-full">
