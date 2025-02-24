@@ -1,6 +1,6 @@
 import { TweetEmbed } from "./TweetEmbed";
 import { YouTubeEmbed } from "./YoutubeEmbed";
-import { Bookmark } from "./Bookmark";
+// import { Bookmark } from "@/components/MDXRenderer/Bookmark";
 import { extractTwitterUrl, extractYouTubeVideoId } from "./utils";
 
 // 型定義
@@ -34,9 +34,9 @@ export const Paragraph = ({ children }: { children: React.ReactNode }) => {
   // 型ガードを使用してAnchor要素かどうかをチェック
   if (isAnchorElement(children)) {
     // Bookmarkの場合
-    if (children.props.children === "bookmark") {
-      return <Bookmark href={children.props.href} />;
-    }
+    // if (children.props.children === "bookmark") {
+    //   return <Bookmark href={children.props.href} />;
+    // }
 
     // URLが本文と同じ場合（埋め込みの可能性）
     if (children.props.href === children.props.children) {

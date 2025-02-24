@@ -2,7 +2,7 @@ import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
-import { FrontMatter, readFileFromMdorMds } from "@/libs/posts";
+import { FrontMatter, getPostDirPath, readFileFromMdorMds } from "@/libs/posts";
 
 const globals = {
   "@mdx-js/react": {
@@ -20,6 +20,7 @@ export const loadMDX = async (slug: string) => {
     return bundleMDX<FrontMatter>({
       source: fileContent,
       globals,
+      cwd: getPostDirPath(),
       mdxOptions(options) {
         options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
         options.rehypePlugins = [
