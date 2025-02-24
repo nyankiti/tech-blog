@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { Paragraph } from "@/components/MDXRenderer/Paragraph";
 import { getMDXComponent } from "mdx-bundler/client";
+import he from "he";
 
 import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 import { useMemo } from "react";
@@ -13,6 +14,7 @@ const GLOBAL_CONFIG = {
   MdxJsReact: {
     useMDXComponents,
   },
+  he: he,
 };
 
 type Props = {

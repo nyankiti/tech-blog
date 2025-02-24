@@ -12,6 +12,10 @@ export const loadMDX = async (fileContent: string) => {
         globalMetadataMap: {
           varName: "globalMetadataMap",
         },
+        he: {
+          varName: "he",
+          defaultExport: true,
+        },
         "@mdx-js/react": {
           varName: "MdxJsReact",
           namedExports: ["useMDXComponents"],

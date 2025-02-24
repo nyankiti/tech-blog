@@ -91,10 +91,7 @@ export default async function Page({ params }: Props) {
     ).then(Object.fromEntries);
 
   return (
-    <article
-      className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32"
-      data-pagefind-body // pagefindの検索対象に指定
-    >
+    <article className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
       <div className="flex w-full md:w-9/12 flex-col mx-auto mb-2 text-left">
         <div className="mb-5 border-b border-gray-200">
           <div className="flex flex-col md:flex-row md:items-center">

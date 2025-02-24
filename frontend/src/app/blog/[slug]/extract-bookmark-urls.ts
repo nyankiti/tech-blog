@@ -19,7 +19,5 @@ export async function extractBookmarkUrls(source: string): Promise<string[]> {
     }
   });
 
-  console.log("extractBookmarkUrls urls:", urls);
-
   return [...new Set(urls)];
 }
