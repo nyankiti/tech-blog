@@ -7,7 +7,7 @@ export default async function Page() {
   const posts = await getSortedPosts();
   const tags = await getTags();
   return (
-    <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    <div className="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 mx-auto">
       <TitleSection />
       <div className="grid gap-4 grid-rows-[auto] md:grid-rows-1 md:grid-cols-[7fr_3fr]">
         <div>
