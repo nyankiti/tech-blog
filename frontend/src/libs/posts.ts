@@ -43,10 +43,10 @@ export async function readFileFromMdorMds(
   }
 
   if (!fileContent || !usedExt) {
-    console.warn(`No valid file found for slug: ${slug}`);
+    console.warn(`No valid file found for slug: ${slug}${usedExt}`);
     return null;
   } else {
-    console.log(`Found file with extension ${usedExt} for slug: ${slug}`);
+    console.warn(`Found file with extension ${slug}${usedExt}`);
   }
   return fileContent;
 }
