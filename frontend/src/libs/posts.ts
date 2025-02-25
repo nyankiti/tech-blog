@@ -22,7 +22,7 @@ const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
 export const baseDir = process.env.BASE_DIR || process.cwd();
 
 export const getPostDirPath = () =>
-  path.join(baseDir, "../blog-contents/contents/tech-blog");
+  path.join(baseDir, "./blog-contents/contents/tech-blog");
 
 export async function readFileFromMdorMds(
   slug: string
@@ -65,23 +65,6 @@ export async function getFrontMatter(
   }
 }
 
-// async function compilePost(slug: string): Promise<FrontMatter | null> {
-//   try {
-//     const fileContent = await readFileFromMdorMds(slug);
-//     if (!fileContent) return null;
-
-//     const compiledData = await bundleMDX<FrontMatter>({
-//       source: fileContent,
-//       cwd: getPostDirPath(),
-//     });
-
-//     return compiledData.frontmatter;
-//   } catch (error) {
-//     console.error(`Error compiling post ${slug}:`, error);
-//     return null;
-//   }
-// }
-
 export const getAllPosts = async (): Promise<FrontMatter[]> => {
   // キャッシュが有効な場合はキャッシュを返す
   const now = Date.now();
@@ -119,7 +102,9 @@ export const getSortedPosts = async (): Promise<FrontMatter[]> => {
 export const getSlugs = async (): Promise<string[]> => {
   const postDirPath = getPostDirPath();
   const postFiles = await readdir(postDirPath);
-  return postFiles.map((file) => path.basename(file, path.extname(file)));
+  return postFiles
+    .map((file) => path.basename(file, path.extname(file)))
+    .filter((slug) => slug !== "images");
 };
 
 export const getTags = async (): Promise<string[]> => {
