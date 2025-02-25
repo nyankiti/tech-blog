@@ -4,6 +4,14 @@ const nextConfig: NextConfig = {
   /* config options here */
   pageExtensions: ["md", "mdx", "ts", "tsx"],
   reactStrictMode: true,
+  webpack: (config) => {
+    // Markdownファイルをraw-loaderで処理
+    config.module.rules.push({
+      test: /\.md$/,
+      use: "raw-loader",
+    });
+    return config;
+  },
   async headers() {
     return [
       {
