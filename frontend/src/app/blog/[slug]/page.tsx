@@ -15,6 +15,7 @@ import {
 } from "@/components/MDXComponents/utils";
 
 export const dynamic = "force-static";
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const slugs = await getSlugs();
