@@ -45,6 +45,8 @@ export async function readFileFromMdorMds(
   if (!fileContent || !usedExt) {
     console.warn(`No valid file found for slug: ${slug}`);
     return null;
+  } else {
+    console.log(`Found file with extension ${usedExt} for slug: ${slug}`);
   }
   return fileContent;
 }
