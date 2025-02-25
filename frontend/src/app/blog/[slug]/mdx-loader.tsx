@@ -3,7 +3,8 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import remarkMdxImages from "remark-mdx-images";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
-import { FrontMatter, getPostDirPath } from "@/libs/posts";
+import { baseDir, FrontMatter, getPostDirPath } from "@/libs/posts";
+import path from "path";
 
 export const loadMDX = async (fileContent: string) => {
   return bundleMDX<FrontMatter>({
@@ -77,15 +78,18 @@ export const loadMDX = async (fileContent: string) => {
       options.define = {
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV), // Reactのモードを固定
       };
+      options.outdir = path.join(baseDir, "public/images/blog/");
       options.loader = {
         ...options.loader,
-        ".gif": "dataurl",
-        ".jpeg": "dataurl",
-        ".jpg": "dataurl",
-        ".png": "dataurl",
-        ".svg": "dataurl",
-        ".webp": "dataurl",
+        ".gif": "file",
+        ".jpeg": "file",
+        ".jpg": "file",
+        ".png": "file",
+        ".svg": "file",
+        ".webp": "file",
       };
+      options.publicPath = "/images/blog/";
+      options.write = true;
       return options;
     },
   });
