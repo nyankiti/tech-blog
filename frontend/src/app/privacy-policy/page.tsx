@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { bundleMDX } from "mdx-bundler";
+import { MDXComponent } from "./MdxComponent";
 
 const PRIVACY_POLICY_MD = `
 # プライバシーポリシー
@@ -61,19 +62,25 @@ labには一部 GoogleのOAuth 2.0を用いた認証の動作確認、通知機�
 // ## 5.Amazonアソシエイト・プログラム
 // 当サイト「s's-nook（https://sokes-nook.net/ ）」は、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。
 
-const PrivacyPolicy = () => {
+export default async function PrivacyPolicy() {
+  const mdx = await bundleMDX({
+    source: PRIVACY_POLICY_MD,
+    mdxOptions(options) {
+      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
+      return options;
+    },
+  });
+  const { code } = mdx;
   return (
-    <div className="flex w-full items-center flex-col mx-auto my-9 text-left">
+    <div className="flex w-full items-center flex-col mx-auto my-9 text-left px-4">
       <div className="post prose dark:prose-invert">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>
-          {PRIVACY_POLICY_MD}
-        </ReactMarkdown>
+        <div className="post prose dark:prose-invert">
+          <MDXComponent code={code} />
+        </div>
       </div>
     </div>
   );
-};
-
-export default PrivacyPolicy;
+}
 
 export const metadata: Metadata = {
   robots: {
