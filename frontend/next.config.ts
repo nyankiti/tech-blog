@@ -4,15 +4,6 @@ const nextConfig: NextConfig = {
   /* config options here */
   pageExtensions: ["md", "mdx", "ts", "tsx"],
   reactStrictMode: true,
-  webpack: (config, { isServer }) => {
-    if (isServer) {
-      // SSRでblog-contentsディレクトリを参照できるようにする
-      config.node = {
-        __dirname: true,
-      };
-    }
-    return config;
-  },
   async headers() {
     return [
       {

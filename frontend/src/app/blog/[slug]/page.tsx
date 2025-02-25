@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
 import { TbRefresh, TbCalendar } from "react-icons/tb";
-import { getFrontMatter, getSlugs, readFileFromMdorMds } from "@/libs/posts";
+import { getFrontMatter, readFileFromMdorMds } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { PcToc } from "@/components/PcToc";
@@ -14,12 +14,12 @@ import {
   SiteMetadata,
 } from "@/components/MDXComponents/utils";
 
-export async function generateStaticParams() {
-  const slugs = await getSlugs();
-  return slugs.map((slug) => {
-    return { slug };
-  });
-}
+// export async function generateStaticParams() {
+//   const slugs = await getSlugs();
+//   return slugs.map((slug) => {
+//     return { slug };
+//   });
+// }
 
 type Props = {
   params: Promise<{ slug: string }>;
