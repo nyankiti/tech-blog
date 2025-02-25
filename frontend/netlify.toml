@@ -1,5 +1,5 @@
 [build]
-  command = "cd .. &&  git submodule update --remote blog-contents && cd frontend && npm run build"
+  command = "cd .. &&  git submodule update --remote frontend/blog-contents && cd frontend && npm run build"
   publish = ".next"
 
 [[plugins]]
