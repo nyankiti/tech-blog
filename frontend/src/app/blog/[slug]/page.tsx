@@ -61,16 +61,6 @@ export default async function Page({ params }: Props) {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return notFound();
 
-    const mdx = await loadMDX(fileContent);
-    const { frontmatter, code } = mdx;
-
-    const publishedDate = new Date(frontmatter.publishedAt);
-    const lastEditedDate = new Date(frontmatter.updatedAt);
-    const isShowEditTime =
-      publishedDate < lastEditedDate &&
-      publishedDate.toISOString().slice(0, 10) !==
-        lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
-
     // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
     const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
 
@@ -86,6 +76,16 @@ export default async function Page({ params }: Props) {
           }
         })
       ).then(Object.fromEntries);
+
+    const mdx = await loadMDX(fileContent);
+    const { frontmatter, code } = mdx;
+
+    const publishedDate = new Date(frontmatter.publishedAt);
+    const lastEditedDate = new Date(frontmatter.updatedAt);
+    const isShowEditTime =
+      publishedDate < lastEditedDate &&
+      publishedDate.toISOString().slice(0, 10) !==
+        lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
 
     return (
       <article className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
