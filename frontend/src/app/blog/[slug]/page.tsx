@@ -14,6 +14,8 @@ import {
   SiteMetadata,
 } from "@/components/MDXComponents/utils";
 
+export const dynamic = "force-static";
+
 export async function generateStaticParams() {
   const slugs = await getSlugs();
   return slugs.map((slug) => {
