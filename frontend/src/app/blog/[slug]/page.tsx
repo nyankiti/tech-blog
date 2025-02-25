@@ -56,27 +56,26 @@ export const generateMetadata = async ({
 };
 
 export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const fileContent = await readFileFromMdorMds(slug);
+  if (!fileContent) return notFound();
+
+  // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
+  const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
+
+  const globalMetadataMap: Record<string, SiteMetadata | null> =
+    await Promise.all(
+      mookmarkUrls.map(async (url) => {
+        try {
+          const metadata = await fetchSiteMetadata(url);
+          return [url, metadata];
+        } catch (error) {
+          console.error(`Failed to fetch metadata for ${url}:`, error);
+          return [url, null];
+        }
+      })
+    ).then(Object.fromEntries);
   try {
-    const { slug } = await params;
-    const fileContent = await readFileFromMdorMds(slug);
-    if (!fileContent) return notFound();
-
-    // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
-    const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
-
-    const globalMetadataMap: Record<string, SiteMetadata | null> =
-      await Promise.all(
-        mookmarkUrls.map(async (url) => {
-          try {
-            const metadata = await fetchSiteMetadata(url);
-            return [url, metadata];
-          } catch (error) {
-            console.error(`Failed to fetch metadata for ${url}:`, error);
-            return [url, null];
-          }
-        })
-      ).then(Object.fromEntries);
-
     const mdx = await loadMDX(fileContent);
     const { frontmatter, code } = mdx;
 
@@ -140,6 +139,7 @@ export default async function Page({ params }: Props) {
     );
   } catch (e) {
     console.error("Failed to load MDX:", e);
+    console.error("filecontent:", fileContent);
     return notFound();
   }
 }
