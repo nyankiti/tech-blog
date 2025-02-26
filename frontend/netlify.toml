@@ -2,9 +2,6 @@
   command = "cd .. &&  git submodule update --remote frontend/blog-contents && cd frontend && npm run build"
   publish = ".next"
 
-[functions]
-  included_files = ["blog-contents/**"]
-
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
