@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { PostSearchIndex } from "@/libs/generate-search-index";
-import FlexSearch, { Index } from "flexsearch";
+import FlexSearch, { Document } from "flexsearch";
 
 interface Post {
   slug: string;
@@ -12,7 +12,7 @@ interface Post {
 }
 
 export const SearchBar = () => {
-  const indexRef = useRef<Index | null>(null);
+  const indexRef = useRef<Document<Post, string[]> | null>(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,9 +24,14 @@ export const SearchBar = () => {
       setIsLoading(true);
       try {
         // インデックスを初期化
-        const index = new FlexSearch.Index({
-          tokenize: "forward",
-          optimize: true,
+        const index = new FlexSearch.Document<Post, string[]>({
+          preset: "match",
+          tokenize: "reverse",
+          document: {
+            id: "slug",
+            index: ["title", "content", "tags"],
+            store: ["slug", "title", "tags", "date", "content"],
+          },
         });
 
         // 検索インデックスJSONを取得
@@ -36,8 +41,7 @@ export const SearchBar = () => {
         console.log("data:", data);
 
         data.forEach((post: PostSearchIndex) => {
-          // 試しにtitleだけをindexに追加してみる
-          index.append(data.slug, post.title);
+          index.add(post);
         });
 
         // インデックスを参照に保持
@@ -59,9 +63,29 @@ export const SearchBar = () => {
 
     try {
       // FlexSearch での検索実行
-      const result = indexRef.current.search(searchTerm, 10);
+      console.log("searchTerm:", searchTerm);
 
-      console.log("allResult:", result);
+      const titleResults = indexRef.current.search(searchTerm, {
+        limit: 10,
+        index: "title",
+        enrich: true,
+      });
+
+      console.log("titleResults:", titleResults);
+
+      const contentsResults = indexRef.current.search(searchTerm, {
+        limit: 10,
+        index: "content",
+        enrich: true,
+      });
+      console.log("contentsResults:", contentsResults);
+
+      const tagsResults = indexRef.current.search(searchTerm, {
+        limit: 10,
+        index: "tags",
+        enrich: true,
+      });
+      console.log("tagsResults:", tagsResults);
     } catch (error) {
       console.error("検索処理中にエラーが発生しました:", error);
     }
