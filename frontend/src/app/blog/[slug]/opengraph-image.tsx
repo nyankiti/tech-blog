@@ -2,7 +2,17 @@ import fs from "fs/promises";
 import path from "path";
 import { ImageResponse } from "next/og";
 import { SITE_TITLE } from "@/constants";
-import { loadMDX } from "./mdx-loader";
+import { getFrontMatter, getSlugs } from "@/libs/posts";
+
+export const dynamic = "error";
+export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  const slugs = await getSlugs();
+  return slugs.map((slug) => {
+    return { slug };
+  });
+}
 
 const assetsDirectory = process.cwd() + "/assets";
 
@@ -19,11 +29,9 @@ type Props = {
 
 export default async function Image({ params }: Props) {
   const { slug } = await params;
-  const mdx = await loadMDX(slug);
+  const frontmatter = await getFrontMatter(slug);
 
-  if (!mdx) return new Response("Not Found", { status: 404 });
-
-  const { frontmatter } = mdx;
+  if (!frontmatter) return new Response("Not Found", { status: 404 });
 
   const fontInter = await fs.readFile(
     path.join(assetsDirectory, "Inter-Bold.ttf")
