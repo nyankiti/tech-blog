@@ -58,7 +58,6 @@ export async function fetchSiteMetadata(
     const timeoutId = setTimeout(() => controller.abort(), 2000); // 2秒でタイムアウト
 
     const response = await fetch(url, {
-      next: { revalidate: 3600 }, // 1時間でrevalidate
       signal: controller.signal,
     });
 
