@@ -22,7 +22,7 @@ const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
 export const baseDir = process.env.BASE_DIR || process.cwd();
 
 export const getPostDirPath = () =>
-  path.join(baseDir, "./blog-contents/contents/tech-blog");
+  path.join(baseDir, "../blog-contents/contents/tech-blog");
 
 export async function readFileFromMdorMds(
   slug: string
@@ -45,8 +45,6 @@ export async function readFileFromMdorMds(
   if (!fileContent || !usedExt) {
     console.warn(`No valid file found for slug: ${slug}${usedExt}`);
     return null;
-  } else {
-    console.warn(`Found file with extension ${slug}${usedExt}`);
   }
   return fileContent;
 }
