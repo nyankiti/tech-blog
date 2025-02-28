@@ -28,7 +28,7 @@ export const PostCard: FC<Props> = ({ post }) => {
               format="yyyy/MM/dd"
             />
 
-            {post.views && (
+            {post.views > 0 && (
               <p className="text-gray-600 text-xs pr-2 underline ml-auto dark:text-neutral-400">
                 {post.views} views
               </p>
