@@ -1,7 +1,17 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { PostDocument } from "@/libs/generate-search-index";
 import FlexSearch, { Document } from "flexsearch";
+
+/**
+ * blog-contents側で生成したtech-blog-search-index.jsonに基づく
+ */
+export type PostDocument = {
+  slug: string;
+  title: string;
+  date: string;
+  tags: string[];
+  content: string;
+};
 
 export const SearchBar = () => {
   const indexRef = useRef<Document<PostDocument, string[]> | null>(null);
@@ -29,7 +39,7 @@ export const SearchBar = () => {
         });
 
         // 検索インデックスJSONを取得
-        const res = await fetch("/search-index.json");
+        const res = await fetch("/tech-blog-search-index.json");
         const data = await res.json();
 
         console.log("data:", data);

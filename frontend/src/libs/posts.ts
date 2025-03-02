@@ -102,8 +102,14 @@ export const getSlugs = async (): Promise<string[]> => {
   const postDirPath = getPostDirPath();
   const postFiles = await readdir(postDirPath);
   return postFiles
-    .map((file) => path.basename(file, path.extname(file)))
-    .filter((slug) => slug !== "images");
+    .map((file) => {
+      if (path.extname(file) === ".md" || path.extname(file) === ".mdx") {
+        const slug = path.basename(file, path.extname(file));
+        return slug;
+      }
+      return null;
+    })
+    .filter(Boolean) as string[];
 };
 
 export const getTags = async (): Promise<string[]> => {
