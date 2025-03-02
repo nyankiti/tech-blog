@@ -57,7 +57,6 @@ export async function getFrontMatter(
     if (!fileContent) return null;
     const { data } = matter(fileContent);
 
-    // 型アサーションで FrontMatter 型を適用
     return data as FrontMatter;
   } catch (error) {
     console.error("Error reading Markdown file:", error);
@@ -103,8 +102,14 @@ export const getSlugs = async (): Promise<string[]> => {
   const postDirPath = getPostDirPath();
   const postFiles = await readdir(postDirPath);
   return postFiles
-    .map((file) => path.basename(file, path.extname(file)))
-    .filter((slug) => slug !== "images");
+    .map((file) => {
+      if (path.extname(file) === ".md" || path.extname(file) === ".mdx") {
+        const slug = path.basename(file, path.extname(file));
+        return slug;
+      }
+      return null;
+    })
+    .filter(Boolean) as string[];
 };
 
 export const getTags = async (): Promise<string[]> => {
@@ -115,5 +120,5 @@ export const getTags = async (): Promise<string[]> => {
         .filter((post) => post.isPublished && !post.idDeleted)
         .flatMap((post) => post.tags)
     )
-  );
+  ).filter((tag) => tag !== "");
 };

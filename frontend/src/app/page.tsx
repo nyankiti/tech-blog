@@ -1,4 +1,5 @@
 import { PostCard } from "@/components/PostCard";
+import { SearchBar } from "@/components/SearchBar";
 import { Tag } from "@/components/Tag";
 import { TitleSection } from "@/components/TitleSection";
 import { getSortedPosts, getTags } from "@/libs/posts";
@@ -22,6 +23,9 @@ export default async function Page() {
           </ul>
         </div>
         <div className="">
+          <div className="my-6 border-t border-slate-200 w-full" />
+
+          <SearchBar />
           {/* <Profile /> */}
 
           {/* divider */}
