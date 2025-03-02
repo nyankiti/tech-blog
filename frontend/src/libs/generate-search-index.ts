@@ -3,18 +3,17 @@ import { baseDir, getSlugs, readFileFromMdorMds } from "./posts";
 import path from "node:path";
 import { writeFile } from "node:fs/promises";
 
-export type PostSearchIndex = {
+export type PostDocument = {
   slug: string;
   title: string;
+  date: string;
   tags: string[];
   content: string;
-  date: string;
-  searchableText: string;
 };
 
 export const generateSearchIndex = async () => {
   const slugs = await getSlugs();
-  const searchIndex: PostSearchIndex[] = [];
+  const searchIndex: PostDocument[] = [];
   for (const slug of slugs) {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return null;
@@ -26,7 +25,6 @@ export const generateSearchIndex = async () => {
       tags: data.tags || [],
       content: content || "",
       date: data.publishedAt || "",
-      searchableText: `${data.title} ${content} ${data.tags.join(" ")}`,
     });
   }
 
