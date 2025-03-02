@@ -42,8 +42,6 @@ export const SearchBar = () => {
         const res = await fetch("/tech-blog-search-index.json");
         const data = await res.json();
 
-        console.log("data:", data);
-
         data.forEach((post: PostDocument) => {
           index.add(post);
         });
