@@ -12,7 +12,7 @@ export const PostCard: FC<Props> = ({ post }) => {
   return (
     <article className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-neutral-900 dark:border-neutral-800">
       <div className="p-4 md:p-5">
-        <div className="flex">
+        <div className="flex flex-wrap gap-y-1">
           {post.tags.map((tag, i) => (
             <Tag key={i} tag={tag} />
           ))}
