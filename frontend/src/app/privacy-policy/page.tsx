@@ -35,6 +35,10 @@ Cookieを使用することにより、GoogleやGoogleのパートナーは当�
 
 その他、Googleの広告における、Cookieの取り扱いについての詳細は、Googleのポリシーと規約ページをご覧ください。
 
+## 5.Amazonアソシエイト・プログラム
+当サイト「s's-nook（https://sokes-nook.net/ ）」は、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。
+
+
 ## 6.labについて
 当サイト「s's-nook（https://sokes-nook.net/ ）」には、当サイト管理人が気になった技術の実装例を示す、lab（https://sokes-nook.net/lab ）というスペースが存在します。
 
@@ -57,10 +61,6 @@ labには一部 GoogleのOAuth 2.0を用いた認証の動作確認、通知機�
 
 また、当サイトで引用している文章や画像について、著作権は引用元にあります。万が一、不適切な記事、画像、リンク等がありましたら早急に削除するなどの対応を致しますので、恐れ入りますがページ下部のお問い合わせリンクからご連絡くださるよう宜しくお願い致します。
 `;
-
-// Amazonアソシエイトを始めると以下も追記する
-// ## 5.Amazonアソシエイト・プログラム
-// 当サイト「s's-nook（https://sokes-nook.net/ ）」は、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。
 
 export default async function PrivacyPolicy() {
   const mdx = await bundleMDX({

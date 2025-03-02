@@ -20,7 +20,7 @@ export const Tag = ({ tag, linkTo }: Props) => {
       href={linkTo ? linkTo : `/tags/${tag}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="center relative inline-block select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-baseline font-sans border border-gray-500 text-gray-700 text-xs font-medium capitalize leading-none tracking-wide hover:opacity-90 dark:text-gray-100"
+      className="center relative inline-block select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-baseline font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-100"
     >
       <span className="mt-px">
         <span

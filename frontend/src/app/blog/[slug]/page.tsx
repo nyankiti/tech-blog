@@ -110,11 +110,9 @@ export default async function Page({ params }: Props) {
                 )}
               </div>
 
-              <div className="flex">
+              <div className="flex flex-wrap gap-y-1 mb-1">
                 {frontmatter.tags.map((tag, i) => (
-                  <span key={i} className="pb-1 ml-1">
-                    <Tag tag={tag} />
-                  </span>
+                  <Tag key={i} tag={tag} />
                 ))}
               </div>
             </div>
