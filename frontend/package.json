@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cp -rn ../blog-contents/public/* ./public/ && next dev",
-    "build": "cp -rn ../blog-contents/public/* ./public/ && next build",
+    "dev": "cp ../blog-contents/public/* ./public/ && next dev",
+    "build": "cp ../blog-contents/public/* ./public/ && next build",
     "start": "next start",
     "lint": "next lint"
   },
