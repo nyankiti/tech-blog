@@ -33,7 +33,7 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
       components={{
         h1: ({ ...props }) => {
           return (
-            <h1 {...props.node?.properties} className="mt-6">
+            <h1 {...props.node?.properties} id={props.id} className="mt-6">
               {props.children}
             </h1>
           );

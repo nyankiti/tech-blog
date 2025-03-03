@@ -35,7 +35,9 @@ export const Adsense = ({ isVertical }: Props) => {
           id={`adsbygoogle-${uniqueId}`}
         ></ins>
       ) : (
-        <div style={{ padding: "10px", border: "1px solid #333" }}>広告</div>
+        <div
+          style={{ padding: "10px", border: "1px solid #333", height: 50 }}
+        ></div>
       )}
     </div>
   );

@@ -19,11 +19,11 @@ export const PcToc: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-16">
-      <div className="mb-4">
+    <div className="mt-14">
+      <div className="mb-3">
         <Adsense isVertical={false} />
       </div>
-      <div className="toc px-0 pb-8 text-base"></div>
+      <div className="toc px-0 pb-4 text-sm max-h-[calc(100vh-250px)] overflow-y-auto"></div>
     </div>
   );
 };
