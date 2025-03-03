@@ -128,8 +128,12 @@ export default async function Page({ params }: Props) {
           <div className="relative left-0 mt-10">
             <div className="border-t absolute left-0 w-full border-gray-200 dark:border-neutral-700" />
             <div className="mt-4 flex justify-center items-center gap-1">
-              <Adsense isVertical={false} />
-              <Adsense isVertical={false} />
+              <div className="w-full">
+                <Adsense isVertical={false} />
+              </div>
+              <div className="w-full">
+                <Adsense isVertical={false} />
+              </div>
             </div>
           </div>
         </div>
