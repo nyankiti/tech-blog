@@ -1,21 +1,13 @@
 "use client";
-import { useEffect } from "react";
+
+import { getIsProdEnv } from "@/components/AdsenseInitialization";
 
 type Props = {
   isVertical: boolean;
 };
 
 export const Adsense = ({ isVertical }: Props) => {
-  const isProdEnv =
-    typeof window !== "undefined" &&
-    window.location.hostname == "sokes-nook.net";
-
-  useEffect(() => {
-    if (isProdEnv) {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
-    }
-  }, [isProdEnv]);
+  const isProdEnv = getIsProdEnv();
 
   return (
     <div>

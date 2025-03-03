@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import * as tocbot from "tocbot";
+import { Adsense } from "./Adsense";
 
 export const PcToc: React.FC = () => {
   useEffect(() => {
@@ -18,8 +19,10 @@ export const PcToc: React.FC = () => {
   }, []);
 
   return (
-    <div>
-      <h2 className="text-xl border-l-4 pl-1">目次</h2>
+    <div className="mt-16">
+      <div className="mb-4">
+        <Adsense isVertical={false} />
+      </div>
       <div className="toc px-0 pb-8 text-base"></div>
     </div>
   );

@@ -13,6 +13,7 @@ import {
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import Script from "next/script";
+import { AdsenseInitialization } from "@/components/AdsenseInitialization";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -97,6 +98,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <AdsenseInitialization />
           <Header />
           {children}
           <Footer />

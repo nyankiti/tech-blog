@@ -4,15 +4,16 @@ import { TbRefresh, TbCalendar } from "react-icons/tb";
 import { getFrontMatter, getSlugs, readFileFromMdorMds } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
-import { PcToc } from "@/components/PcToc";
-import { Adsense } from "@/components/Adsense";
 import { loadMDX } from "./mdx-loader";
-import { MDXComponent } from "./MdxComponent";
 import { extractBookmarkUrls } from "./extract-bookmark-urls";
 import {
   fetchSiteMetadata,
   SiteMetadata,
 } from "@/components/MDXComponents/utils";
+
+import { PcToc } from "./components/PcToc";
+import { Adsense } from "./components/Adsense";
+import { MDXComponent } from "./components/MdxComponent";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -90,8 +91,8 @@ export default async function Page({ params }: Props) {
         lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
 
     return (
-      <article className="max-w-6xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
-        <div className="flex w-full md:w-9/12 flex-col mx-auto mb-2 text-left">
+      <article className="max-w-7xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
+        <div className="flex w-full md:w-8/12 flex-col mx-auto mb-2 text-left">
           <div className="mb-5 border-b border-gray-200">
             <div className="flex flex-col md:flex-row md:items-center">
               <div className="text-gray-600 flex dark:text-neutral-400 mr-3">
@@ -131,8 +132,8 @@ export default async function Page({ params }: Props) {
             </div>
           </div>
         </div>
-        <div className="hidden sticky top-0 self-start md:block md:w-3/12">
-          <div className="pt-16 ml-8">
+        <div className="hidden sticky top-0 self-start md:block md:w-4/12">
+          <div className="ml-8">
             <PcToc />
           </div>
         </div>
