@@ -19,7 +19,7 @@ export const PcToc: React.FC = () => {
   }, []);
 
   return (
-    <div className="mt-10">
+    <div className="mt-16">
       <div className="mb-3 mt-1">
         <Adsense isVertical={false} />
       </div>

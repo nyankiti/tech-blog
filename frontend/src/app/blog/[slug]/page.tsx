@@ -131,7 +131,7 @@ export default async function Page({ params }: Props) {
               <div className="w-full ml-2">
                 <Adsense isVertical={false} />
               </div>
-              <div className="w-full mr-2">
+              <div className="w-full mr-2 hidden md:block">
                 <Adsense isVertical={false} />
               </div>
             </div>
