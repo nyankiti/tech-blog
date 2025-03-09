@@ -1,4 +1,5 @@
 import { PostCard } from "@/components/PostCard";
+import { Profile } from "@/components/Profile";
 import { SearchBar } from "@/components/SearchBar";
 import { Tag } from "@/components/Tag";
 import { TitleSection } from "@/components/TitleSection";
@@ -26,9 +27,7 @@ export default async function Page() {
           <div className="my-6 border-t border-slate-200 w-full" />
 
           <SearchBar />
-          {/* <Profile /> */}
 
-          {/* divider */}
           <div className="my-6 border-t border-slate-200 w-full" />
           <div>
             <p>Tags</p>
@@ -36,6 +35,9 @@ export default async function Page() {
               <Tag key={i} tag={tag} />
             ))}
           </div>
+
+          <div className="my-6 border-t border-slate-200 w-full" />
+          <Profile />
         </div>
       </div>
     </div>

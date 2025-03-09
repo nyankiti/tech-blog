@@ -1,3 +1,5 @@
+import { SITE_TITLE } from "@/constants";
+
 export const Footer = () => {
   return (
     <footer className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -7,7 +9,7 @@ export const Footer = () => {
         <div className="flex flex-wrap justify-between items-center gap-2">
           <div>
             <p className="text-xs text-gray-600 dark:text-neutral-400">
-              © 2024 s&apos;s-nook:
+              © 2025 {SITE_TITLE}
             </p>
           </div>
 
@@ -39,7 +41,7 @@ export const Footer = () => {
             <li className="inline-block pe-4 text-xs">
               <a
                 className="text-xs text-gray-500 underline hover:text-gray-800 hover:decoration-2 focus:outline-none focus:decoration-2 dark:text-neutral-500 dark:hover:text-neutral-400"
-                href="mailto:nowi41cic77mav@gmail.com?subject=お問い合わせ|s's-nook&body=お問い合わせ内容を入力してください"
+                href={`mailto:nowi41cic77mav@gmail.com?subject=お問い合わせ|${SITE_TITLE}&body=お問い合わせ内容を入力してください`}
               >
                 問い合わせ
               </a>

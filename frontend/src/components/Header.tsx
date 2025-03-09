@@ -3,6 +3,7 @@
 import NextLink from "next/link";
 import { FC } from "react";
 import { ColorThemeSelector } from "./ColorThemeSelector";
+import { SITE_TITLE } from "@/constants";
 
 export const Header: FC = () => {
   return (
@@ -11,7 +12,7 @@ export const Header: FC = () => {
         href="/"
         className="text-xl sm:text-2xl md:text-4xl font-black tracking-tighter text-gray-800 dark:text-white"
       >
-        s&apos;s-nook:
+        {SITE_TITLE}
       </NextLink>
       <nav className="flex items-center gap-2">
         <NavLinks />
@@ -28,6 +29,12 @@ const NavLinks: FC = () => {
         className="text-sm text-gray-500 transition-colors duration-200 px-2 py-2 hover:text-gray-800"
       >
         Blog
+      </NextLink>
+      <NextLink
+        href="/about"
+        className="text-sm text-gray-500 transition-colors duration-200 px-2 py-2 hover:text-gray-800"
+      >
+        About
       </NextLink>
       {/* <NextLink
         href="/lab"
