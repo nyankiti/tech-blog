@@ -2,6 +2,7 @@ import { compareDesc } from "date-fns";
 import path from "node:path";
 import { readFile, readdir } from "node:fs/promises";
 import matter from "gray-matter";
+import { generatePostsDescription } from "./generate-posts-description";
 
 export type FrontMatter = {
   title: string;
@@ -12,6 +13,7 @@ export type FrontMatter = {
   publishedAt: string;
   updatedAt: string;
   views: number;
+  description?: string;
 };
 
 export const baseDir = process.env.BASE_DIR || process.cwd();
@@ -50,9 +52,13 @@ export async function getFrontMatter(
   try {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return null;
-    const { data } = matter(fileContent);
+    const { data, content } = matter(fileContent);
+    const description = await generatePostsDescription(content);
 
-    return data as FrontMatter;
+    return {
+      ...data,
+      description,
+    } as FrontMatter;
   } catch (error) {
     console.error("Error reading Markdown file:", error);
     return null;

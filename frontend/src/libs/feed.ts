@@ -30,9 +30,10 @@ export const generateFeed = async () => {
     favicon: new URL("/favicon.ico", SITE_URL).toString(),
   });
 
-  posts.forEach((post) => {
+  posts.forEach(async (post) => {
     feed.addItem({
       title: post.title,
+      description: post.description ?? post.title,
       id: new URL(`/blog/${post.slug}`, SITE_URL).toString(),
       link: new URL(`/blog/${post.slug}`, SITE_URL).toString(),
       date: new Date(post.publishedAt),

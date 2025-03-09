@@ -7,12 +7,14 @@ import {
   readFileFromMdorMds,
   baseDir,
 } from "./posts";
+import { generatePostsDescription } from "./generate-posts-description";
 
 // デフォルト値を設定するヘルパー関数
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const castFrontMatter = (data: { [key: string]: any }): FrontMatter => {
   return {
-    title: data.title || "No Title",
+    title: data.title || "",
+    description: data.description || data.title || "",
     slug: data.slug || "",
     tags: Array.isArray(data.tags) ? data.tags : [],
     isPublished: Boolean(data.isPublished),
@@ -23,12 +25,13 @@ const castFrontMatter = (data: { [key: string]: any }): FrontMatter => {
   };
 };
 
-export async function getFrontMatter(slug: string) {
+export async function getPostJson(slug: string) {
   try {
     const fileContent = await readFileFromMdorMds(slug);
     if (!fileContent) return null;
     const { data, content } = matter(fileContent);
-    const frontMatters = castFrontMatter(data);
+    const description = await generatePostsDescription(content);
+    const frontMatters = castFrontMatter({ ...data, description });
     return {
       ...frontMatters,
       content,
@@ -46,7 +49,7 @@ export const generatePostsJson = async () => {
     path.basename(file, path.extname(file))
   );
 
-  const postsJsonPromises = slugs.map((slug) => getFrontMatter(slug));
+  const postsJsonPromises = slugs.map((slug) => getPostJson(slug));
   const postsJson = (await Promise.all(postsJsonPromises)).filter(
     (post) => post !== null
   );

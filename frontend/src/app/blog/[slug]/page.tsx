@@ -39,7 +39,7 @@ export const generateMetadata = async ({
 
   return {
     title: frontmatter.title,
-    description: frontmatter.title,
+    description: frontmatter.description || frontmatter.title,
     alternates: {
       canonical: `https://sokes-nook.net/blog/${slug}`,
     },
@@ -47,7 +47,7 @@ export const generateMetadata = async ({
       type: "article",
       url: `/blog/${slug}`,
       title: frontmatter.title,
-      description: frontmatter.title,
+      description: frontmatter.description || frontmatter.title,
       publishedTime: frontmatter.publishedAt,
       modifiedTime: frontmatter.updatedAt,
       tags: frontmatter.tags,
