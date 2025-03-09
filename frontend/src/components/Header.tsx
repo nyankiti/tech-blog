@@ -30,12 +30,12 @@ const NavLinks: FC = () => {
       >
         Blog
       </NextLink>
-      <NextLink
+      {/* <NextLink
         href="/about"
         className="text-sm text-gray-500 transition-colors duration-200 px-2 py-2 hover:text-gray-800"
       >
         About
-      </NextLink>
+      </NextLink> */}
       {/* <NextLink
         href="/lab"
         className="text-sm text-gray-500 transition-colors duration-200 px-2 py-2 hover:text-gray-800"

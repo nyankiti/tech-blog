@@ -1,12 +1,22 @@
-import { readFile } from "node:fs/promises";
 import { Feed } from "feed";
 import { FrontMatter } from "./posts";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/constants";
-import { POSTS_JSON_PATH } from "@/libs/generate-posts-json";
+
+const getPostJsonUrl = () => {
+  if (typeof window !== "undefined") {
+    // クライアント側: 相対パスで OK
+    return "/posts.json";
+  }
+  // サーバー側: 絶対 URL が必要
+  return new URL("/posts.json", SITE_URL).toString();
+};
 
 export const generateFeed = async () => {
-  const postsJsonString = await readFile(POSTS_JSON_PATH, "utf-8");
-  const posts = JSON.parse(postsJsonString) as (FrontMatter & {
+  const response = await fetch(getPostJsonUrl());
+  if (!response.ok) {
+    throw new Error("Failed to fetch posts.json");
+  }
+  const posts = (await response.json()) as (FrontMatter & {
     content: string;
   })[];
 

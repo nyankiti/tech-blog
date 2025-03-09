@@ -8,8 +8,6 @@ import {
   baseDir,
 } from "./posts";
 
-export const POSTS_JSON_PATH = path.join(baseDir, "public/posts.json");
-
 // デフォルト値を設定するヘルパー関数
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const castFrontMatter = (data: { [key: string]: any }): FrontMatter => {
@@ -57,8 +55,11 @@ export const generatePostsJson = async () => {
       new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  writeFile(POSTS_JSON_PATH, JSON.stringify(postsJson, null, 2));
-  console.log(`✅ Articles JSON generated at ${POSTS_JSON_PATH}`);
+  writeFile(
+    path.join(baseDir, "public/posts.json"),
+    JSON.stringify(postsJson, null, 2)
+  );
+  console.log(`✅ Articles JSON generated at public/posts.json`);
 };
 
 generatePostsJson();
