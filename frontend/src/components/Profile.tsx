@@ -1,17 +1,24 @@
-import niwatoriImage from "../../public/niwatori.jpeg";
+import gorouImage from "../../public/gorou.jpg";
 import Image from "next/image";
 import { IoLogoTwitter, IoLogoGithub } from "react-icons/io5";
 
 export const Profile = () => {
   return (
     <div className="flex gap-2">
-      <div className="shrink-0">
+      <button
+        type="button"
+        className="shrink-0"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="hs-vertically-centered-modal"
+        data-hs-overlay="#hs-vertically-centered-modal"
+      >
         <Image
           className="shrink-0 size-16 rounded-full"
-          src={niwatoriImage}
+          src={gorouImage}
           alt="Avatar"
         />
-      </div>
+      </button>
 
       <div className="grow">
         <h1 className="text-lg font-medium text-gray-800 dark:text-neutral-200">
@@ -27,18 +34,10 @@ export const Profile = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            松尾のひよこ
+            実家猫のにゃんきちくん
           </a>
           とnook（隅、隠れ家）が好き
           <br />
-          <a
-            className="hover:underline"
-            href="https://x.com/20hajimemashite/status/1743216794700284326"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            アイコンはフリー素材らしいです
-          </a>
         </p>
 
         <p className="mt-3 text-sm text-gray-600 dark:text-neutral-400"></p>
