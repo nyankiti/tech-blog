@@ -1,19 +1,23 @@
+import { readFile } from "node:fs/promises";
 import { Feed } from "feed";
-import { getSortedPosts } from "./posts";
+import { FrontMatter } from "./posts";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/constants";
+import { POSTS_JSON_PATH } from "@/libs/generate-posts-json";
 
 export const generateFeed = async () => {
-  const posts = await getSortedPosts();
+  const postsJsonString = await readFile(POSTS_JSON_PATH, "utf-8");
+  const posts = JSON.parse(postsJsonString) as (FrontMatter & {
+    content: string;
+  })[];
 
   const feed = new Feed({
     id: SITE_URL.toString(),
     title: SITE_TITLE,
-    copyright: `All right reserved ${new Date().getFullYear()}, kentaro_soda`,
+    copyright: `All right reserved ${new Date().getFullYear()}, ${SITE_TITLE}`,
     language: "ja",
     description: SITE_DESCRIPTION,
     link: SITE_URL.toString(),
-    // image: new URL("/images/og.png", SITE_URL).toString(),
-    favicon: new URL("/icon.ico", SITE_URL).toString(),
+    favicon: new URL("/favicon.ico", SITE_URL).toString(),
   });
 
   posts.forEach((post) => {

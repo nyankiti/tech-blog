@@ -2,6 +2,7 @@
 
 # blog-contents側で生成するので、frontend側ではgit管理しない
 public/tech-blog-search-index.json
+public/posts.json
 
 # dependencies
 /node_modules

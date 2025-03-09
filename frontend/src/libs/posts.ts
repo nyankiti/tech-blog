@@ -14,11 +14,6 @@ export type FrontMatter = {
   views: number;
 };
 
-// メモ化用のキャッシュ
-let postsCache: FrontMatter[] | null = null;
-let lastCacheTime = 0;
-const CACHE_TTL = 60 * 60 * 1000; // 1時間のキャッシュ有効期限
-
 export const baseDir = process.env.BASE_DIR || process.cwd();
 
 export const getPostDirPath = () =>
@@ -65,12 +60,6 @@ export async function getFrontMatter(
 }
 
 export const getAllPosts = async (): Promise<FrontMatter[]> => {
-  // キャッシュが有効な場合はキャッシュを返す
-  const now = Date.now();
-  if (postsCache && now - lastCacheTime < CACHE_TTL) {
-    return postsCache;
-  }
-
   const postDirPath = getPostDirPath();
   const postFiles = await readdir(postDirPath);
   const slugs = postFiles.map((file) =>
@@ -81,11 +70,6 @@ export const getAllPosts = async (): Promise<FrontMatter[]> => {
   const frontMatters = (await Promise.all(frontMattersPromises)).filter(
     (post): post is FrontMatter => post !== null
   );
-
-  // キャッシュの更新
-  postsCache = frontMatters;
-  lastCacheTime = now;
-
   return frontMatters;
 };
 
