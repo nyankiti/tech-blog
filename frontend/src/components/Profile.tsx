@@ -28,15 +28,7 @@ export const Profile = () => {
         <p className="text-sm text-gray-600 dark:text-neutral-400">
           23卒のweb屋さん, 日日是好日
           <br />
-          <a
-            className="text-blue-600 dark:text-blue-500 hover:underline"
-            href="https://www.youtube.com/watch?v=9NKK_DmI8SU"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            実家猫のにゃんきちくん
-          </a>
-          とnook（隅、隠れ家）が好き
+          実家猫のにゃんきちくんとnook（隅、隠れ家）が好き
           <br />
         </p>
 

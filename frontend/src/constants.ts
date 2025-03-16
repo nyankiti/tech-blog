@@ -1,4 +1,4 @@
-export const SITE_TITLE = "s's-nook:";
+export const SITE_TITLE = "nook:net:";
 
 export const SITE_DESCRIPTION =
   "気になった技術や読み物の記録、雑記など残す個人ブログです。\nnookは「隅、隠れ家」という意味。";

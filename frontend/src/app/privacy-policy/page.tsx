@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import remarkGfm from "remark-gfm";
 import { bundleMDX } from "mdx-bundler";
 import { MDXComponent } from "./MdxComponent";
+import { SITE_TITLE } from "@/constants";
 
 const PRIVACY_POLICY_MD = `
 # プライバシーポリシー
-「s's-nook（https://sokes-nook.net/ ）」をご覧頂き誠にありがとうございます。 訪問者様とのより良い関係を築くために、当サイトのプライバシーポリシーを記載します。
+「${SITE_TITLE}（https://sokes-nook.net/ ）」をご覧頂き誠にありがとうございます。 訪問者様とのより良い関係を築くために、当サイトのプライバシーポリシーを記載します。
 
 ## 1.個人情報保護方針
 本文書は、当サイトにおける個人情報の保護および、その適切な取り扱いについての方針を示したものです。
@@ -36,11 +37,11 @@ Cookieを使用することにより、GoogleやGoogleのパートナーは当�
 その他、Googleの広告における、Cookieの取り扱いについての詳細は、Googleのポリシーと規約ページをご覧ください。
 
 ## 5.Amazonアソシエイト・プログラム
-当サイト「s's-nook（https://sokes-nook.net/ ）」は、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。
+当サイト「${SITE_TITLE}（https://sokes-nook.net/ ）」は、Amazon.co.jpを宣伝しリンクすることによってサイトが紹介料を獲得できる手段を提供することを目的に設定されたアフィリエイトプログラムである、Amazonアソシエイト・プログラムの参加者です。
 
 
 ## 6.labについて
-当サイト「s's-nook（https://sokes-nook.net/ ）」には、当サイト管理人が気になった技術の実装例を示す、lab（https://sokes-nook.net/lab ）というスペースが存在します。
+当サイト「${SITE_TITLE}（https://sokes-nook.net/ ）」には、当サイト管理人が気になった技術の実装例を示す、lab（https://sokes-nook.net/lab ）というスペースが存在します。
 
 labには一部 GoogleのOAuth 2.0を用いた認証の動作確認、通知機能の動作確認を提供しており、その際にGoogleアカウントに関連する情報（名前、メールアドレス、プロフィール写真など）やブラウザの情報が取得されます。
 
@@ -49,7 +50,7 @@ labには一部 GoogleのOAuth 2.0を用いた認証の動作確認、通知機�
 当サイトではlabで取得したデータの保存は行なっておらず、ユーザーによる動作確認以外の目的で取得したデータを使用することはありません。
 
 ## 7.著作権について
-当サイト「s's-nook（https://sokes-nook.net/ ）」に掲載されている情報についての著作権は放棄しておりません。
+当サイト「${SITE_TITLE}（https://sokes-nook.net/ ）」に掲載されている情報についての著作権は放棄しておりません。
 
 著作権法により認められている引用の範囲である場合を除き「内容、テキスト、画像等」の無断転載・使用を固く禁じます。
 
