@@ -35,7 +35,7 @@ export const generateMetadata = async ({
   const { slug } = await params;
   const frontmatter = await getFrontMatter(slug);
 
-  if (!frontmatter) return notFound();
+  if (!frontmatter || frontmatter.isDeleted === true) return notFound();
 
   return {
     title: frontmatter.title,

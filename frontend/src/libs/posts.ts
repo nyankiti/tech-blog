@@ -9,7 +9,7 @@ export type FrontMatter = {
   slug: string;
   tags: string[];
   isPublished: boolean;
-  idDeleted: boolean;
+  isDeleted: boolean;
   publishedAt: string;
   updatedAt: string;
   views: number;
@@ -74,7 +74,12 @@ export const getAllPosts = async (): Promise<FrontMatter[]> => {
 
   const frontMattersPromises = slugs.map((slug) => getFrontMatter(slug));
   const frontMatters = (await Promise.all(frontMattersPromises)).filter(
-    (post): post is FrontMatter => post !== null
+    (post): post is FrontMatter => {
+      console.log(post?.isDeleted);
+      return (
+        post !== null && post.isDeleted !== true && post.isPublished === true
+      );
+    }
   );
   return frontMatters;
 };
