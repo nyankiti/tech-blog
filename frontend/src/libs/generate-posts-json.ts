@@ -18,7 +18,7 @@ const castFrontMatter = (data: { [key: string]: any }): FrontMatter => {
     slug: data.slug || "",
     tags: Array.isArray(data.tags) ? data.tags : [],
     isPublished: Boolean(data.isPublished),
-    idDeleted: Boolean(data.idDeleted),
+    isDeleted: Boolean(data.isDeleted),
     publishedAt: data.publishedAt || "1970-01-01",
     updatedAt: data.updatedAt || data.publishedAt || "1970-01-01",
     views: Number(data.views) || 0,

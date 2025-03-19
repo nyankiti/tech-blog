@@ -87,7 +87,7 @@ export const getAllPosts = async (): Promise<FrontMatter[]> => {
 export const getSortedPosts = async (): Promise<FrontMatter[]> => {
   const posts = await getAllPosts();
   return posts
-    .filter((post) => post.isPublished && !post.idDeleted)
+    .filter((post) => post.isPublished && !post.isDeleted)
     .sort((a, b) =>
       compareDesc(new Date(a.publishedAt), new Date(b.publishedAt))
     );
@@ -112,7 +112,7 @@ export const getTags = async (): Promise<string[]> => {
   return Array.from(
     new Set(
       posts
-        .filter((post) => post.isPublished && !post.idDeleted)
+        .filter((post) => post.isPublished && !post.isDeleted)
         .flatMap((post) => post.tags)
     )
   ).filter((tag) => tag !== "");
