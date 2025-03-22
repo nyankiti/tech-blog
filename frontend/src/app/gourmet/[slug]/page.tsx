@@ -6,6 +6,9 @@ import { loadMDX } from "./mdx-loader";
 import { Tag } from "@/components/Tag";
 import { TbCalendar } from "react-icons/tb";
 import { Datetime } from "@/components/Datetime";
+import { unstable_ViewTransition as ViewTransition } from "react";
+import { BLOG_CONTENTS_URL } from "@/constants";
+import NextImage from "next/image";
 
 export async function generateStaticParams() {
   const slugs = (await getAllGourmetPosts()).map((post) => post.slug);
@@ -80,10 +83,23 @@ export default async function Page({ params }: Props) {
               </div>
             </div>
           </div>
-          <header className="flex flex-col-reverse gap-1 mb-4">
-            <h1 className="font-bold text-4xl">{post.title}</h1>
-          </header>
+          <ViewTransition name={`gourmet-post-title-${post.slug}`}>
+            <header className="flex flex-col-reverse gap-1 mb-4">
+              <h1 className="font-bold text-4xl">{post.title}</h1>
+            </header>
+          </ViewTransition>
           <div className="post prose dark:prose-invert">
+            <ViewTransition name={`gourmet-post-image-${post.slug}`}>
+              <NextImage
+                loading="eager"
+                decoding="sync"
+                className="w-full object-cover rounded-xl transition-all duration-300 ease-in-out"
+                src={`${BLOG_CONTENTS_URL}/${post.thumbnail}`}
+                width={300}
+                height={200}
+                alt="Blog Image"
+              />
+            </ViewTransition>
             <MDXComponent code={code} />
           </div>
         </div>
