@@ -1,5 +1,5 @@
 [build]
-  command = "cd .. &&  git submodule update --remote blog-contents && cp blog-contents/public/tech-blog-search-index.json frontend/public && cd frontend && ts-node src/libs/generate-posts-json.ts && npm run build"
+  command = "cd .. &&  git submodule update --remote blog-contents && cd frontend && ts-node src/libs/generate-posts-json.ts && npm run build"
   publish = ".next"
 
 [[plugins]]

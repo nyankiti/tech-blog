@@ -39,7 +39,9 @@ export const SearchBar = () => {
         });
 
         // 検索インデックスJSONを取得
-        const res = await fetch("/tech-blog-search-index.json");
+        const res = await fetch(
+          "https://nyankiti.github.io/blog-contents/tech-blog-search-index.json"
+        );
         const data = await res.json();
 
         data.forEach((post: PostDocument) => {

@@ -2,17 +2,10 @@ import { Feed } from "feed";
 import { FrontMatter } from "./posts";
 import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/constants";
 
-const getPostJsonUrl = () => {
-  if (typeof window !== "undefined") {
-    // クライアント側: 相対パスで OK
-    return "/posts.json";
-  }
-  // サーバー側: 絶対 URL が必要
-  return new URL("/posts.json", SITE_URL).toString();
-};
-
 export const generateFeed = async () => {
-  const response = await fetch(getPostJsonUrl());
+  const response = await fetch(
+    "https://nyankiti.github.io/blog-contents/posts.json"
+  );
   if (!response.ok) {
     throw new Error("Failed to fetch posts.json");
   }
