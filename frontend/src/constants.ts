@@ -14,3 +14,5 @@ export const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
     ? process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
     : undefined;
+
+export const BLOG_CONTENTS_URL = "https://nyankiti.github.io/blog-contents";

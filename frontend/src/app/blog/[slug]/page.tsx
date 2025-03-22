@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
 import { TbRefresh, TbCalendar } from "react-icons/tb";
-import { getFrontMatter, getSlugs, readFileFromMdorMds } from "@/libs/posts";
+import {
+  getFrontMatter,
+  getPostDirPath,
+  getSlugs,
+  readFileFromMdorMds,
+} from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { loadMDX } from "./mdx-loader";
@@ -61,7 +66,7 @@ export const generateMetadata = async ({
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const fileContent = await readFileFromMdorMds(slug);
+  const fileContent = await readFileFromMdorMds(slug, getPostDirPath());
   if (!fileContent) return notFound();
 
   // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する

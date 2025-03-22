@@ -1,11 +1,14 @@
 import { Feed } from "feed";
 import { FrontMatter } from "./posts";
-import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "@/constants";
+import {
+  BLOG_CONTENTS_URL,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/constants";
 
 export const generateFeed = async () => {
-  const response = await fetch(
-    "https://nyankiti.github.io/blog-contents/posts.json"
-  );
+  const response = await fetch(`${BLOG_CONTENTS_URL}/posts.json`);
   if (!response.ok) {
     throw new Error("Failed to fetch posts.json");
   }

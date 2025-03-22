@@ -22,14 +22,15 @@ export const getPostDirPath = () =>
   path.join(baseDir, "../blog-contents/contents/tech-blog");
 
 export async function readFileFromMdorMds(
-  slug: string
+  slug: string,
+  dirPath: string
 ): Promise<string | null> {
   const extensions = [".md", ".mdx"];
   let fileContent: string | null = null;
   let usedExt: string | null = null;
 
   for (const ext of extensions) {
-    const filepath = path.join(getPostDirPath(), `${slug}${ext}`);
+    const filepath = path.join(dirPath, `${slug}${ext}`);
     try {
       fileContent = await readFile(filepath, "utf-8");
       usedExt = ext;
@@ -50,7 +51,8 @@ export async function getFrontMatter(
   slug: string
 ): Promise<FrontMatter | null> {
   try {
-    const fileContent = await readFileFromMdorMds(slug);
+    const dirPath = getPostDirPath();
+    const fileContent = await readFileFromMdorMds(slug, dirPath);
     if (!fileContent) return null;
     const { data, content } = matter(fileContent);
     const description = await generatePostsDescription(content);

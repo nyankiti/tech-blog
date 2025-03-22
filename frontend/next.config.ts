@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nyankiti.github.io",
+      },
+    ],
+  },
   /* config options here */
   pageExtensions: ["md", "mdx", "ts", "tsx"],
   reactStrictMode: true,

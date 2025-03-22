@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import FlexSearch, { Document } from "flexsearch";
+import { BLOG_CONTENTS_URL } from "@/constants";
 
 /**
  * blog-contents側で生成したtech-blog-search-index.jsonに基づく
@@ -40,7 +41,7 @@ export const SearchBar = () => {
 
         // 検索インデックスJSONを取得
         const res = await fetch(
-          "https://nyankiti.github.io/blog-contents/tech-blog-search-index.json"
+          `${BLOG_CONTENTS_URL}/tech-blog-search-index.json`
         );
         const data = await res.json();
 
