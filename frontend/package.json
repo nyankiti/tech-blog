@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node src/libs/generate-posts-json.ts && next dev",
-    "build": "ts-node src/libs/generate-posts-json.ts && next build",
+    "dev": "next dev",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
