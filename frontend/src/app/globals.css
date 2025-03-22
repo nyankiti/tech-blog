@@ -35,3 +35,33 @@
     display: none;
   }
 }
+
+/* short labに関するスタイル */
+body {
+  overscroll-behavior-y: none; /* iOS上でのオーバースクロールを防止 */
+}
+/* スクロールバーをカスタマイズ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+/* ビデオに関連する特別なスタイル */
+@layer components {
+  .video-scrollbar-hidden {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .video-scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+}

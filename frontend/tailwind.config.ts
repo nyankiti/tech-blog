@@ -13,6 +13,17 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      extend: {
+        animation: {
+          "spin-slow": "spin 3s linear infinite",
+        },
+        keyframes: {
+          pulse: {
+            "0%, 100%": { opacity: "1" },
+            "50%": { opacity: "0.5" },
+          },
+        },
+      },
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-require-imports
