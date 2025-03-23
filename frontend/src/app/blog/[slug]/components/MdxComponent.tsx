@@ -44,20 +44,31 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
         code: ({ ...props }) => {
           const { className, children } = props;
           const match = /language-(\w+)/.exec(className || "");
-          return match ? (
-            <SyntaxHighlighter
-              language={match[1]}
-              PreTag="div"
-              {...props}
-              style={oneDark}
-            >
-              {String(children).replace(/\n$/, "")}
-            </SyntaxHighlighter>
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          );
+          if (match) {
+            console.log("className", className);
+            const filename = className.split(":")[1] as string | undefined;
+            return (
+              <>
+                {filename && (
+                  <div className="text-sm text-neutral-200">{filename}</div>
+                )}
+                <SyntaxHighlighter
+                  language={match[1]}
+                  PreTag="div"
+                  {...props}
+                  style={oneDark}
+                >
+                  {String(children).replace(/\n$/, "")}
+                </SyntaxHighlighter>
+              </>
+            );
+          } else {
+            return (
+              <code className={className} {...props}>
+                {children}
+              </code>
+            );
+          }
         },
       }}
     >

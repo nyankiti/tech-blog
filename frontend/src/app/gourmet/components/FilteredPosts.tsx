@@ -21,7 +21,6 @@ export default function FilteredPosts({ initialPosts }: FilteredPostsProps) {
       searchParams.get("gourmet")?.split(",").filter(Boolean) || [];
 
     if (locationFilters.length === 0 && gourmetFilters.length === 0) {
-      // setFilteredPosts(initialPosts);
       startTransition(() => {
         setFilteredPosts(initialPosts);
       });
