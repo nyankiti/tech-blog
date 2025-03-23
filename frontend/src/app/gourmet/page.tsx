@@ -1,14 +1,16 @@
 import {
-  //   getGourmetTags,
-  //   getLocationTags,
+  getGourmetTags,
+  getLocationTags,
   getSortedGourmetPosts,
 } from "@/libs/gourmet";
-import GourmetPostCard from "./components/GourmetPostCard";
+import TagFilter from "./components/TagFilter";
+import FilteredPosts from "./components/FilteredPosts";
 
 export default async function GourmetPage() {
   const gourmetPosts = await getSortedGourmetPosts();
-  //   const locationsTags = await getLocationTags();
-  //   const gourmetTags = await getGourmetTags();
+  const locationsTags = await getLocationTags();
+  const gourmetTags = await getGourmetTags();
+
   return (
     <div className="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 mx-auto">
       <div className="my-8">
@@ -19,11 +21,11 @@ export default async function GourmetPage() {
         </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {gourmetPosts.map((post, i) => {
-          return <GourmetPostCard key={i} post={post} />;
-        })}
+      <div className="mb-8">
+        <TagFilter locationsTags={locationsTags} gourmetTags={gourmetTags} />
       </div>
+
+      <FilteredPosts initialPosts={gourmetPosts} />
     </div>
   );
 }

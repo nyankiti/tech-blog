@@ -93,7 +93,7 @@ export default async function Page({ params }: Props) {
               <NextImage
                 loading="eager"
                 decoding="sync"
-                className="w-full object-cover rounded-xl transition-all duration-300 ease-in-out"
+                className="w-full object-cover rounded-xl"
                 src={`${BLOG_CONTENTS_URL}/${post.thumbnail}`}
                 width={300}
                 height={200}

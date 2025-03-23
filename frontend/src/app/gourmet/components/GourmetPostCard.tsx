@@ -16,7 +16,7 @@ export default function GourmetPostCard({ post }: { post: GourmetPost }) {
         <NextImage
           loading="eager"
           decoding="sync"
-          className="w-full object-cover rounded-xl transition-transform"
+          className="w-full object-cover rounded-xl"
           src={`${BLOG_CONTENTS_URL}/${post.thumbnail}`}
           width={300}
           height={200}
