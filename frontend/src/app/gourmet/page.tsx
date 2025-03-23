@@ -16,7 +16,7 @@ export default async function GourmetPage() {
     <div className="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 mx-auto">
       <div className="mt-8">
         <p className="mt-1 whitespace-pre-wrap text-gray-600 dark:text-neutral-400">
-          訪れたお店の写真を何となく残しておこうとする場所。写真は素人。
+          訪れたお店の記録を何となく残しておこうとする場所。写真は素人。
         </p>
       </div>
 

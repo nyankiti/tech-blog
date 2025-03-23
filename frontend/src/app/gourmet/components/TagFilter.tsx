@@ -80,13 +80,13 @@ export default function TagFilter({
             <button
               key={tag}
               onClick={() => toggleLocationTag(tag)}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              className={`center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-300  ${
                 selectedLocationTags.includes(tag)
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
               }`}
             >
-              {tag}
+              # {tag}
             </button>
           ))}
         </div>
@@ -99,13 +99,13 @@ export default function TagFilter({
             <button
               key={tag}
               onClick={() => toggleGourmetTag(tag)}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+              className={`center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-300 ${
                 selectedGourmetTags.includes(tag)
                   ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
               }`}
             >
-              {tag}
+              # {tag}
             </button>
           ))}
         </div>
@@ -114,7 +114,8 @@ export default function TagFilter({
       {(selectedLocationTags.length > 0 || selectedGourmetTags.length > 0) && (
         <button
           onClick={clearFilters}
-          className="text-sm text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+          className="center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-100"
+          // className="text-sm text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
         >
           フィルターをクリア
         </button>

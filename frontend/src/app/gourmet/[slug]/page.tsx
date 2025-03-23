@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
+import NextLink from "next/link";
 import {
   getGourmetPost,
   getAllGourmetPosts,
@@ -13,7 +14,6 @@ import { unstable_ViewTransition as ViewTransition } from "react";
 import { BLOG_CONTENTS_URL } from "@/constants";
 import NextImage from "next/image";
 import RelatedPostCard from "../components/RelatedPostCard";
-import { Tag } from "@/components/Tag";
 
 export async function generateStaticParams() {
   const slugs = (await getAllGourmetPosts()).map((post) => post.slug);
@@ -89,28 +89,32 @@ export default async function Page({ params }: Props) {
                   {post.locationTags?.length > 0 && (
                     <div className="flex gap-2">
                       {post.locationTags.map((tag, i) => (
-                        <Tag
+                        <NextLink
                           key={i}
-                          tag={tag}
                           href={{
                             pathname: "/gourmet",
                             query: { locations: tag },
                           }}
-                        />
+                          className="center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                        >
+                          # {tag}
+                        </NextLink>
                       ))}
                     </div>
                   )}
                   {post.gourmetTags?.length > 0 && (
                     <div className="flex gap-2 ml-2">
                       {post.gourmetTags.map((tag) => (
-                        <Tag
+                        <NextLink
                           key={tag}
-                          tag={tag}
                           href={{
                             pathname: "/gourmet",
                             query: { gourmet: tag },
                           }}
-                        />
+                          className="center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                        >
+                          # {tag}
+                        </NextLink>
                       ))}
                     </div>
                   )}
