@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, startTransition } from "react";
 import GourmetPostCard from "./GourmetPostCard";
 import { GourmetPost } from "@/libs/gourmet";
 
@@ -21,25 +21,30 @@ export default function FilteredPosts({ initialPosts }: FilteredPostsProps) {
       searchParams.get("gourmet")?.split(",").filter(Boolean) || [];
 
     if (locationFilters.length === 0 && gourmetFilters.length === 0) {
-      setFilteredPosts(initialPosts);
+      // setFilteredPosts(initialPosts);
+      startTransition(() => {
+        setFilteredPosts(initialPosts);
+      });
       return;
     }
 
-    const filtered = initialPosts.filter((post) => {
-      const matchesLocation =
-        locationFilters.length === 0 ||
-        (post.locationTags &&
-          locationFilters.some((tag) => post.locationTags?.includes(tag)));
+    startTransition(() => {
+      setFilteredPosts(
+        initialPosts.filter((post) => {
+          const matchesLocation =
+            locationFilters.length === 0 ||
+            (post.locationTags &&
+              locationFilters.some((tag) => post.locationTags?.includes(tag)));
 
-      const matchesGourmet =
-        gourmetFilters.length === 0 ||
-        (post.gourmetTags &&
-          gourmetFilters.some((tag) => post.gourmetTags?.includes(tag)));
+          const matchesGourmet =
+            gourmetFilters.length === 0 ||
+            (post.gourmetTags &&
+              gourmetFilters.some((tag) => post.gourmetTags?.includes(tag)));
 
-      return matchesLocation && matchesGourmet;
+          return matchesLocation && matchesGourmet;
+        })
+      );
     });
-
-    setFilteredPosts(filtered);
   }, [searchParams, initialPosts]);
 
   if (filteredPosts.length === 0) {
@@ -54,8 +59,8 @@ export default function FilteredPosts({ initialPosts }: FilteredPostsProps) {
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      {filteredPosts.map((post, i) => (
-        <GourmetPostCard key={i} post={post} />
+      {filteredPosts.map((post) => (
+        <GourmetPostCard key={post.slug} post={post} />
       ))}
     </div>
   );
