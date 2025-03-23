@@ -1,7 +1,7 @@
 import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-import remarkMdxImages from "remark-mdx-images";
+import rehypeMdxImportMedia from "rehype-mdx-import-media";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import { baseDir, FrontMatter, getPostDirPath } from "@/libs/posts";
 import path from "path";
@@ -22,13 +22,10 @@ export const loadMDX = async (fileContent: string) => {
     },
     cwd: getPostDirPath(),
     mdxOptions(options) {
-      options.remarkPlugins = [
-        ...(options.remarkPlugins ?? []),
-        remarkGfm,
-        remarkMdxImages,
-      ];
+      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
+        rehypeMdxImportMedia,
         rehypeSlug,
         [
           rehypeToc,
@@ -87,6 +84,7 @@ export const loadMDX = async (fileContent: string) => {
         ".png": "file",
         ".svg": "file",
         ".webp": "file",
+        ".avif": "file",
       };
       options.publicPath = "/images/blog/";
       options.write = true;

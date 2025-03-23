@@ -1,6 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    viewTransition: true,
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "nyankiti.github.io",
+      },
+    ],
+  },
   /* config options here */
   pageExtensions: ["md", "mdx", "ts", "tsx"],
   reactStrictMode: true,
