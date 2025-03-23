@@ -1,24 +1,29 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState, startTransition } from "react";
 import GourmetPostCard from "./GourmetPostCard";
 import { GourmetPost } from "@/libs/gourmet";
 
 interface FilteredPostsProps {
   initialPosts: GourmetPost[];
+  params: { [key: string]: string | string[] | undefined };
 }
 
-export default function FilteredPosts({ initialPosts }: FilteredPostsProps) {
-  const searchParams = useSearchParams();
+export default function FilteredPosts({
+  initialPosts,
+  params: searchParams,
+}: FilteredPostsProps) {
   const [filteredPosts, setFilteredPosts] =
     useState<GourmetPost[]>(initialPosts);
 
   useEffect(() => {
+    const locations = searchParams["locations"];
     const locationFilters =
-      searchParams.get("locations")?.split(",").filter(Boolean) || [];
+      (typeof locations === "string" && locations.split(",").filter(Boolean)) ||
+      [];
+    const gourmet = searchParams["gourmet"];
     const gourmetFilters =
-      searchParams.get("gourmet")?.split(",").filter(Boolean) || [];
+      (typeof gourmet === "string" && gourmet.split(",").filter(Boolean)) || [];
 
     if (locationFilters.length === 0 && gourmetFilters.length === 0) {
       startTransition(() => {

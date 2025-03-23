@@ -45,7 +45,6 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
           const { className, children } = props;
           const match = /language-(\w+)/.exec(className || "");
           if (match) {
-            console.log("className", className);
             const filename = className.split(":")[1] as string | undefined;
             return (
               <>
