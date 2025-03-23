@@ -13,6 +13,7 @@ import { unstable_ViewTransition as ViewTransition } from "react";
 import { BLOG_CONTENTS_URL } from "@/constants";
 import NextImage from "next/image";
 import RelatedPostCard from "../components/RelatedPostCard";
+import { Tag } from "@/components/Tag";
 
 export async function generateStaticParams() {
   const slugs = (await getAllGourmetPosts()).map((post) => post.slug);
@@ -87,25 +88,29 @@ export default async function Page({ params }: Props) {
                 <div className="flex flex-wrap gap-y-1 mb-1">
                   {post.locationTags?.length > 0 && (
                     <div className="flex gap-2">
-                      {post.locationTags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded dark:bg-blue-900 dark:text-blue-200"
-                        >
-                          {tag}
-                        </span>
+                      {post.locationTags.map((tag, i) => (
+                        <Tag
+                          key={i}
+                          tag={tag}
+                          href={{
+                            pathname: "/gourmet",
+                            query: { locations: tag },
+                          }}
+                        />
                       ))}
                     </div>
                   )}
                   {post.gourmetTags?.length > 0 && (
                     <div className="flex gap-2 ml-2">
                       {post.gourmetTags.map((tag) => (
-                        <span
+                        <Tag
                           key={tag}
-                          className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded dark:bg-green-900 dark:text-green-200"
-                        >
-                          {tag}
-                        </span>
+                          tag={tag}
+                          href={{
+                            pathname: "/gourmet",
+                            query: { gourmet: tag },
+                          }}
+                        />
                       ))}
                     </div>
                   )}
@@ -135,7 +140,6 @@ export default async function Page({ params }: Props) {
             </div>
           </div>
 
-          {/* 関連する投稿 (PCでは右側, スマホでは下部) */}
           <aside className="md:col-span-3">
             {relatedPosts.length > 0 && (
               <div className="mt-12 md:mt-0">

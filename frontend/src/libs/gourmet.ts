@@ -18,14 +18,20 @@ export type GourmetPost = {
   description?: string;
 };
 
+let cachedGourmetPosts: GourmetPost[] | null = null;
+
 export const getAllGourmetPosts = async (): Promise<GourmetPost[]> => {
+  if (cachedGourmetPosts) {
+    return cachedGourmetPosts;
+  }
+
   const response = await fetch(`${BLOG_CONTENTS_URL}/gourmets.json`);
   if (!response.ok) {
     console.error("Failed to fetch posts.json");
     return [];
   }
-  const gourmetPosts = (await response.json()) as GourmetPost[];
-  return gourmetPosts;
+  cachedGourmetPosts = (await response.json()) as GourmetPost[];
+  return cachedGourmetPosts;
 };
 
 export const getGourmetPost = async (
@@ -45,28 +51,26 @@ export const getSortedGourmetPosts = async (): Promise<GourmetPost[]> => {
 export const getRelatedGourmetPosts = async (
   post: GourmetPost
 ): Promise<GourmetPost[]> => {
-  const result: GourmetPost[] = [];
-  const posts = await getSortedGourmetPosts();
-  // locationTagsが一つでも一致する投稿を取得
-  result.push(
-    ...posts.filter(
-      (p) =>
-        p.slug !== post.slug &&
-        p.locationTags.some((tag) => post.locationTags.includes(tag))
-    )
+  const otherPosts = (await getSortedGourmetPosts()).filter(
+    (p) => p.slug !== post.slug
   );
 
-  // gourmetTagsが一つでも一致する投稿を取得
-  result.push(
-    ...posts.filter(
-      (p) =>
-        p.slug !== post.slug &&
-        p.gourmetTags.some((tag) => post.gourmetTags.includes(tag))
-    )
+  // locationTagsが一つでも一致する投稿を取得
+  const locationMatchedPosts = otherPosts.filter(
+    (p) =>
+      p.slug !== post.slug &&
+      p.locationTags.some((tag) => post.locationTags.includes(tag))
   );
+  // gourmetTagsが一つでも一致する投稿を取得
+  const gourmetMatchedPosts = otherPosts.filter(
+    (p) =>
+      p.slug !== post.slug &&
+      p.gourmetTags.some((tag) => post.gourmetTags.includes(tag))
+  );
+  const result = locationMatchedPosts || gourmetMatchedPosts;
+
   // 記事が4つに満たない場合は最新記事から補填する;
-  const latestPosts = posts.filter((p) => p.slug !== post.slug);
-  for (const p of latestPosts) {
+  for (const p of otherPosts) {
     if (result.length >= 4) break;
     if (!result.some((r) => r.slug === p.slug)) {
       result.push(p);

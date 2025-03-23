@@ -1,13 +1,13 @@
 "use client";
-import NextLink from "next/link";
+import NextLink, { LinkProps } from "next/link";
 import { useState } from "react";
 
 type Props = {
   tag: string;
-  linkTo?: string;
+  href?: LinkProps["href"];
 };
 
-export const Tag = ({ tag, linkTo }: Props) => {
+export const Tag = ({ tag, href }: Props) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => setIsHovered(true);
@@ -17,12 +17,12 @@ export const Tag = ({ tag, linkTo }: Props) => {
     <NextLink
       prefetch={false}
       key={tag}
-      href={linkTo ? linkTo : `/tags/${tag}`}
+      href={href ? href : `/tags/${tag}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="center relative inline-block select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-baseline font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-100"
+      className="center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-100"
     >
-      <span className="mt-px">
+      <span className="flex items-center">
         <span
           style={{
             color: isHovered ? "#a3e635" : "inherit",
