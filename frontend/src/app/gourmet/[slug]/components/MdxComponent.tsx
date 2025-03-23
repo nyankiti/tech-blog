@@ -43,7 +43,6 @@ export function MDXComponent({ code }: Props) {
             props.src.startsWith("../")
               ? `${BLOG_CONTENTS_URL}/${props.src}`
               : props.src;
-          console.log("src:", src);
           return (
             <NextImage
               className="w-full object-cover rounded-xl"
