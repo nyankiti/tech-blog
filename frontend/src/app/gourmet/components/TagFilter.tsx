@@ -72,11 +72,9 @@ export default function TagFilter({
   };
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
-          場所
-        </h3>
+    <>
+      <div className="my-4">
+        <h3>場所</h3>
         <div className="flex flex-wrap gap-2">
           {locationsTags.map((tag) => (
             <button
@@ -95,9 +93,7 @@ export default function TagFilter({
       </div>
 
       <div className="mb-4">
-        <h3 className="text-lg font-medium text-gray-800 dark:text-white mb-2">
-          ジャンル
-        </h3>
+        <h3>ジャンル</h3>
         <div className="flex flex-wrap gap-2">
           {gourmetTags.map((tag) => (
             <button
@@ -123,6 +119,6 @@ export default function TagFilter({
           フィルターをクリア
         </button>
       )}
-    </div>
+    </>
   );
 }

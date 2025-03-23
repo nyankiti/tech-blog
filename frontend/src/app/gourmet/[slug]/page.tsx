@@ -70,7 +70,7 @@ export default async function Page({ params }: Props) {
     const { code } = mdx;
 
     return (
-      <article className="max-w-7xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
+      <article className="max-w-7xl w-full flex justify-center px-5 pt-12 pb-24 mx-auto lg:px-32">
         <div className="w-full grid md:grid-cols-12 gap-8">
           {/* メインコンテンツ */}
           <div className="md:col-span-8 break-all">
@@ -144,7 +144,7 @@ export default async function Page({ params }: Props) {
             {relatedPosts.length > 0 && (
               <div className="mt-12 md:mt-0">
                 <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
-                  関連する投稿
+                  他の投稿
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
                   {relatedPosts.map((relatedPost) => (

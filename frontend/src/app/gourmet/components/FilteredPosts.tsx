@@ -57,7 +57,7 @@ export default function FilteredPosts({ initialPosts }: FilteredPostsProps) {
   }
 
   return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
       {filteredPosts.map((post) => (
         <GourmetPostCard key={post.slug} post={post} />
       ))}

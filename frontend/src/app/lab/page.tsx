@@ -14,6 +14,9 @@ export default async function Page() {
         <li>
           <a href="/lab/webpush">webpush</a>
         </li>
+        <li>
+          <a href="/gourmet">View Transition APIを用いたグルメブログ</a>
+        </li>
       </ul>
     </div>
   );

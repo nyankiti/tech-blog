@@ -1,15 +1,17 @@
 "use client";
 
 import NextLink from "next/link";
-import { FC } from "react";
 import { ColorThemeSelector } from "./ColorThemeSelector";
 import { SITE_TITLE } from "@/constants";
+import { usePathname } from "next/navigation";
 
-export const Header: FC = () => {
+export const Header = () => {
+  const pathname = usePathname();
+  const titleLink = pathname.includes("gourmet") ? "/gourmet" : "/";
   return (
     <header className="sticky top-0 flex items-center justify-between px-4 md:px-8 py-2 border-b border-gray-200 backdrop-blur-sm z-10">
       <NextLink
-        href="/"
+        href={titleLink}
         className="text-xl sm:text-2xl md:text-4xl font-black tracking-tighter text-gray-800 dark:text-white"
       >
         {SITE_TITLE}
@@ -21,7 +23,7 @@ export const Header: FC = () => {
   );
 };
 
-const NavLinks: FC = () => {
+const NavLinks = () => {
   return (
     <>
       <NextLink
