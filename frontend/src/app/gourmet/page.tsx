@@ -5,6 +5,7 @@ import {
 } from "@/libs/gourmet";
 import TagFilter from "./components/TagFilter";
 import FilteredPosts from "./components/FilteredPosts";
+import { Suspense } from "react";
 
 export default async function GourmetPage() {
   const gourmetPosts = await getSortedGourmetPosts();
@@ -21,11 +22,13 @@ export default async function GourmetPage() {
         </p>
       </div>
 
-      <div className="mb-8">
-        <TagFilter locationsTags={locationsTags} gourmetTags={gourmetTags} />
-      </div>
+      <Suspense fallback={<div>読み込み中...</div>}>
+        <div className="mb-8">
+          <TagFilter locationsTags={locationsTags} gourmetTags={gourmetTags} />
+        </div>
 
-      <FilteredPosts initialPosts={gourmetPosts} />
+        <FilteredPosts initialPosts={gourmetPosts} />
+      </Suspense>
     </div>
   );
 }

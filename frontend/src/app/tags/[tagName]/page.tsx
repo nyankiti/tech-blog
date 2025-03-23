@@ -68,7 +68,7 @@ const TagPage: React.FC<Props> = async ({ params }) => {
           {tagName && (
             <>
               <span>選択中のタグ: </span>
-              <Tag tag={tagName} linkTo="/" />
+              <Tag tag={tagName} href="/" />
             </>
           )}
           <div>
