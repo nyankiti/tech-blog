@@ -42,6 +42,39 @@ export const getSortedGourmetPosts = async (): Promise<GourmetPost[]> => {
     .sort((a, b) => compareDesc(new Date(a.visitedAt), new Date(b.visitedAt)));
 };
 
+export const getRelatedGourmetPosts = async (
+  post: GourmetPost
+): Promise<GourmetPost[]> => {
+  const result: GourmetPost[] = [];
+  const posts = await getSortedGourmetPosts();
+  // locationTagsが一つでも一致する投稿を取得
+  result.push(
+    ...posts.filter(
+      (p) =>
+        p.slug !== post.slug &&
+        p.locationTags.some((tag) => post.locationTags.includes(tag))
+    )
+  );
+
+  // gourmetTagsが一つでも一致する投稿を取得
+  result.push(
+    ...posts.filter(
+      (p) =>
+        p.slug !== post.slug &&
+        p.gourmetTags.some((tag) => post.gourmetTags.includes(tag))
+    )
+  );
+  // 記事が4つに満たない場合は最新記事から補填する;
+  const latestPosts = posts.filter((p) => p.slug !== post.slug);
+  for (const p of latestPosts) {
+    if (result.length >= 4) break;
+    if (!result.some((r) => r.slug === p.slug)) {
+      result.push(p);
+    }
+  }
+  return result.slice(0, 4);
+};
+
 export const getLocationTags = async (): Promise<string[]> => {
   const posts = await getAllGourmetPosts();
   return Array.from(
