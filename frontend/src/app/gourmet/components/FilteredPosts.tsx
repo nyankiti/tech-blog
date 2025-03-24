@@ -16,6 +16,7 @@ export default function FilteredPosts({
   const [filteredPosts, setFilteredPosts] =
     useState<GourmetPost[]>(initialPosts);
 
+  // FIXME: useEffect, useStateでフィルタリングする必要ないのでは？？ SRCの段階でフィルタリングできそう？
   useEffect(() => {
     const locations = searchParams["locations"];
     const locationFilters =

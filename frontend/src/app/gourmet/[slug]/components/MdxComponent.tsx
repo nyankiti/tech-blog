@@ -37,6 +37,7 @@ export function MDXComponent({ code }: Props) {
           );
         },
         img: ({ ...props }) => {
+          // 相対パスが指定された場合、blog-contents側の画像を参照する
           const src =
             props.src.startsWith("images") | props.src.startsWith("/") ||
             props.src.startsWith("./") ||

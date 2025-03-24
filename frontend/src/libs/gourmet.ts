@@ -30,7 +30,16 @@ export const getAllGourmetPosts = async (): Promise<GourmetPost[]> => {
     console.error("Failed to fetch posts.json");
     return [];
   }
-  cachedGourmetPosts = (await response.json()) as GourmetPost[];
+  const gourmetPosts = (await response.json()) as GourmetPost[];
+  cachedGourmetPosts = gourmetPosts.map((post) => {
+    const thumbnail = post.thumbnail.startsWith("images")
+      ? `${BLOG_CONTENTS_URL}/${post.thumbnail}`
+      : post.thumbnail;
+    return {
+      ...post,
+      thumbnail,
+    };
+  });
   return cachedGourmetPosts;
 };
 
