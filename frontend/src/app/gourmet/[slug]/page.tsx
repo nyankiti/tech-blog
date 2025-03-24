@@ -11,7 +11,6 @@ import { loadMDX } from "./mdx-loader";
 import { TbCalendar } from "react-icons/tb";
 import { Datetime } from "@/components/Datetime";
 import { unstable_ViewTransition as ViewTransition } from "react";
-import { BLOG_CONTENTS_URL } from "@/constants";
 import NextImage from "next/image";
 import RelatedPostCard from "../components/RelatedPostCard";
 
