@@ -27,7 +27,7 @@ export const getAllGourmetPosts = async (): Promise<GourmetPost[]> => {
 
   const response = await fetch(`${BLOG_CONTENTS_URL}/gourmets.json`);
   if (!response.ok) {
-    console.error("Failed to fetch posts.json");
+    console.error("Failed to fetch gourmets.json");
     return [];
   }
   const gourmetPosts = (await response.json()) as GourmetPost[];

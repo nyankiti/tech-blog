@@ -4,7 +4,6 @@ import NextLink from "next/link";
 
 import { GourmetPost } from "@/libs/gourmet";
 import { Datetime } from "@/components/Datetime";
-import { BLOG_CONTENTS_URL } from "@/constants";
 
 export default function GourmetPostCard({ post }: { post: GourmetPost }) {
   return (
@@ -17,7 +16,7 @@ export default function GourmetPostCard({ post }: { post: GourmetPost }) {
           loading="eager"
           decoding="sync"
           className="w-full object-cover rounded-xl"
-          src={`${BLOG_CONTENTS_URL}/${post.thumbnail}`}
+          src={post.thumbnail}
           width={600}
           height={400}
           alt="Blog Image"
