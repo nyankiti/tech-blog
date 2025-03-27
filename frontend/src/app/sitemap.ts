@@ -1,4 +1,5 @@
 import { SITE_URL } from "@/constants";
+import { getSortedGourmetPosts } from "@/libs/gourmet";
 import { getSortedPosts } from "@/libs/posts";
 import type { MetadataRoute } from "next";
 
@@ -9,7 +10,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     return {
       url: `${siteUrl}blog/${post.slug}`,
       lastModified: new Date(post.updatedAt ?? post.publishedAt),
-      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    };
+  });
+  const gourmets = (await getSortedGourmetPosts()).map((post) => {
+    return {
+      url: `${siteUrl}gourmet/${post.slug}`,
+      lastModified: new Date(post.updatedAt ?? post.publishedAt),
       priority: 0.5,
     };
   });
@@ -28,6 +35,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.5,
     },
     ...blogs,
+    ...gourmets,
     {
       url: `${siteUrl}lab`,
       lastModified: new Date(),
@@ -36,7 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     // labsは手動で追加するしかない
     {
-      url: `${siteUrl}lab/unified`,
+      url: `${siteUrl}lab/webpush`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.3,
