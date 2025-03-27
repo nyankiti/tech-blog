@@ -21,9 +21,7 @@ export type GourmetPost = {
 let cachedGourmetPosts: GourmetPost[] | null = null;
 
 export const getAllGourmetPosts = async (): Promise<GourmetPost[]> => {
-  if (cachedGourmetPosts) {
-    return cachedGourmetPosts;
-  }
+  if (cachedGourmetPosts) return cachedGourmetPosts;
 
   const response = await fetch(`${BLOG_CONTENTS_URL}/gourmets.json`);
   if (!response.ok) {
@@ -31,15 +29,17 @@ export const getAllGourmetPosts = async (): Promise<GourmetPost[]> => {
     return [];
   }
   const gourmetPosts = (await response.json()) as GourmetPost[];
-  cachedGourmetPosts = gourmetPosts.map((post) => {
-    const thumbnail = post.thumbnail.startsWith("images")
-      ? `${BLOG_CONTENTS_URL}/${post.thumbnail}`
-      : post.thumbnail;
-    return {
-      ...post,
-      thumbnail,
-    };
-  });
+  cachedGourmetPosts = gourmetPosts
+    .filter((post) => post.isPublished && !post.isDeleted)
+    .map((post) => {
+      const thumbnail = post.thumbnail.startsWith("images")
+        ? `${BLOG_CONTENTS_URL}/${post.thumbnail}`
+        : post.thumbnail;
+      return {
+        ...post,
+        thumbnail,
+      };
+    });
   return cachedGourmetPosts;
 };
 
@@ -52,9 +52,9 @@ export const getGourmetPost = async (
 
 export const getSortedGourmetPosts = async (): Promise<GourmetPost[]> => {
   const posts = await getAllGourmetPosts();
-  return posts
-    .filter((post) => post.isPublished && !post.isDeleted)
-    .sort((a, b) => compareDesc(new Date(a.visitedAt), new Date(b.visitedAt)));
+  return posts.sort((a, b) =>
+    compareDesc(new Date(a.visitedAt), new Date(b.visitedAt))
+  );
 };
 
 export const getRelatedGourmetPosts = async (
@@ -90,22 +90,14 @@ export const getRelatedGourmetPosts = async (
 
 export const getLocationTags = async (): Promise<string[]> => {
   const posts = await getAllGourmetPosts();
-  return Array.from(
-    new Set(
-      posts
-        .filter((post) => post.isPublished && !post.isDeleted)
-        .flatMap((post) => post.locationTags)
-    )
-  ).filter((tag) => tag !== "");
+  return Array.from(new Set(posts.flatMap((post) => post.locationTags))).filter(
+    (tag) => tag !== ""
+  );
 };
 
 export const getGourmetTags = async (): Promise<string[]> => {
   const posts = await getAllGourmetPosts();
-  return Array.from(
-    new Set(
-      posts
-        .filter((post) => post.isPublished && !post.isDeleted)
-        .flatMap((post) => post.gourmetTags)
-    )
-  ).filter((tag) => tag !== "");
+  return Array.from(new Set(posts.flatMap((post) => post.gourmetTags))).filter(
+    (tag) => tag !== ""
+  );
 };
