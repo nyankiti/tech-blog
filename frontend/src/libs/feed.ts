@@ -1,5 +1,5 @@
 import { Feed } from "feed";
-import { FrontMatter } from "./posts";
+import { TechBlogPost } from "./posts";
 import {
   BLOG_CONTENTS_URL,
   SITE_DESCRIPTION,
@@ -12,9 +12,7 @@ export const generateFeed = async () => {
   if (!response.ok) {
     throw new Error("Failed to fetch posts.json");
   }
-  const posts = (await response.json()) as (FrontMatter & {
-    content: string;
-  })[];
+  const posts = (await response.json()) as TechBlogPost[];
 
   const feed = new Feed({
     id: SITE_URL.toString(),
