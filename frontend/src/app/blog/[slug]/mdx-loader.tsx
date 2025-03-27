@@ -3,6 +3,7 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import path from "path";
+import { remarkImageDimesionsPlugin } from "./remark-image-dimensions-plugin";
 
 export const loadMDX = async (fileContent: string) => {
   return bundleMDX({
@@ -25,7 +26,11 @@ export const loadMDX = async (fileContent: string) => {
     // ),
     cwd: path.join(process.env.BASE_DIR || process.cwd(), "src/app/blog"),
     mdxOptions(options) {
-      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
+      options.remarkPlugins = [
+        ...(options.remarkPlugins ?? []),
+        remarkGfm,
+        remarkImageDimesionsPlugin,
+      ];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
         rehypeSlug,

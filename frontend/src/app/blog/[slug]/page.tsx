@@ -66,7 +66,7 @@ export default async function Page({ params }: Props) {
   if (!post || post.isDeleted === true) return notFound();
 
   // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
-  const mookmarkUrls = await extractBookmarkUrls(post.content ?? "");
+  const mookmarkUrls = await extractBookmarkUrls(post.content);
 
   const globalMetadataMap: Record<string, SiteMetadata | null> =
     await Promise.all(
@@ -80,6 +80,7 @@ export default async function Page({ params }: Props) {
         }
       })
     ).then(Object.fromEntries);
+
   try {
     const mdx = await loadMDX(post.content);
     const { code } = mdx;

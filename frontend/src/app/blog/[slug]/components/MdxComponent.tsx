@@ -26,7 +26,11 @@ type Props = {
 
 export function MDXComponent({ code, globalMetadataMap }: Props) {
   const Component = useMemo(
-    () => getMDXComponent(code, { ...GLOBAL_CONFIG, globalMetadataMap }),
+    () =>
+      getMDXComponent(code, {
+        ...GLOBAL_CONFIG,
+        globalMetadataMap,
+      }),
     [code, globalMetadataMap]
   );
 
@@ -41,20 +45,15 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
           );
         },
         img: ({ ...props }) => {
-          // 相対パスが指定された場合、blog-contents側の画像を参照する
-          const src =
-            props.src.startsWith("images") | props.src.startsWith("/") ||
-            props.src.startsWith("./") ||
-            props.src.startsWith("../")
-              ? `${BLOG_CONTENTS_URL}/${props.src}`
-              : props.src;
           return (
             <NextImage
               className="object-cover rounded-xl"
-              src={src}
+              // blog-contentsリポジトリのgithub-pagesにアップロードされた画像のURL
+              src={`${BLOG_CONTENTS_URL}/${props.src}`}
               alt={props.alt || ""}
-              width={900}
-              height={600}
+              // memo: 独自のremarkプラグインで画像のサイズを取得している
+              width={props.originalwidth || 900}
+              height={props.originalheight || 600}
             />
           );
         },
