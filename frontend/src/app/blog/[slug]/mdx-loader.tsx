@@ -5,10 +5,6 @@ import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import path from "path";
 
 export const loadMDX = async (fileContent: string) => {
-  console.log(
-    "path",
-    path.join(process.env.BASE_DIR || process.cwd(), "src/app/blog")
-  );
   return bundleMDX({
     source: fileContent,
     globals: {
