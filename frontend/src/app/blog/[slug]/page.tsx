@@ -1,12 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
 import { TbRefresh, TbCalendar } from "react-icons/tb";
-import {
-  getFrontMatter,
-  getPostDirPath,
-  getSlugs,
-  readFileFromMdorMds,
-} from "@/libs/posts";
+import { getSlugs, getTechBlogPost } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { loadMDX } from "./mdx-loader";
@@ -38,24 +33,24 @@ export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
   const { slug } = await params;
-  const frontmatter = await getFrontMatter(slug);
+  const post = await getTechBlogPost(slug);
 
-  if (!frontmatter || frontmatter.isDeleted === true) return notFound();
+  if (!post || post.isDeleted === true) return notFound();
 
   return {
-    title: frontmatter.title,
-    description: frontmatter.description || frontmatter.title,
+    title: post.title,
+    description: post.description || post.title,
     alternates: {
       canonical: `https://sokes-nook.net/blog/${slug}`,
     },
     openGraph: {
       type: "article",
       url: `/blog/${slug}`,
-      title: frontmatter.title,
-      description: frontmatter.description || frontmatter.title,
-      publishedTime: frontmatter.publishedAt,
-      modifiedTime: frontmatter.updatedAt,
-      tags: frontmatter.tags,
+      title: post.title,
+      description: post.description || post.title,
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      tags: post.tags,
     },
     twitter: {
       card: "summary_large_image",
@@ -66,11 +61,12 @@ export const generateMetadata = async ({
 
 export default async function Page({ params }: Props) {
   const { slug } = await params;
-  const fileContent = await readFileFromMdorMds(slug, getPostDirPath());
-  if (!fileContent) return notFound();
+  const post = await getTechBlogPost(slug);
+
+  if (!post || post.isDeleted === true) return notFound();
 
   // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
-  const mookmarkUrls = await extractBookmarkUrls(fileContent ?? "");
+  const mookmarkUrls = await extractBookmarkUrls(post.content ?? "");
 
   const globalMetadataMap: Record<string, SiteMetadata | null> =
     await Promise.all(
@@ -85,11 +81,11 @@ export default async function Page({ params }: Props) {
       })
     ).then(Object.fromEntries);
   try {
-    const mdx = await loadMDX(fileContent);
-    const { frontmatter, code } = mdx;
+    const mdx = await loadMDX(post.content);
+    const { code } = mdx;
 
-    const publishedDate = new Date(frontmatter.publishedAt);
-    const lastEditedDate = new Date(frontmatter.updatedAt);
+    const publishedDate = new Date(post.publishedAt);
+    const lastEditedDate = new Date(post.updatedAt);
     const isShowEditTime =
       publishedDate < lastEditedDate &&
       publishedDate.toISOString().slice(0, 10) !==
@@ -104,27 +100,24 @@ export default async function Page({ params }: Props) {
                 <TbCalendar size={20} className="" />
                 <Datetime
                   className="text-gray-600  dark:text-neutral-400"
-                  datetime={frontmatter.publishedAt}
+                  datetime={post.publishedAt}
                   format="yyyy/MM/dd"
                 />
                 {isShowEditTime && <TbRefresh size={20} className="ml-3" />}
-                {frontmatter.updatedAt && isShowEditTime && (
-                  <Datetime
-                    datetime={frontmatter.updatedAt}
-                    format="yyyy/MM/dd"
-                  />
+                {post.updatedAt && isShowEditTime && (
+                  <Datetime datetime={post.updatedAt} format="yyyy/MM/dd" />
                 )}
               </div>
 
               <div className="flex flex-wrap gap-y-1 mb-1">
-                {frontmatter.tags.map((tag, i) => (
+                {post.tags.map((tag, i) => (
                   <Tag key={i} tag={tag} />
                 ))}
               </div>
             </div>
           </div>
           <header className="flex flex-col-reverse gap-1 mb-4">
-            <h1 className="font-bold text-4xl">{frontmatter.title}</h1>
+            <h1 className="font-bold text-4xl">{post.title}</h1>
           </header>
           <div className="post prose dark:prose-invert">
             <MDXComponent code={code} globalMetadataMap={globalMetadataMap} />
@@ -151,7 +144,7 @@ export default async function Page({ params }: Props) {
     );
   } catch (e) {
     console.error("Failed to load MDX:", e);
-    console.error("filecontent:", fileContent);
+    console.error("filecontent:", post);
     return notFound();
   }
 }

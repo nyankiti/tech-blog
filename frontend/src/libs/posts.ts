@@ -1,10 +1,8 @@
 import { compareDesc } from "date-fns";
-import path from "node:path";
-import { readFile, readdir } from "node:fs/promises";
-import matter from "gray-matter";
 import { generatePostsDescription } from "./generate-posts-description";
+import { BLOG_CONTENTS_URL } from "@/constants";
 
-export type FrontMatter = {
+export type TechBlogPost = {
   title: string;
   slug: string;
   tags: string[];
@@ -13,108 +11,58 @@ export type FrontMatter = {
   publishedAt: string;
   updatedAt: string;
   views: number;
+  content: string;
   description?: string;
 };
 
-export const baseDir = process.env.BASE_DIR || process.cwd();
+let cachedTechBlogPosts: TechBlogPost[] | null = null;
 
-export const getPostDirPath = () =>
-  path.join(baseDir, "../blog-contents/contents/tech-blog");
+export const getAllPosts = async (): Promise<TechBlogPost[]> => {
+  if (cachedTechBlogPosts) return cachedTechBlogPosts;
 
-export async function readFileFromMdorMds(
-  slug: string,
-  dirPath: string
-): Promise<string | null> {
-  const extensions = [".md", ".mdx"];
-  let fileContent: string | null = null;
-  let usedExt: string | null = null;
-
-  for (const ext of extensions) {
-    const filepath = path.join(dirPath, `${slug}${ext}`);
-    try {
-      fileContent = await readFile(filepath, "utf-8");
-      usedExt = ext;
-      break;
-    } catch {
-      continue;
-    }
+  const response = await fetch(`${BLOG_CONTENTS_URL}/posts.json`);
+  if (!response.ok) {
+    console.error("Failed to fetch posts.json");
+    return [];
   }
-
-  if (!fileContent || !usedExt) {
-    console.warn(`No valid file found for slug: ${slug}${usedExt}`);
-    return null;
-  }
-  return fileContent;
-}
-
-export async function getFrontMatter(
-  slug: string
-): Promise<FrontMatter | null> {
-  try {
-    const dirPath = getPostDirPath();
-    const fileContent = await readFileFromMdorMds(slug, dirPath);
-    if (!fileContent) return null;
-    const { data, content } = matter(fileContent);
-    const description = await generatePostsDescription(content);
-
-    return {
-      ...data,
-      description,
-    } as FrontMatter;
-  } catch (error) {
-    console.error("Error reading Markdown file:", error);
-    return null;
-  }
-}
-
-export const getAllPosts = async (): Promise<FrontMatter[]> => {
-  const postDirPath = getPostDirPath();
-  const postFiles = await readdir(postDirPath);
-  const slugs = postFiles.map((file) =>
-    path.basename(file, path.extname(file))
+  const posts = (await response.json()) as TechBlogPost[];
+  cachedTechBlogPosts = await Promise.all(
+    posts
+      .filter((post) => post.isPublished && !post.isDeleted)
+      .map(async (post) => {
+        const description =
+          post.description || (await generatePostsDescription(post.content));
+        return {
+          ...post,
+          description,
+        };
+      })
   );
-
-  const frontMattersPromises = slugs.map((slug) => getFrontMatter(slug));
-  const frontMatters = (await Promise.all(frontMattersPromises)).filter(
-    (post): post is FrontMatter => {
-      return (
-        post !== null && post.isDeleted !== true && post.isPublished === true
-      );
-    }
-  );
-  return frontMatters;
+  return cachedTechBlogPosts;
 };
 
-export const getSortedPosts = async (): Promise<FrontMatter[]> => {
+export const getTechBlogPost = async (
+  slug: string
+): Promise<TechBlogPost | null> => {
   const posts = await getAllPosts();
-  return posts
-    .filter((post) => post.isPublished && !post.isDeleted)
-    .sort((a, b) =>
-      compareDesc(new Date(a.publishedAt), new Date(b.publishedAt))
-    );
+  return posts.find((post) => post.slug === slug) ?? null;
+};
+
+export const getSortedPosts = async (): Promise<TechBlogPost[]> => {
+  const posts = await getAllPosts();
+  return posts.sort((a, b) =>
+    compareDesc(new Date(a.publishedAt), new Date(b.publishedAt))
+  );
 };
 
 export const getSlugs = async (): Promise<string[]> => {
-  const postDirPath = getPostDirPath();
-  const postFiles = await readdir(postDirPath);
-  return postFiles
-    .map((file) => {
-      if (path.extname(file) === ".md" || path.extname(file) === ".mdx") {
-        const slug = path.basename(file, path.extname(file));
-        return slug;
-      }
-      return null;
-    })
-    .filter(Boolean) as string[];
+  const posts = await getAllPosts();
+  return posts.map((post) => post.slug);
 };
 
 export const getTags = async (): Promise<string[]> => {
   const posts = await getAllPosts();
-  return Array.from(
-    new Set(
-      posts
-        .filter((post) => post.isPublished && !post.isDeleted)
-        .flatMap((post) => post.tags)
-    )
-  ).filter((tag) => tag !== "");
+  return Array.from(new Set(posts.flatMap((post) => post.tags))).filter(
+    (tag) => tag !== ""
+  );
 };

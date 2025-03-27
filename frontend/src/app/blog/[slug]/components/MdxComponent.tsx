@@ -1,6 +1,7 @@
 "use client";
 import { useMemo } from "react";
 import he from "he";
+import NextImage from "next/image";
 import { getMDXComponent } from "mdx-bundler/client";
 import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -9,6 +10,7 @@ import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { SiteMetadata } from "@/components/MDXComponents/utils";
 import { TweetEmbed } from "@/components/MDXComponents/TweetEmbed";
 import { YouTubeEmbed } from "@/components/MDXComponents/YoutubeEmbed";
+import { BLOG_CONTENTS_URL } from "@/constants";
 
 const GLOBAL_CONFIG = {
   MdxJsReact: {
@@ -38,7 +40,26 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
             </h1>
           );
         },
-        // TODO: この辺りのComponentをblog-contents側によせたい
+        img: ({ ...props }) => {
+          // 相対パスが指定された場合、blog-contents側の画像を参照する
+          const src =
+            props.src.startsWith("images") | props.src.startsWith("/") ||
+            props.src.startsWith("./") ||
+            props.src.startsWith("../")
+              ? `${BLOG_CONTENTS_URL}/${props.src}`
+              : props.src;
+          return (
+            <NextImage
+              className="object-cover rounded-xl"
+              src={src}
+              alt={props.alt || ""}
+              width={900}
+              height={600}
+            />
+          );
+        },
+        // BookmarkのレンダリングをFE側に寄せる
+        // Bookmark: Bookmark,
         TweetEmbed: TweetEmbed,
         YouTubeEmbed: YouTubeEmbed,
         code: ({ ...props }) => {

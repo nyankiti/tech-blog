@@ -1,13 +1,15 @@
 import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-import rehypeMdxImportMedia from "rehype-mdx-import-media";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
-import { baseDir, FrontMatter, getPostDirPath } from "@/libs/posts";
 import path from "path";
 
 export const loadMDX = async (fileContent: string) => {
-  return bundleMDX<FrontMatter>({
+  console.log(
+    "path",
+    path.join(process.env.BASE_DIR || process.cwd(), "src/app/blog")
+  );
+  return bundleMDX({
     source: fileContent,
     globals: {
       globalMetadataMap: {
@@ -20,12 +22,16 @@ export const loadMDX = async (fileContent: string) => {
         defaultExport: false,
       },
     },
-    cwd: getPostDirPath(),
+    // mdx-bundlerのesbuildではこのcwdからの相対パスでimportを解決する
+    // cwd: path.join(
+    //   process.env.BASE_DIR || process.cwd(),
+    //   "../blog-contents/contents/tech-blog"
+    // ),
+    cwd: path.join(process.env.BASE_DIR || process.cwd(), "src/app/blog"),
     mdxOptions(options) {
       options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkGfm];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
-        rehypeMdxImportMedia,
         rehypeSlug,
         [
           rehypeToc,
@@ -75,19 +81,6 @@ export const loadMDX = async (fileContent: string) => {
       options.define = {
         "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV), // Reactのモードを固定
       };
-      options.outdir = path.join(baseDir, "public/images/blog/");
-      options.loader = {
-        ...options.loader,
-        ".gif": "file",
-        ".jpeg": "file",
-        ".jpg": "file",
-        ".png": "file",
-        ".svg": "file",
-        ".webp": "file",
-        ".avif": "file",
-      };
-      options.publicPath = "/images/blog/";
-      options.write = true;
       return options;
     },
   });

@@ -1,14 +1,13 @@
 import NextLink from "next/link";
-import { FC } from "react";
 import { Datetime } from "./Datetime";
 import { Tag } from "./Tag";
-import { FrontMatter } from "@/libs/posts";
+import { TechBlogPost } from "@/libs/posts";
 
 type Props = {
-  post: FrontMatter;
+  post: TechBlogPost;
 };
 
-export const PostCard: FC<Props> = ({ post }) => {
+export const PostCard = ({ post }: Props) => {
   return (
     <article className="group flex flex-col bg-white border shadow-sm rounded-xl hover:shadow-md transition dark:bg-neutral-900 dark:border-neutral-800">
       <div className="p-4 md:p-5">

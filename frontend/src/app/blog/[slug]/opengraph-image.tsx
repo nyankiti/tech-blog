@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import { ImageResponse } from "next/og";
 import { SITE_TITLE } from "@/constants";
-import { getFrontMatter, getSlugs } from "@/libs/posts";
+import { getSlugs, getTechBlogPost } from "@/libs/posts";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -29,7 +29,7 @@ type Props = {
 
 export default async function Image({ params }: Props) {
   const { slug } = await params;
-  const frontmatter = await getFrontMatter(slug);
+  const frontmatter = await getTechBlogPost(slug);
 
   if (!frontmatter) return new Response("Not Found", { status: 404 });
 
