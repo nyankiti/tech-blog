@@ -1,21 +1,29 @@
 "use client";
 
-import { getFaviconUrl, SiteMetadata } from "./MDXComponents/utils";
+import { getFaviconUrl } from "./MDXComponents/utils";
 import he from "he";
 
 type Props = {
   href: string;
-  siteUrl: string;
+  metadataurl?: string;
+  metadatasitename?: string;
+  metadatatitle?: string;
+  metadatadescription?: string;
+  metadataimage?: string;
+  metadatatype?: string;
 };
 
-declare const globalMetadataMap: Record<string, SiteMetadata | undefined>;
-
-export const Bookmark: React.FC<Props> = ({ href, siteUrl }) => {
-  const url = new URL(href, siteUrl); // hrefを相対パスで指定された場合は SITE_URL利用されるようにする
-  // metadataMapはMDXのスコープから注入される。
-  const metadata = globalMetadataMap[url.toString()];
-  if (!metadata) {
-    // return <BookmarkError href={href} />;
+export const Bookmark: React.FC<Props> = (props) => {
+  const url = new URL(props.href);
+  const metadata = {
+    url: props.metadataurl,
+    site_name: props.metadatasitename,
+    title: props.metadatatitle,
+    description: props.metadatadescription,
+    image: props.metadataimage,
+    type: props.metadatatype,
+  };
+  if (!metadata.title) {
     return (
       <a href={url.toString()} target="_blank" rel="noreferrer noopener">
         {url.toString()}
@@ -32,7 +40,7 @@ export const Bookmark: React.FC<Props> = ({ href, siteUrl }) => {
     >
       <div className="flex flex-col p-2 flex-1 h-full hover:opacity-80">
         <div className="font-bold line-clamp-3 break-words">
-          {he.decode(metadata.title ? metadata.title : metadata.url)}
+          {he.decode(metadata.title ? metadata.title : metadata.url ?? "")}
         </div>
 
         <div className="flex-1 mt-2">

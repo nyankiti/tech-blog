@@ -4,6 +4,7 @@ import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
 import path from "path";
 import { remarkImageDimesionsPlugin } from "./remark-image-dimensions-plugin";
+import { remarkBookmarkMetadatasPlugin } from "./remark-bookmark-metadatas-plugin";
 
 export const loadMDX = async (fileContent: string) => {
   return bundleMDX({
@@ -30,6 +31,7 @@ export const loadMDX = async (fileContent: string) => {
         ...(options.remarkPlugins ?? []),
         remarkGfm,
         remarkImageDimesionsPlugin,
+        remarkBookmarkMetadatasPlugin,
       ];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),

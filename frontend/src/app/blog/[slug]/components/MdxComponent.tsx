@@ -11,6 +11,7 @@ import { SiteMetadata } from "@/components/MDXComponents/utils";
 import { TweetEmbed } from "@/components/MDXComponents/TweetEmbed";
 import { YouTubeEmbed } from "@/components/MDXComponents/YoutubeEmbed";
 import { BLOG_CONTENTS_URL } from "@/constants";
+import { Bookmark } from "@/components/Bookmark";
 
 const GLOBAL_CONFIG = {
   MdxJsReact: {
@@ -57,8 +58,7 @@ export function MDXComponent({ code, globalMetadataMap }: Props) {
             />
           );
         },
-        // BookmarkのレンダリングをFE側に寄せる
-        // Bookmark: Bookmark,
+        Bookmark: Bookmark,
         TweetEmbed: TweetEmbed,
         YouTubeEmbed: YouTubeEmbed,
         code: ({ ...props }) => {

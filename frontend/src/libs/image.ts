@@ -14,7 +14,6 @@ export const getImageDimensions = async (
     timeout?: number;
   } = {}
 ): Promise<ImageDimensions> => {
-  console.log("imgUrl", imgUrl);
   const {
     maxSize = 10 * 1024 * 1024, // 10MB default
     timeout = 10000, // 10 seconds default
