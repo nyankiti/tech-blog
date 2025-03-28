@@ -1,10 +1,10 @@
-"use client";
-import NextLink, { LinkProps } from "next/link";
-import { useState } from "react";
+'use client';
+import NextLink, { type LinkProps } from 'next/link';
+import { useState } from 'react';
 
 type Props = {
   tag: string;
-  href?: LinkProps["href"];
+  href?: LinkProps['href'];
 };
 
 export const Tag = ({ tag, href }: Props) => {
@@ -25,7 +25,7 @@ export const Tag = ({ tag, href }: Props) => {
       <span className="flex items-center">
         <span
           style={{
-            color: isHovered ? "#a3e635" : "inherit",
+            color: isHovered ? '#a3e635' : 'inherit',
           }}
           className="transition mr-1"
         >

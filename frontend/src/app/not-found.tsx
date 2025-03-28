@@ -1,13 +1,13 @@
-"use client";
-import { useRouter } from "next/navigation";
-import NextLink from "next/link";
-import { useEffect } from "react";
+'use client';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function NotFound() {
   const router = useRouter();
   useEffect(() => {
     setTimeout(() => {
-      router.push("/");
+      router.push('/');
     }, 100000);
   });
   return (
@@ -17,9 +17,7 @@ export default function NotFound() {
           <h1 className="block text-7xl font-bold text-gray-800 sm:text-9xl dark:text-white">
             404
           </h1>
-          <p className="mt-3 text-gray-600 dark:text-neutral-400">
-            Oops, something went wrong.
-          </p>
+          <p className="mt-3 text-gray-600 dark:text-neutral-400">Oops, something went wrong.</p>
           <p className="text-gray-600 dark:text-neutral-400">
             Sorry, we couldn&apos;t find your page.
           </p>

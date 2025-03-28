@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import remarkGfm from "remark-gfm";
-import { bundleMDX } from "mdx-bundler";
-import { MDXComponent } from "./MdxComponent";
-import { SITE_TITLE } from "@/constants";
+import { SITE_TITLE } from '@/constants';
+import { bundleMDX } from 'mdx-bundler';
+import type { Metadata } from 'next';
+import remarkGfm from 'remark-gfm';
+import { MDXComponent } from './MdxComponent';
 
 const PRIVACY_POLICY_MD = `
 # プライバシーポリシー

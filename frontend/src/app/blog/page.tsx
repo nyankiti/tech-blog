@@ -1,7 +1,7 @@
-import { redirect } from "next/navigation";
+import { redirect } from 'next/navigation';
 
 const PostPage: React.FC = async () => {
-  redirect("/");
+  redirect('/');
 };
 
 export default PostPage;

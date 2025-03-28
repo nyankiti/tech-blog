@@ -1,5 +1,5 @@
-import { Metadata } from "next";
-import NextLink from "next/link";
+import type { Metadata } from 'next';
+import NextLink from 'next/link';
 
 export const metadata: Metadata = {
   robots: {
@@ -16,9 +16,7 @@ export default async function Page() {
           <NextLink href="/lab/webpush">webpush</NextLink>
         </li>
         <li>
-          <NextLink href="/gourmet">
-            View Transition APIを用いたグルメブログ
-          </NextLink>
+          <NextLink href="/gourmet">View Transition APIを用いたグルメブログ</NextLink>
         </li>
       </ul>
     </div>

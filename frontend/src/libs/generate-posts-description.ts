@@ -1,10 +1,10 @@
-import { remark } from "remark";
-import remarkParse from "remark-parse";
-import strip from "strip-markdown";
-import { Parent } from "unist";
+import { remark } from 'remark';
+import remarkParse from 'remark-parse';
+import strip from 'strip-markdown';
+import type { Parent } from 'unist';
 
 const removeBookmarkImport = (text: string) => {
-  return text.replace(/^import { Bookmark } from ["'].*["'];?\n?/gm, "");
+  return text.replace(/^import { Bookmark } from ["'].*["'];?\n?/gm, '');
 };
 
 const cleanMarkdown = async (content: string) => {
@@ -13,7 +13,7 @@ const cleanMarkdown = async (content: string) => {
     .use(() => (tree) => {
       // headingを削除
       (tree as Parent).children = (tree as Parent).children.filter(
-        (node) => node.type !== "heading"
+        (node) => node.type !== 'heading',
       );
     })
     .use(strip)

@@ -1,13 +1,11 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { subscribeUser, unsubscribeUser, sendNotification } from "./actions";
+import { useEffect, useState } from 'react';
+import { sendNotification, subscribeUser, unsubscribeUser } from './actions';
 
 function urlBase64ToUint8Array(base64String: string) {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding)
-    .replace(/\\-/g, "+")
-    .replace(/_/g, "/");
+  const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/\\-/g, '+').replace(/_/g, '/');
 
   const rawData = window.atob(base64);
   const outputArray = new Uint8Array(rawData.length);
@@ -19,12 +17,10 @@ function urlBase64ToUint8Array(base64String: string) {
 }
 
 function PushNotificationManager() {
-  const [subscription, setSubscription] = useState<PushSubscription | null>(
-    null
-  );
-  const [alert, setAlert] = useState("");
-  const [message, setMessage] = useState("");
-  const [title, setTitle] = useState("Test Notification");
+  const [subscription, setSubscription] = useState<PushSubscription | null>(null);
+  const [alert, setAlert] = useState('');
+  const [message, setMessage] = useState('');
+  const [title, setTitle] = useState('Test Notification');
 
   useEffect(() => {
     requestPermission().then((permission) => {
@@ -33,35 +29,29 @@ function PushNotificationManager() {
   }, []);
 
   async function requestPermission() {
-    if (
-      "serviceWorker" in navigator &&
-      "PushManager" in window &&
-      "Notification" in window
-    ) {
+    if ('serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window) {
       // 現在の通知権限の状態をチェック
-      if (Notification.permission === "granted") {
+      if (Notification.permission === 'granted') {
         return true;
-      } else if (Notification.permission === "default") {
+      } else if (Notification.permission === 'default') {
         // 通知権限がまだ許可されていない場合、許可をリクエスト
         Notification.requestPermission().then((permission) => {
-          if (permission === "granted") return true;
+          if (permission === 'granted') return true;
         });
       } else {
         // Notification.permission === "denied" の場合、手動で権限を許可してもらう必要がある
-        setAlert(
-          "通知権限が拒否されています。ブラウザの設定より手動で通知を許可してください"
-        );
+        setAlert('通知権限が拒否されています。ブラウザの設定より手動で通知を許可してください');
       }
     } else {
-      setAlert("このブラウザは通知をサポートしていません。");
+      setAlert('このブラウザは通知をサポートしていません。');
     }
     return false;
   }
 
   async function registerServiceWorker() {
-    const registration = await navigator.serviceWorker.register("/sw.js", {
-      scope: "/",
-      updateViaCache: "none",
+    const registration = await navigator.serviceWorker.register('/sw.js', {
+      scope: '/',
+      updateViaCache: 'none',
     });
     const subscription = await registration.pushManager.getSubscription();
     setSubscription(subscription);
@@ -71,9 +61,7 @@ function PushNotificationManager() {
     const registration = await navigator.serviceWorker.ready;
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
-      ),
+      applicationServerKey: urlBase64ToUint8Array(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!),
     });
 
     setSubscription(subscription);
@@ -89,18 +77,12 @@ function PushNotificationManager() {
 
   async function sendTestNotification() {
     if (subscription) {
-      const res = await sendNotification(
-        JSON.parse(JSON.stringify(subscription)),
-        title,
-        message
-      );
+      const res = await sendNotification(JSON.parse(JSON.stringify(subscription)), title, message);
       if (res.success === true) {
-        setMessage("");
+        setMessage('');
       } else {
         // 失敗の場合はアラートメッセージを出す
-        setAlert(
-          "通知送信に失敗しました。一度 Unsubscribeしてから再度お試しください"
-        );
+        setAlert('通知送信に失敗しました。一度 Unsubscribeしてから再度お試しください');
       }
     }
   }

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import * as tocbot from "tocbot";
-import { Adsense } from "./Adsense";
+import { useEffect } from 'react';
+import * as tocbot from 'tocbot';
+import { Adsense } from './Adsense';
 
 export const PcToc: React.FC = () => {
   useEffect(() => {
     tocbot.init({
-      tocSelector: ".toc",
-      contentSelector: ".post", // 目次を抽出したい要素のクラス名
-      headingSelector: "h1, h2, h3",
+      tocSelector: '.toc',
+      contentSelector: '.post', // 目次を抽出したい要素のクラス名
+      headingSelector: 'h1, h2, h3',
       scrollSmoothOffset: -60,
       headingsOffset: 60,
       scrollSmoothDuration: 300,

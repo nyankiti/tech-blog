@@ -1,5 +1,5 @@
-import { Buffer } from "buffer";
-import sizeOf from "image-size";
+import { Buffer } from 'buffer';
+import sizeOf from 'image-size';
 
 export interface ImageDimensions {
   width: number;
@@ -12,7 +12,7 @@ export const getImageDimensions = async (
   options: {
     maxSize?: number;
     timeout?: number;
-  } = {}
+  } = {},
 ): Promise<ImageDimensions> => {
   const {
     maxSize = 10 * 1024 * 1024, // 10MB default
@@ -24,10 +24,10 @@ export const getImageDimensions = async (
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
     const response = await fetch(imgUrl, {
-      method: "GET",
+      method: 'GET',
       signal: controller.signal,
       headers: {
-        Accept: "image/*",
+        Accept: 'image/*',
       },
     });
 
@@ -44,7 +44,7 @@ export const getImageDimensions = async (
     const dimensions = sizeOf(buffer);
 
     if (!dimensions.width || !dimensions.height)
-      throw new Error("Could not determine image dimensions");
+      throw new Error('Could not determine image dimensions');
 
     return {
       width: dimensions.width,
@@ -52,8 +52,8 @@ export const getImageDimensions = async (
       type: dimensions.type,
     };
   } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw new Error("Request timed out");
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error('Request timed out');
     }
     throw error;
   }

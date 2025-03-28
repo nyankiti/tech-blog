@@ -1,68 +1,55 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type TagFilterProps = {
   locationsTags: string[];
   gourmetTags: string[];
 };
 
-export default function TagFilter({
-  locationsTags,
-  gourmetTags,
-}: TagFilterProps) {
+export default function TagFilter({ locationsTags, gourmetTags }: TagFilterProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const [selectedLocationTags, setSelectedLocationTags] = useState<string[]>(
-    () => {
-      const locationsParam = searchParams.get("locations");
-      return locationsParam ? locationsParam.split(",").filter(Boolean) : [];
-    }
-  );
+  const [selectedLocationTags, setSelectedLocationTags] = useState<string[]>(() => {
+    const locationsParam = searchParams.get('locations');
+    return locationsParam ? locationsParam.split(',').filter(Boolean) : [];
+  });
 
-  const [selectedGourmetTags, setSelectedGourmetTags] = useState<string[]>(
-    () => {
-      const gourmetParam = searchParams.get("gourmet");
-      return gourmetParam ? gourmetParam.split(",").filter(Boolean) : [];
-    }
-  );
+  const [selectedGourmetTags, setSelectedGourmetTags] = useState<string[]>(() => {
+    const gourmetParam = searchParams.get('gourmet');
+    return gourmetParam ? gourmetParam.split(',').filter(Boolean) : [];
+  });
 
   useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (selectedLocationTags.length > 0) {
-      params.set("locations", selectedLocationTags.join(","));
+      params.set('locations', selectedLocationTags.join(','));
     } else {
-      params.delete("locations");
+      params.delete('locations');
     }
 
     if (selectedGourmetTags.length > 0) {
-      params.set("gourmet", selectedGourmetTags.join(","));
+      params.set('gourmet', selectedGourmetTags.join(','));
     } else {
-      params.delete("gourmet");
+      params.delete('gourmet');
     }
 
     router.replace(`${pathname}?${params.toString()}`);
-  }, [
-    selectedLocationTags,
-    selectedGourmetTags,
-    pathname,
-    router,
-    searchParams,
-  ]);
+  }, [selectedLocationTags, selectedGourmetTags, pathname, router, searchParams]);
 
   const toggleLocationTag = (tag: string) => {
     setSelectedLocationTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 
   const toggleGourmetTag = (tag: string) => {
     setSelectedGourmetTags((prev) =>
-      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],
     );
   };
 
@@ -82,8 +69,8 @@ export default function TagFilter({
               onClick={() => toggleLocationTag(tag)}
               className={`center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-300  ${
                 selectedLocationTags.includes(tag)
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600'
               }`}
             >
               # {tag}
@@ -101,8 +88,8 @@ export default function TagFilter({
               onClick={() => toggleGourmetTag(tag)}
               className={`center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 dark:text-gray-300 ${
                 selectedGourmetTags.includes(tag)
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600'
               }`}
             >
               # {tag}

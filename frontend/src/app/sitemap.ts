@@ -1,7 +1,7 @@
-import { SITE_URL } from "@/constants";
-import { getSortedGourmetPosts } from "@/libs/gourmet";
-import { getSortedPosts } from "@/libs/posts";
-import type { MetadataRoute } from "next";
+import { SITE_URL } from '@/constants';
+import { getSortedGourmetPosts } from '@/libs/gourmet';
+import { getSortedPosts } from '@/libs/posts';
+import type { MetadataRoute } from 'next';
 
 // /sitemap.xml にアクセスすると表示される
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -25,13 +25,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: siteUrl,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: 'weekly',
       priority: 1,
     },
     {
       url: `${siteUrl}blog`,
       lastModified: new Date(),
-      changeFrequency: "weekly",
+      changeFrequency: 'weekly',
       priority: 0.5,
     },
     ...blogs,
@@ -39,14 +39,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: `${siteUrl}lab`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: 'monthly',
       priority: 0.8,
     },
     // labsは手動で追加するしかない
     {
       url: `${siteUrl}lab/webpush`,
       lastModified: new Date(),
-      changeFrequency: "monthly",
+      changeFrequency: 'monthly',
       priority: 0.3,
     },
   ];

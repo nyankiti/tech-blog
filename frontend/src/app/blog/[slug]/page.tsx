@@ -1,15 +1,15 @@
-import { notFound } from "next/navigation";
-import { Metadata } from "next/types";
-import { TbRefresh, TbCalendar } from "react-icons/tb";
-import { getSlugs, getTechBlogPost } from "@/libs/posts";
-import { Tag } from "@/components/Tag";
-import { Datetime } from "@/components/Datetime";
-import { loadMDX } from "./mdx-loader";
-import { PcToc } from "./components/PcToc";
-import { Adsense } from "./components/Adsense";
-import { MDXComponent } from "./components/MdxComponent";
+import { Datetime } from '@/components/Datetime';
+import { Tag } from '@/components/Tag';
+import { getSlugs, getTechBlogPost } from '@/libs/posts';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next/types';
+import { TbCalendar, TbRefresh } from 'react-icons/tb';
+import { Adsense } from './components/Adsense';
+import { MDXComponent } from './components/MdxComponent';
+import { PcToc } from './components/PcToc';
+import { loadMDX } from './mdx-loader';
 
-export const dynamic = "error";
+export const dynamic = 'error';
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
@@ -23,9 +23,7 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export const generateMetadata = async ({
-  params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { slug } = await params;
   const post = await getTechBlogPost(slug);
 
@@ -38,7 +36,7 @@ export const generateMetadata = async ({
       canonical: `https://sokes-nook.net/blog/${slug}`,
     },
     openGraph: {
-      type: "article",
+      type: 'article',
       url: `/blog/${slug}`,
       title: post.title,
       description: post.description || post.title,
@@ -47,7 +45,7 @@ export const generateMetadata = async ({
       tags: post.tags,
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       creator: `@soken_nowi`,
     },
   };
@@ -67,8 +65,7 @@ export default async function Page({ params }: Props) {
     const lastEditedDate = new Date(post.updatedAt);
     const isShowEditTime =
       publishedDate < lastEditedDate &&
-      publishedDate.toISOString().slice(0, 10) !==
-        lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
+      publishedDate.toISOString().slice(0, 10) !== lastEditedDate.toISOString().slice(0, 10); // 同じ日付の場合は変更日を表示しない
 
     return (
       <article className="max-w-7xl w-full flex justify-center px-5 py-24 mx-auto lg:px-32">
@@ -122,8 +119,8 @@ export default async function Page({ params }: Props) {
       </article>
     );
   } catch (e) {
-    console.error("Failed to load MDX:", e);
-    console.error("filecontent:", post);
+    console.error('Failed to load MDX:', e);
+    console.error('filecontent:', post);
     return notFound();
   }
 }

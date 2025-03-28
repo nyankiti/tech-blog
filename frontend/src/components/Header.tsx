@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import NextLink from "next/link";
-import { ColorThemeSelector } from "./ColorThemeSelector";
-import { SITE_TITLE } from "@/constants";
-import { usePathname } from "next/navigation";
+import { SITE_TITLE } from '@/constants';
+import NextLink from 'next/link';
+import { usePathname } from 'next/navigation';
+import { ColorThemeSelector } from './ColorThemeSelector';
 
 export const Header = () => {
   const pathname = usePathname();
-  const titleLink = pathname.includes("gourmet") ? "/gourmet" : "/";
+  const titleLink = pathname.includes('gourmet') ? '/gourmet' : '/';
   return (
     <header className="sticky top-0 flex items-center justify-between px-4 md:px-8 py-2 border-b border-gray-200 backdrop-blur-sm z-10">
       <NextLink

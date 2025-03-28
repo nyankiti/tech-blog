@@ -1,9 +1,9 @@
 "use client";
 
-import { MdDarkMode, MdDevices, MdLightMode } from "react-icons/md";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { MdDarkMode, MdDevices, MdLightMode } from "react-icons/md";
 
 export const ColorThemeSelector = () => {
   const [mounted, setMounted] = useState(false);
@@ -16,7 +16,7 @@ export const ColorThemeSelector = () => {
   if (!mounted) {
     return (
       <div className="rounded border p-1.5 dark:border-gray-500">
-        <div className="size-5"></div>
+        <div className="size-5" />
       </div>
     );
   }

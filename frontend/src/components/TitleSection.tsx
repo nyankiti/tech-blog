@@ -1,4 +1,4 @@
-import { SITE_DESCRIPTION } from "@/constants";
+import { SITE_DESCRIPTION } from '@/constants';
 
 export const TitleSection = () => {
   return (

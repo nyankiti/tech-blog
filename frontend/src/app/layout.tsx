@@ -1,20 +1,15 @@
-import type { Metadata } from "next";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import { Inter } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { GoogleAnalytics } from '@next/third-parties/google';
+import type { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
+import { Inter } from 'next/font/google';
 
-import "./globals.css";
-import {
-  GA_MEASUREMENT_ID,
-  SITE_DESCRIPTION,
-  SITE_TITLE,
-  SITE_URL,
-} from "@/constants";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
-import Script from "next/script";
+import './globals.css';
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
+import { GA_MEASUREMENT_ID, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/constants';
+import Script from 'next/script';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: {
@@ -23,12 +18,12 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   twitter: {
-    card: "summary",
+    card: 'summary',
     creator: `@stin_factory`,
   },
   openGraph: {
-    type: "website",
-    url: "/",
+    type: 'website',
+    url: '/',
     title: {
       template: `%s | ${SITE_TITLE}`,
       default: `Home | ${SITE_TITLE}`,
@@ -37,7 +32,7 @@ export const metadata: Metadata = {
     siteName: SITE_TITLE,
   },
   metadataBase: SITE_URL,
-  manifest: "/site.webmanifest",
+  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
@@ -75,23 +70,9 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
       </head>

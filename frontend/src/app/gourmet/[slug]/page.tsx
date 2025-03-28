@@ -1,18 +1,14 @@
-import { notFound } from "next/navigation";
-import { Metadata } from "next/types";
-import NextLink from "next/link";
-import {
-  getGourmetPost,
-  getAllGourmetPosts,
-  getRelatedGourmetPosts,
-} from "@/libs/gourmet";
-import { MDXComponent } from "./components/MdxComponent";
-import { loadMDX } from "./mdx-loader";
-import { TbCalendar } from "react-icons/tb";
-import { Datetime } from "@/components/Datetime";
-import { unstable_ViewTransition as ViewTransition } from "react";
-import NextImage from "next/image";
-import RelatedPostCard from "../components/RelatedPostCard";
+import { Datetime } from '@/components/Datetime';
+import { getAllGourmetPosts, getGourmetPost, getRelatedGourmetPosts } from '@/libs/gourmet';
+import NextImage from 'next/image';
+import NextLink from 'next/link';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next/types';
+import { unstable_ViewTransition as ViewTransition } from 'react';
+import { TbCalendar } from 'react-icons/tb';
+import RelatedPostCard from '../components/RelatedPostCard';
+import { MDXComponent } from './components/MdxComponent';
+import { loadMDX } from './mdx-loader';
 
 export async function generateStaticParams() {
   const slugs = (await getAllGourmetPosts()).map((post) => post.slug);
@@ -25,9 +21,7 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
-export const generateMetadata = async ({
-  params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const { slug } = await params;
   const post = await getGourmetPost(slug);
 
@@ -40,7 +34,7 @@ export const generateMetadata = async ({
       canonical: `https://sokes-nook.net/gourmet/${slug}`,
     },
     openGraph: {
-      type: "article",
+      type: 'article',
       url: `/gourmet/${slug}`,
       title: post.title,
       description: post.description || post.title,
@@ -50,7 +44,7 @@ export const generateMetadata = async ({
       images: post.thumbnail,
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       creator: `@soken_nowi`,
     },
   };
@@ -91,7 +85,7 @@ export default async function Page({ params }: Props) {
                         <NextLink
                           key={i}
                           href={{
-                            pathname: "/gourmet",
+                            pathname: '/gourmet',
                             query: { locations: tag },
                           }}
                           className="center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -107,7 +101,7 @@ export default async function Page({ params }: Props) {
                         <NextLink
                           key={tag}
                           href={{
-                            pathname: "/gourmet",
+                            pathname: '/gourmet',
                             query: { gourmet: tag },
                           }}
                           className="center relative inline-flex items-center justify-center select-none whitespace-nowrap rounded-md py-1 px-2 mr-1 align-middle font-sans border border-gray-500 text-gray-700 text-xs font-medium leading-none tracking-wide hover:opacity-90 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
@@ -146,15 +140,10 @@ export default async function Page({ params }: Props) {
           <aside className="md:col-span-3">
             {relatedPosts.length > 0 && (
               <div className="mt-12 md:mt-0">
-                <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
-                  他の投稿
-                </h2>
+                <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">他の投稿</h2>
                 <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
                   {relatedPosts.map((relatedPost) => (
-                    <RelatedPostCard
-                      key={relatedPost.slug}
-                      post={relatedPost}
-                    />
+                    <RelatedPostCard key={relatedPost.slug} post={relatedPost} />
                   ))}
                 </div>
               </div>
@@ -164,8 +153,8 @@ export default async function Page({ params }: Props) {
       </article>
     );
   } catch (error) {
-    console.error("Failed to load MDX:", error);
-    console.error("slug:", slug);
+    console.error('Failed to load MDX:', error);
+    console.error('slug:', slug);
     return notFound();
   }
 }
