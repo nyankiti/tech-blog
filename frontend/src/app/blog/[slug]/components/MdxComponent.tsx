@@ -7,11 +7,10 @@ import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/cjs/styles/prism";
 
-import { SiteMetadata } from "@/components/MDXComponents/utils";
 import { TweetEmbed } from "@/components/MDXComponents/TweetEmbed";
 import { YouTubeEmbed } from "@/components/MDXComponents/YoutubeEmbed";
+import { Bookmark } from "@/components/MDXComponents/Bookmark";
 import { BLOG_CONTENTS_URL } from "@/constants";
-import { Bookmark } from "@/components/Bookmark";
 
 const GLOBAL_CONFIG = {
   MdxJsReact: {
@@ -22,17 +21,15 @@ const GLOBAL_CONFIG = {
 
 type Props = {
   code: string;
-  globalMetadataMap: Record<string, SiteMetadata | null>;
 };
 
-export function MDXComponent({ code, globalMetadataMap }: Props) {
+export function MDXComponent({ code }: Props) {
   const Component = useMemo(
     () =>
       getMDXComponent(code, {
         ...GLOBAL_CONFIG,
-        globalMetadataMap,
       }),
-    [code, globalMetadataMap]
+    [code]
   );
 
   return (

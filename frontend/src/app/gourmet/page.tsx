@@ -13,7 +13,6 @@ export default async function GourmetPage({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const params = await searchParams;
-  console.log(params);
   const gourmetPosts = await getSortedGourmetPosts();
   const locationsTags = await getLocationTags();
   const gourmetTags = await getGourmetTags();

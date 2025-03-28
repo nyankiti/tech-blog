@@ -5,12 +5,6 @@ import { getSlugs, getTechBlogPost } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { Datetime } from "@/components/Datetime";
 import { loadMDX } from "./mdx-loader";
-import { extractBookmarkUrls } from "./extract-bookmark-urls";
-import {
-  fetchSiteMetadata,
-  SiteMetadata,
-} from "@/components/MDXComponents/utils";
-
 import { PcToc } from "./components/PcToc";
 import { Adsense } from "./components/Adsense";
 import { MDXComponent } from "./components/MdxComponent";
@@ -65,22 +59,6 @@ export default async function Page({ params }: Props) {
 
   if (!post || post.isDeleted === true) return notFound();
 
-  // Bookmark用のmetadataを事前に取得してMDXのglobalsに注入する
-  const mookmarkUrls = await extractBookmarkUrls(post.content);
-
-  const globalMetadataMap: Record<string, SiteMetadata | null> =
-    await Promise.all(
-      mookmarkUrls.map(async (url) => {
-        try {
-          const metadata = await fetchSiteMetadata(url);
-          return [url, metadata];
-        } catch (error) {
-          console.error(`Failed to fetch metadata for ${url}:`, error);
-          return [url, null];
-        }
-      })
-    ).then(Object.fromEntries);
-
   try {
     const mdx = await loadMDX(post.content);
     const { code } = mdx;
@@ -121,7 +99,7 @@ export default async function Page({ params }: Props) {
             <h1 className="font-bold text-4xl">{post.title}</h1>
           </header>
           <div className="post prose dark:prose-invert">
-            <MDXComponent code={code} globalMetadataMap={globalMetadataMap} />
+            <MDXComponent code={code} />
           </div>
 
           <div className="relative left-0 mt-10">

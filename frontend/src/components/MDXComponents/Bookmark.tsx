@@ -1,6 +1,6 @@
 "use client";
 
-import { getFaviconUrl } from "./MDXComponents/utils";
+import { getFaviconUrl } from "@/libs/sitemetadata";
 import he from "he";
 
 type Props = {

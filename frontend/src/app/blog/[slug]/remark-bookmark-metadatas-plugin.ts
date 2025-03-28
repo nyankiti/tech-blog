@@ -1,8 +1,8 @@
-import { fetchSiteMetadata } from "@/components/MDXComponents/utils";
 import type { Root } from "mdast";
 import { visit } from "unist-util-visit";
 import type { MdxJsxAttribute } from "mdast-util-mdx-jsx";
 import { getImageDimensions } from "@/libs/image";
+import { fetchSiteMetadata } from "@/libs/sitemetadata";
 
 export const remarkBookmarkMetadatasPlugin = () => {
   return async function transformer(tree: Root) {
