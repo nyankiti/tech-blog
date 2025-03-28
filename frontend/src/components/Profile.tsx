@@ -1,6 +1,6 @@
-import gorouImage from "../../public/gorou.jpg";
-import Image from "next/image";
-import { IoLogoTwitter, IoLogoGithub } from "react-icons/io5";
+import Image from 'next/image';
+import { IoLogoGithub, IoLogoTwitter } from 'react-icons/io5';
+import gorouImage from '../../public/gorou.jpg';
 
 export const Profile = () => {
   return (
@@ -13,17 +13,11 @@ export const Profile = () => {
         aria-controls="hs-vertically-centered-modal"
         data-hs-overlay="#hs-vertically-centered-modal"
       >
-        <Image
-          className="shrink-0 size-16 rounded-full"
-          src={gorouImage}
-          alt="Avatar"
-        />
+        <Image className="shrink-0 size-16 rounded-full" src={gorouImage} alt="Avatar" />
       </button>
 
       <div className="grow">
-        <h1 className="text-lg font-medium text-gray-800 dark:text-neutral-200">
-          管理人
-        </h1>
+        <h1 className="text-lg font-medium text-gray-800 dark:text-neutral-200">管理人</h1>
 
         <p className="text-sm text-gray-600 dark:text-neutral-400">
           23卒のweb屋さん, 日日是好日
@@ -32,7 +26,7 @@ export const Profile = () => {
           <br />
         </p>
 
-        <p className="mt-3 text-sm text-gray-600 dark:text-neutral-400"></p>
+        <p className="mt-3 text-sm text-gray-600 dark:text-neutral-400" />
         <div className="mt-3 flex items-center gap-3">
           <a
             href="https://x.com/soken_nowi"

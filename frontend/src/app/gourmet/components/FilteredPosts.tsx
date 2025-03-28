@@ -1,30 +1,25 @@
-"use client";
+'use client';
 
-import { useEffect, useState, startTransition } from "react";
-import GourmetPostCard from "./GourmetPostCard";
-import { GourmetPost } from "@/libs/gourmet";
+import type { GourmetPost } from '@/libs/gourmet';
+import { startTransition, useEffect, useState } from 'react';
+import GourmetPostCard from './GourmetPostCard';
 
 interface FilteredPostsProps {
   initialPosts: GourmetPost[];
   params: { [key: string]: string | string[] | undefined };
 }
 
-export default function FilteredPosts({
-  initialPosts,
-  params: searchParams,
-}: FilteredPostsProps) {
-  const [filteredPosts, setFilteredPosts] =
-    useState<GourmetPost[]>(initialPosts);
+export default function FilteredPosts({ initialPosts, params: searchParams }: FilteredPostsProps) {
+  const [filteredPosts, setFilteredPosts] = useState<GourmetPost[]>(initialPosts);
 
   // FIXME: useEffect, useStateでフィルタリングする必要ないのでは？？ SRCの段階でフィルタリングできそう？
   useEffect(() => {
-    const locations = searchParams["locations"];
+    const locations = searchParams['locations'];
     const locationFilters =
-      (typeof locations === "string" && locations.split(",").filter(Boolean)) ||
-      [];
-    const gourmet = searchParams["gourmet"];
+      (typeof locations === 'string' && locations.split(',').filter(Boolean)) || [];
+    const gourmet = searchParams['gourmet'];
     const gourmetFilters =
-      (typeof gourmet === "string" && gourmet.split(",").filter(Boolean)) || [];
+      (typeof gourmet === 'string' && gourmet.split(',').filter(Boolean)) || [];
 
     if (locationFilters.length === 0 && gourmetFilters.length === 0) {
       startTransition(() => {
@@ -38,16 +33,14 @@ export default function FilteredPosts({
         initialPosts.filter((post) => {
           const matchesLocation =
             locationFilters.length === 0 ||
-            (post.locationTags &&
-              locationFilters.some((tag) => post.locationTags?.includes(tag)));
+            (post.locationTags && locationFilters.some((tag) => post.locationTags?.includes(tag)));
 
           const matchesGourmet =
             gourmetFilters.length === 0 ||
-            (post.gourmetTags &&
-              gourmetFilters.some((tag) => post.gourmetTags?.includes(tag)));
+            (post.gourmetTags && gourmetFilters.some((tag) => post.gourmetTags?.includes(tag)));
 
           return matchesLocation && matchesGourmet;
-        })
+        }),
       );
     });
   }, [searchParams, initialPosts]);
@@ -55,9 +48,7 @@ export default function FilteredPosts({
   if (filteredPosts.length === 0) {
     return (
       <div className="text-center py-10">
-        <p className="text-gray-600 dark:text-gray-400">
-          該当する投稿がありません
-        </p>
+        <p className="text-gray-600 dark:text-gray-400">該当する投稿がありません</p>
       </div>
     );
   }

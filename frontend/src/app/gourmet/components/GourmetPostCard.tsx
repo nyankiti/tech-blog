@@ -1,9 +1,9 @@
-import { unstable_ViewTransition as ViewTransition } from "react";
-import NextImage from "next/image";
-import NextLink from "next/link";
+import NextImage from 'next/image';
+import NextLink from 'next/link';
+import { unstable_ViewTransition as ViewTransition } from 'react';
 
-import { GourmetPost } from "@/libs/gourmet";
-import { Datetime } from "@/components/Datetime";
+import { Datetime } from '@/components/Datetime';
+import type { GourmetPost } from '@/libs/gourmet';
 
 export default function GourmetPostCard({ post }: { post: GourmetPost }) {
   return (

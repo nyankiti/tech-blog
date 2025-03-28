@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { getFaviconUrl } from "@/libs/sitemetadata";
-import he from "he";
+import { getFaviconUrl } from '@/libs/sitemetadata';
+import he from 'he';
 
 type Props = {
   href: string;
@@ -40,23 +40,18 @@ export const Bookmark: React.FC<Props> = (props) => {
     >
       <div className="flex flex-col p-2 flex-1 h-full hover:opacity-80">
         <div className="font-bold line-clamp-3 break-words">
-          {he.decode(metadata.title ? metadata.title : metadata.url ?? "")}
+          {he.decode(metadata.title ? metadata.title : (metadata.url ?? ''))}
         </div>
 
         <div className="flex-1 mt-2">
           <div className="text-sm line-clamp-2 overflow-wrap break-words">
-            {he.decode(metadata.description ?? "")}
+            {he.decode(metadata.description ?? '')}
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={getFaviconUrl(url.hostname)}
-            alt=""
-            width={16}
-            height={16}
-          />
+          <img src={getFaviconUrl(url.hostname)} alt="" width={16} height={16} />
 
           <span className="text-sm line-clamp-1">{url.hostname}</span>
         </div>
@@ -65,11 +60,7 @@ export const Bookmark: React.FC<Props> = (props) => {
       {metadata.image && (
         <div className="max-w-[40%]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            className="h-full w-full object-cover"
-            src={metadata.image}
-            alt={metadata.title}
-          />
+          <img className="h-full w-full object-cover" src={metadata.image} alt={metadata.title} />
         </div>
       )}
     </a>

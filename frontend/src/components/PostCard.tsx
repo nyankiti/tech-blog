@@ -1,7 +1,7 @@
-import NextLink from "next/link";
-import { Datetime } from "./Datetime";
-import { Tag } from "./Tag";
-import { TechBlogPost } from "@/libs/posts";
+import type { TechBlogPost } from '@/libs/posts';
+import NextLink from 'next/link';
+import { Datetime } from './Datetime';
+import { Tag } from './Tag';
 
 type Props = {
   post: TechBlogPost;
@@ -13,7 +13,7 @@ export const PostCard = ({ post }: Props) => {
       <div className="p-4 md:p-5">
         <div className="flex flex-wrap gap-y-1">
           {post.tags.map((tag, i) => (
-            <Tag key={i} tag={tag} />
+            <Tag key={i.toString()} tag={tag} />
           ))}
         </div>
         <NextLink href={`/blog/${post.slug}`}>
@@ -45,7 +45,9 @@ export const PostCard = ({ post }: Props) => {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
+                aria-labelledby="arrow-icon-title"
               >
+                <title id="arrow-icon-title">Arrow pointing right</title>
                 <path d="m9 18 6-6-6-6" />
               </svg>
             </p>

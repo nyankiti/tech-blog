@@ -1,13 +1,13 @@
-"use client";
-import { useMemo } from "react";
-import NextImage from "next/image";
-import he from "he";
-import { getMDXComponent } from "mdx-bundler/client";
-import { MDXProvider, useMDXComponents } from "@mdx-js/react";
+'use client';
+import { MDXProvider, useMDXComponents } from '@mdx-js/react';
+import he from 'he';
+import { getMDXComponent } from 'mdx-bundler/client';
+import NextImage from 'next/image';
+import { useMemo } from 'react';
 
-import { TweetEmbed } from "@/components/MDXComponents/TweetEmbed";
-import { YouTubeEmbed } from "@/components/MDXComponents/YoutubeEmbed";
-import { BLOG_CONTENTS_URL } from "@/constants";
+import { TweetEmbed } from '@/components/MDXComponents/TweetEmbed';
+import { YouTubeEmbed } from '@/components/MDXComponents/YoutubeEmbed';
+import { BLOG_CONTENTS_URL } from '@/constants';
 
 const GLOBAL_CONFIG = {
   MdxJsReact: {
@@ -21,10 +21,7 @@ type Props = {
 };
 
 export function MDXComponent({ code }: Props) {
-  const Component = useMemo(
-    () => getMDXComponent(code, { ...GLOBAL_CONFIG }),
-    [code]
-  );
+  const Component = useMemo(() => getMDXComponent(code, { ...GLOBAL_CONFIG }), [code]);
 
   return (
     <MDXProvider
@@ -39,16 +36,16 @@ export function MDXComponent({ code }: Props) {
         img: ({ ...props }) => {
           // 相対パスが指定された場合、blog-contents側の画像を参照する
           const src =
-            props.src.startsWith("images") | props.src.startsWith("/") ||
-            props.src.startsWith("./") ||
-            props.src.startsWith("../")
+            props.src.startsWith('images') | props.src.startsWith('/') ||
+            props.src.startsWith('./') ||
+            props.src.startsWith('../')
               ? `${BLOG_CONTENTS_URL}/${props.src}`
               : props.src;
           return (
             <NextImage
               className="w-full object-cover rounded-xl"
               src={src}
-              alt={props.alt || ""}
+              alt={props.alt || ''}
               width={300}
               height={200}
             />

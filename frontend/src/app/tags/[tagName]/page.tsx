@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getSortedPosts, getTags } from "@/libs/posts";
-import { Tag } from "@/components/Tag";
-import { PostCard } from "@/components/PostCard";
-import { TitleSection } from "@/components/TitleSection";
+import { PostCard } from '@/components/PostCard';
+import { Tag } from '@/components/Tag';
+import { TitleSection } from '@/components/TitleSection';
+import { getSortedPosts, getTags } from '@/libs/posts';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ tagName: string }>;
@@ -14,14 +14,10 @@ export const generateStaticParams = async () => {
   return tags.map((tag) => ({ tagName: tag }));
 };
 
-export const generateMetadata = async ({
-  params,
-}: Props): Promise<Metadata> => {
+export const generateMetadata = async ({ params }: Props): Promise<Metadata> => {
   const tagName = decodeURIComponent((await params).tagName);
 
-  const articles = (await getSortedPosts()).filter((post) =>
-    post.tags.includes(tagName)
-  );
+  const articles = (await getSortedPosts()).filter((post) => post.tags.includes(tagName));
 
   if (articles.length === 0) {
     return notFound();
@@ -34,13 +30,13 @@ export const generateMetadata = async ({
       canonical: `https://sokes-nook.net/tags/${tagName}`,
     },
     openGraph: {
-      type: "website",
+      type: 'website',
       url: `/tags/${tagName}`,
       title: `tag: ${tagName}`,
       description: `${tagName} でタグ付けされた記事一覧`,
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       creator: `@soken_nowi`,
     },
     robots: {
@@ -52,9 +48,7 @@ export const generateMetadata = async ({
 const TagPage: React.FC<Props> = async ({ params }) => {
   const tagName = decodeURIComponent((await params).tagName);
 
-  const posts = (await getSortedPosts()).filter((post) =>
-    post.tags.includes(tagName)
-  );
+  const posts = (await getSortedPosts()).filter((post) => post.tags.includes(tagName));
 
   const tags = await getTags();
 

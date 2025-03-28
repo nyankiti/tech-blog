@@ -1,4 +1,4 @@
-import { SITE_TITLE } from "@/constants";
+import { SITE_TITLE } from '@/constants';
 
 export const Footer = () => {
   return (
@@ -8,9 +8,7 @@ export const Footer = () => {
       <div className="py-6">
         <div className="flex flex-wrap justify-between items-center gap-2">
           <div>
-            <p className="text-xs text-gray-600 dark:text-neutral-400">
-              © 2025 {SITE_TITLE}
-            </p>
+            <p className="text-xs text-gray-600 dark:text-neutral-400">© 2025 {SITE_TITLE}</p>
           </div>
 
           <ul className="flex flex-wrap items-center">

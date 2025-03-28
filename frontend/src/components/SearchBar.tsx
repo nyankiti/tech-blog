@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect, useRef } from "react";
-import FlexSearch, { Document } from "flexsearch";
-import { BLOG_CONTENTS_URL } from "@/constants";
+'use client';
+import { BLOG_CONTENTS_URL } from '@/constants';
+import FlexSearch, { type Document } from 'flexsearch';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * blog-contents側で生成したtech-blog-search-index.jsonに基づく
@@ -17,7 +17,7 @@ export type PostDocument = {
 export const SearchBar = () => {
   const indexRef = useRef<Document<PostDocument, string[]> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<PostDocument[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,34 +25,32 @@ export const SearchBar = () => {
   // インデックスの読み込みと初期化
   useEffect(() => {
     async function initializeSearchIndex() {
-      if (typeof window === "undefined") return;
+      if (typeof window === 'undefined') return;
       setIsLoading(true);
       try {
         // インデックスを初期化
         const index = new FlexSearch.Document<PostDocument, string[]>({
-          preset: "match",
-          tokenize: "reverse",
+          preset: 'match',
+          tokenize: 'reverse',
           document: {
-            id: "slug",
-            index: ["title", "content", "tags"],
-            store: ["slug", "title", "tags", "date", "content"],
+            id: 'slug',
+            index: ['title', 'content', 'tags'],
+            store: ['slug', 'title', 'tags', 'date', 'content'],
           },
         });
 
         // 検索インデックスJSONを取得
-        const res = await fetch(
-          `${BLOG_CONTENTS_URL}/tech-blog-search-index.json`
-        );
+        const res = await fetch(`${BLOG_CONTENTS_URL}/tech-blog-search-index.json`);
         const data = await res.json();
 
-        data.forEach((post: PostDocument) => {
+        for (const post of data) {
           index.add(post);
-        });
+        }
 
         // インデックスを参照に保持
         indexRef.current = index;
       } catch (error) {
-        console.error("検索インデックスの初期化に失敗しました:", error);
+        console.error('検索インデックスの初期化に失敗しました:', error);
       }
       setIsLoading(false);
     }
@@ -62,43 +60,43 @@ export const SearchBar = () => {
 
   // 検索処理
   useEffect(() => {
-    if (searchTerm.trim() === "" || isLoading || !indexRef.current) {
+    if (searchTerm.trim() === '' || isLoading || !indexRef.current) {
       return;
     }
 
     try {
       const titleResults = indexRef.current.search<true>(searchTerm, 10, {
-        index: "title",
+        index: 'title',
         enrich: true,
       });
 
       const contentsResults = indexRef.current.search<true>(searchTerm, 10, {
-        index: "content",
+        index: 'content',
         enrich: true,
       });
 
       const tagsResults = indexRef.current.search<true>(searchTerm, 10, {
-        index: "tags",
+        index: 'tags',
         enrich: true,
       });
 
       const allResults = new Map<string, PostDocument>(); // 重複を除くために Map を使用
-      [titleResults, contentsResults, tagsResults].forEach((resultSet) => {
+      for (const resultSet of [titleResults, contentsResults, tagsResults]) {
         if (resultSet.length > 0) {
-          resultSet[0].result.forEach((item) => {
+          for (const item of resultSet[0].result) {
             if (!allResults.has(item.doc.slug)) {
               allResults.set(item.doc.slug, item.doc);
             }
-          });
+          }
         }
-      });
+      }
 
       const mergedResults = Array.from(allResults.values());
 
       setSearchResults(mergedResults);
       setIsModalOpen(mergedResults.length > 0);
     } catch (error) {
-      console.error("検索処理中にエラーが発生しました:", error);
+      console.error('検索処理中にエラーが発生しました:', error);
     }
   }, [searchTerm, isLoading]);
 
@@ -106,66 +104,57 @@ export const SearchBar = () => {
   const highlightText = (text: string, query: string) => {
     if (!query.trim()) return text;
 
-    const segments = text.split(new RegExp(`(${query})`, "gi"));
+    const segments = text.split(new RegExp(`(${query})`, 'gi'));
     return segments.map((segment, index) =>
       segment.toLowerCase() === query.toLowerCase() ? (
-        <span key={index} className="bg-yellow-200">
+        <span key={index.toString()} className="bg-yellow-200">
           {segment}
         </span>
       ) : (
         segment
-      )
+      ),
     );
   };
 
   // 日付をフォーマット
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return date.toLocaleDateString('ja-JP', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
   // 記事の内容を抜粋（検索語を含む部分）
-  const getContentExcerpt = (
-    content: string,
-    query: string,
-    length: number = 150
-  ) => {
-    if (!query.trim()) return content.slice(0, length) + "...";
+  const getContentExcerpt = (content: string, query: string, length = 150) => {
+    if (!query.trim()) return `${content.slice(0, length)}...`;
 
     const lowerContent = content.toLowerCase();
     const lowerQuery = query.toLowerCase();
     const index = lowerContent.indexOf(lowerQuery);
 
-    if (index === -1) return content.slice(0, length) + "...";
+    if (index === -1) return `${content.slice(0, length)}...`;
 
     const start = Math.max(0, index - length / 2);
     const end = Math.min(content.length, index + query.length + length / 2);
 
     return (
-      (start > 0 ? "..." : "") +
-      content.slice(start, end) +
-      (end < content.length ? "..." : "")
+      (start > 0 ? '...' : '') + content.slice(start, end) + (end < content.length ? '...' : '')
     );
   };
 
   // 外部クリックの処理
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
   return (
@@ -180,7 +169,7 @@ export const SearchBar = () => {
         />
         {isLoading && (
           <div className="absolute right-3 top-2.5">
-            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500"></div>
+            <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500" />
           </div>
         )}
       </div>
@@ -193,6 +182,7 @@ export const SearchBar = () => {
               「{searchTerm}」の検索結果 ({searchResults.length}件)
             </h3>
             <button
+              type="button"
               onClick={() => setIsModalOpen(false)}
               className="text-gray-500 hover:text-gray-700"
             >
@@ -203,6 +193,7 @@ export const SearchBar = () => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
+                <title>Close search results</title>
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -238,10 +229,7 @@ export const SearchBar = () => {
                         </div>
                       </div>
                       <p className="text-sm text-gray-700">
-                        {highlightText(
-                          getContentExcerpt(result.content, searchTerm),
-                          searchTerm
-                        )}
+                        {highlightText(getContentExcerpt(result.content, searchTerm), searchTerm)}
                       </p>
                     </a>
                   </li>

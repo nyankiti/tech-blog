@@ -1,11 +1,7 @@
-import {
-  getGourmetTags,
-  getLocationTags,
-  getSortedGourmetPosts,
-} from "@/libs/gourmet";
+import { getGourmetTags, getLocationTags, getSortedGourmetPosts } from '@/libs/gourmet';
 
-import TagFilter from "./components/TagFilter";
-import FilteredPosts from "./components/FilteredPosts";
+import FilteredPosts from './components/FilteredPosts';
+import TagFilter from './components/TagFilter';
 
 export default async function GourmetPage({
   searchParams,

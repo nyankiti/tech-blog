@@ -1,9 +1,9 @@
-import { PostCard } from "@/components/PostCard";
-import { Profile } from "@/components/Profile";
-import { SearchBar } from "@/components/SearchBar";
-import { Tag } from "@/components/Tag";
-import { TitleSection } from "@/components/TitleSection";
-import { getSortedPosts, getTags } from "@/libs/posts";
+import { PostCard } from '@/components/PostCard';
+import { Profile } from '@/components/Profile';
+import { SearchBar } from '@/components/SearchBar';
+import { Tag } from '@/components/Tag';
+import { TitleSection } from '@/components/TitleSection';
+import { getSortedPosts, getTags } from '@/libs/posts';
 
 export default async function Page() {
   const posts = await getSortedPosts();

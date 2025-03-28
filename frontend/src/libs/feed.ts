@@ -1,16 +1,11 @@
-import { Feed } from "feed";
-import { TechBlogPost } from "./posts";
-import {
-  BLOG_CONTENTS_URL,
-  SITE_DESCRIPTION,
-  SITE_TITLE,
-  SITE_URL,
-} from "@/constants";
+import { BLOG_CONTENTS_URL, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/constants';
+import { Feed } from 'feed';
+import type { TechBlogPost } from './posts';
 
 export const generateFeed = async () => {
   const response = await fetch(`${BLOG_CONTENTS_URL}/posts.json`);
   if (!response.ok) {
-    throw new Error("Failed to fetch posts.json");
+    throw new Error('Failed to fetch posts.json');
   }
   const posts = (await response.json()) as TechBlogPost[];
 
@@ -18,10 +13,10 @@ export const generateFeed = async () => {
     id: SITE_URL.toString(),
     title: SITE_TITLE,
     copyright: `All right reserved ${new Date().getFullYear()}, ${SITE_TITLE}`,
-    language: "ja",
+    language: 'ja',
     description: SITE_DESCRIPTION,
     link: SITE_URL.toString(),
-    favicon: new URL("/favicon.ico", SITE_URL).toString(),
+    favicon: new URL('/favicon.ico', SITE_URL).toString(),
   });
 
   posts.forEach(async (post) => {
@@ -33,7 +28,7 @@ export const generateFeed = async () => {
       date: new Date(post.publishedAt),
       image: {
         url: new URL(`/blog/${post.slug}/opengraph-image`, SITE_URL).toString(),
-        type: "image/png",
+        type: 'image/png',
       },
     });
   });
