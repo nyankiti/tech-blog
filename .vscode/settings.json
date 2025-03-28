@@ -2,7 +2,17 @@
   "search.exclude": {
     "node_modules": true,
     "dist": true,
-    "build": true,
-    "blog-contents": true
+    "build": true
+  },
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit"
   }
 }
