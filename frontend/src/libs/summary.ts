@@ -31,5 +31,7 @@ export const getSummaryDates = async (): Promise<string[]> => {
     return [];
   }
   const summaryDates = (await response.json()) as string[];
-  return summaryDates;
+  return summaryDates.sort(
+    (a, b) => new Date(b).getTime() - new Date(a).getTime()
+  );
 };
