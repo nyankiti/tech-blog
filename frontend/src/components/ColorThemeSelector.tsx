@@ -1,7 +1,7 @@
 "use client";
 
 import { MdDarkMode, MdDevices, MdLightMode } from "react-icons/md";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { DropdownMenu } from "radix-ui";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
