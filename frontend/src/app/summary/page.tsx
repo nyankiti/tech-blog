@@ -13,7 +13,7 @@ export default async function SummaryPage() {
           個人的にウォッチしているTech系の情報を生成AIで要約したものを公開する場所。
         </p>
       </div>
-      <div className="prose">
+      <div className="prose dark:prose-invert ">
         <ul>
           {summaryDates.map((date) => (
             <li key={date} className="mt-2">

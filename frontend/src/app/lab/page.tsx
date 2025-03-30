@@ -15,7 +15,7 @@ export default async function Page() {
           気になった技術の実験場。
         </p>
       </div>
-      <div className="prose">
+      <div className="prose dark:prose-invert ">
         <ul>
           <li>
             <NextLink href="/lab/webpush">webpush</NextLink>
