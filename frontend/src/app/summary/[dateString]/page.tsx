@@ -17,6 +17,7 @@ export default async function Page({ params }: Props) {
 
     if (!summaryPost) return notFound();
 
+    // TODO: ここで毎回全てのコンパイルする必要ない気がする
     const { code: techFeedCode } = await loadMDX(summaryPost["tech-feed.md"]);
     const { code: redditCode } = await loadMDX(summaryPost["reddit.md"]);
     const { code: hackerNewsCode } = await loadMDX(
