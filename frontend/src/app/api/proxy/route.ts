@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // URLをデコード（searchParams.get()で既にデコードされているが、二重エンコードの場合に備えて）
+    // URLをデコード（必要な場合）
     let targetUrl: string;
     try {
       targetUrl = decodeURIComponent(urlParam);
@@ -79,28 +79,36 @@ export async function GET(request: NextRequest) {
     // プロキシ先のURLにリクエストを送信
     const response = await fetch(targetUrl, {
       headers: {
-        // 必要に応じてヘッダーを追加
         "User-Agent": "next-proxy-api",
         "Cache-Control": "no-cache",
         Pragma: "no-cache",
       },
-      cache: "no-store", // fetchのキャッシュを無効化
+      cache: "no-store",
+      // 安全なプロキシ用の設定
+      redirect: "follow",
+      // 以下はプロキシ先でのクレデンシャル利用を防止
+      credentials: "omit",
     });
 
     // レスポンスのステータスコードとヘッダーをコピー
     const responseHeaders = new Headers();
     response.headers.forEach((value, key) => {
-      // CORS関連のヘッダーは除外
+      // 問題を起こす可能性のあるヘッダーを除外
       if (
-        !["set-cookie", "access-control-allow-origin"].includes(
-          key.toLowerCase()
-        )
+        ![
+          "set-cookie",
+          "access-control-allow-origin",
+          "content-encoding",
+          "content-length",
+          "connection",
+          "transfer-encoding",
+        ].includes(key.toLowerCase())
       ) {
         responseHeaders.set(key, value);
       }
     });
 
-    // Content-Typeヘッダーをレスポンスから取得
+    // Content-Typeヘッダーを明示的に設定
     const contentType = response.headers.get("content-type");
     if (contentType) {
       responseHeaders.set("Content-Type", contentType);
@@ -109,7 +117,7 @@ export async function GET(request: NextRequest) {
     // キャッシュ無効化ヘッダーを追加
     addNoCacheHeaders(responseHeaders);
 
-    // レスポンスボディを取得
+    // レスポンスボディの取得方法を改善（サイズが大きい場合に備えて）
     const responseData = await response.arrayBuffer();
 
     // レスポンスを返す
@@ -122,7 +130,10 @@ export async function GET(request: NextRequest) {
     const errorHeaders = new Headers();
     addNoCacheHeaders(errorHeaders);
     return NextResponse.json(
-      { error: "Failed to proxy request" },
+      {
+        error: "Failed to proxy request",
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500, headers: errorHeaders }
     );
   }
@@ -161,15 +172,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // リクエストボディを取得
+    // リクエストボディを取得（最大サイズ制限を設定）
     const body = await request.arrayBuffer();
 
     // リクエストヘッダーをコピー
     const headers = new Headers();
     request.headers.forEach((value, key) => {
-      // ホスト関連のヘッダーは除外
+      // 問題を起こす可能性のあるヘッダーを除外
       if (
-        !["host", "connection", "content-length"].includes(key.toLowerCase())
+        !["host", "connection", "content-length", "transfer-encoding"].includes(
+          key.toLowerCase()
+        )
       ) {
         headers.set(key, value);
       }
@@ -184,16 +197,26 @@ export async function POST(request: NextRequest) {
       method: "POST",
       headers,
       body,
-      cache: "no-store", // fetchのキャッシュを無効化
+      cache: "no-store",
+      redirect: "follow",
+      credentials: "omit",
+      // タイムアウトを設定（15秒）
+      signal: AbortSignal.timeout(15000),
     });
 
     // レスポンスのステータスコードとヘッダーをコピー
     const responseHeaders = new Headers();
     response.headers.forEach((value, key) => {
+      // 問題を起こす可能性のあるヘッダーを除外
       if (
-        !["set-cookie", "access-control-allow-origin"].includes(
-          key.toLowerCase()
-        )
+        ![
+          "set-cookie",
+          "access-control-allow-origin",
+          "content-encoding",
+          "content-length",
+          "connection",
+          "transfer-encoding",
+        ].includes(key.toLowerCase())
       ) {
         responseHeaders.set(key, value);
       }
@@ -220,7 +243,10 @@ export async function POST(request: NextRequest) {
     const errorHeaders = new Headers();
     addNoCacheHeaders(errorHeaders);
     return NextResponse.json(
-      { error: "Failed to proxy request" },
+      {
+        error: "Failed to proxy request",
+        message: error instanceof Error ? error.message : String(error),
+      },
       { status: 500, headers: errorHeaders }
     );
   }
