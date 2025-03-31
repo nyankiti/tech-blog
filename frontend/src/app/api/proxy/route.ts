@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Next.jsの設定でこのAPIルートのキャッシュを無効化
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 // ホワイトリストドメインの配列
 const WHITE_LIST_DOMAINS = [
   "www.joshwcomeau.com",
@@ -23,21 +27,37 @@ function isAllowedDomain(urlString: string): boolean {
   }
 }
 
+/**
+ * キャッシュ無効化ヘッダーを追加
+ */
+function addNoCacheHeaders(headers: Headers): Headers {
+  headers.set(
+    "Cache-Control",
+    "no-store, no-cache, must-revalidate, proxy-revalidate"
+  );
+  headers.set("Pragma", "no-cache");
+  headers.set("Expires", "0");
+  headers.set("Surrogate-Control", "no-store");
+  return headers;
+}
+
 export async function GET(request: NextRequest) {
   try {
-    // URLパラメータからプロキシ先のURLを取得（デコード済み）
+    // URLパラメータからプロキシ先のURLを取得
     const { searchParams } = new URL(request.url);
     const urlParam = searchParams.get("url");
 
     // URLパラメータが存在しない場合はエラーを返す
     if (!urlParam) {
+      const errorHeaders = new Headers();
+      addNoCacheHeaders(errorHeaders);
       return NextResponse.json(
         { error: "URL parameter is required" },
-        { status: 400 }
+        { status: 400, headers: errorHeaders }
       );
     }
 
-    // URLをデコード（searchParams.get() で既にデコードされているが、二重エンコードの場合に備えて）
+    // URLをデコード（searchParams.get()で既にデコードされているが、二重エンコードの場合に備えて）
     let targetUrl: string;
     try {
       targetUrl = decodeURIComponent(urlParam);
@@ -48,9 +68,11 @@ export async function GET(request: NextRequest) {
 
     // ドメインがホワイトリストにあるか確認
     if (!isAllowedDomain(targetUrl)) {
+      const errorHeaders = new Headers();
+      addNoCacheHeaders(errorHeaders);
       return NextResponse.json(
         { error: "Domain not allowed" },
-        { status: 403 }
+        { status: 403, headers: errorHeaders }
       );
     }
 
@@ -59,7 +81,10 @@ export async function GET(request: NextRequest) {
       headers: {
         // 必要に応じてヘッダーを追加
         "User-Agent": "next-proxy-api",
+        "Cache-Control": "no-cache",
+        Pragma: "no-cache",
       },
+      cache: "no-store", // fetchのキャッシュを無効化
     });
 
     // レスポンスのステータスコードとヘッダーをコピー
@@ -81,6 +106,9 @@ export async function GET(request: NextRequest) {
       responseHeaders.set("Content-Type", contentType);
     }
 
+    // キャッシュ無効化ヘッダーを追加
+    addNoCacheHeaders(responseHeaders);
+
     // レスポンスボディを取得
     const responseData = await response.arrayBuffer();
 
@@ -91,9 +119,11 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Proxy error:", error);
+    const errorHeaders = new Headers();
+    addNoCacheHeaders(errorHeaders);
     return NextResponse.json(
       { error: "Failed to proxy request" },
-      { status: 500 }
+      { status: 500, headers: errorHeaders }
     );
   }
 }
@@ -104,13 +134,15 @@ export async function POST(request: NextRequest) {
     const urlParam = searchParams.get("url");
 
     if (!urlParam) {
+      const errorHeaders = new Headers();
+      addNoCacheHeaders(errorHeaders);
       return NextResponse.json(
         { error: "URL parameter is required" },
-        { status: 400 }
+        { status: 400, headers: errorHeaders }
       );
     }
 
-    // URLをデコード（必要な場合）
+    // URLをデコード
     let targetUrl: string;
     try {
       targetUrl = decodeURIComponent(urlParam);
@@ -121,9 +153,11 @@ export async function POST(request: NextRequest) {
 
     // ドメインがホワイトリストにあるか確認
     if (!isAllowedDomain(targetUrl)) {
+      const errorHeaders = new Headers();
+      addNoCacheHeaders(errorHeaders);
       return NextResponse.json(
         { error: "Domain not allowed" },
-        { status: 403 }
+        { status: 403, headers: errorHeaders }
       );
     }
 
@@ -141,11 +175,16 @@ export async function POST(request: NextRequest) {
       }
     });
 
+    // キャッシュ無効化ヘッダーをリクエストに追加
+    headers.set("Cache-Control", "no-cache");
+    headers.set("Pragma", "no-cache");
+
     // プロキシ先のURLにリクエストを送信
     const response = await fetch(targetUrl, {
       method: "POST",
       headers,
       body,
+      cache: "no-store", // fetchのキャッシュを無効化
     });
 
     // レスポンスのステータスコードとヘッダーをコピー
@@ -165,6 +204,9 @@ export async function POST(request: NextRequest) {
       responseHeaders.set("Content-Type", contentType);
     }
 
+    // キャッシュ無効化ヘッダーを追加
+    addNoCacheHeaders(responseHeaders);
+
     // レスポンスボディを取得
     const responseData = await response.arrayBuffer();
 
@@ -175,9 +217,11 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Proxy error:", error);
+    const errorHeaders = new Headers();
+    addNoCacheHeaders(errorHeaders);
     return NextResponse.json(
       { error: "Failed to proxy request" },
-      { status: 500 }
+      { status: 500, headers: errorHeaders }
     );
   }
 }
