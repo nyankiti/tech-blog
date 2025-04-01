@@ -2,23 +2,19 @@
 import { Tabs } from "radix-ui";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { MDXComponent } from "./MdxComponent";
+import { RiShareBoxFill } from "react-icons/ri";
 
 type Props = {
   techFeedCode: string;
   redditCode: string;
-  hackerNewsCode: string;
 };
 
-export default function SummaryTabs({
-  techFeedCode,
-  redditCode,
-  hackerNewsCode,
-}: Props) {
+export default function SummaryTabs({ techFeedCode, redditCode }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
 
-  const activeTab = searchParams.get("tab") || "tech-feed";
+  const activeTab = searchParams.get("tab") || "hacker-news";
 
   const handleTabChange = (tab: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
@@ -63,7 +59,15 @@ export default function SummaryTabs({
       </Tabs.Content>
 
       <Tabs.Content value="hacker-news" className="max-w-none">
-        <MDXComponent code={hackerNewsCode} />
+        <a
+          href="https://catnose.me/lab/hackernews-ja/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-gray-600 hover:text-blue-500 transition-colors ml-2"
+        >
+          catnoseさんのHacker News日本語まとめ
+          <RiShareBoxFill />
+        </a>
       </Tabs.Content>
     </Tabs.Root>
   );

@@ -1,7 +1,6 @@
 export type SummaryPost = {
   "tech-feed.md": string;
   "reddit.md": string;
-  "hacker-news.md": string;
 };
 
 export const getSummaryPost = async (
@@ -18,7 +17,6 @@ export const getSummaryPost = async (
   return {
     "tech-feed.md": summaryPosts["tech-feed.md"] ?? "要約が存在しません",
     "reddit.md": summaryPosts["reddit.md"] ?? "要約が存在しません",
-    "hacker-news.md": summaryPosts["hacker-news.md"] ?? "要約が存在しません",
   };
 };
 
