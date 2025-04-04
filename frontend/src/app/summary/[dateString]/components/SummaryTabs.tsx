@@ -14,7 +14,7 @@ export default function SummaryTabs({ techFeedCode, redditCode }: Props) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const activeTab = searchParams.get("tab") || "hacker-news";
+  const activeTab = searchParams.get("tab") || "tech-feed";
 
   const handleTabChange = (tab: string) => {
     const newParams = new URLSearchParams(searchParams.toString());
