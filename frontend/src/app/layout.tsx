@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+import { notFound } from "next/navigation";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
 
 import "./globals.css";
 import {
@@ -12,7 +15,7 @@ import {
 } from "@/constants";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import Script from "next/script";
+import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,13 +43,18 @@ export const metadata: Metadata = {
   manifest: "/site.webmanifest",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
+
   return (
-    <html lang="ja" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
         <Script
@@ -96,11 +104,13 @@ export default function RootLayout({
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Header />
-          {children}
-          <Footer />
-        </ThemeProvider>
+        <NextIntlClientProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <Header />
+            {children}
+            <Footer />
+          </ThemeProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
