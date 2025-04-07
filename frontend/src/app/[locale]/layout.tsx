@@ -1,54 +1,59 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { Locale, NextIntlClientProvider, hasLocale } from "next-intl";
 
 import "./globals.css";
-import {
-  GA_MEASUREMENT_ID,
-  SITE_DESCRIPTION,
-  SITE_TITLE,
-  SITE_URL,
-} from "@/constants";
+import { GA_MEASUREMENT_ID, SITE_TITLE, SITE_URL } from "@/constants";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
-  title: {
-    template: `%s | ${SITE_TITLE}`,
-    default: `Home | ${SITE_TITLE}`,
-  },
-  description: SITE_DESCRIPTION,
-  twitter: {
-    card: "summary",
-    creator: `@stin_factory`,
-  },
-  openGraph: {
-    type: "website",
-    url: "/",
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "HomePage" });
+
+  return {
     title: {
       template: `%s | ${SITE_TITLE}`,
       default: `Home | ${SITE_TITLE}`,
     },
-    description: SITE_DESCRIPTION,
-    siteName: SITE_TITLE,
-  },
-  metadataBase: SITE_URL,
-  manifest: "/site.webmanifest",
-};
+    description: t("siteDescription"),
+    twitter: {
+      card: "summary",
+      creator: `@stin_factory`,
+    },
+    openGraph: {
+      type: "website",
+      url: "/",
+      title: {
+        template: `%s | ${SITE_TITLE}`,
+        default: `Home | ${SITE_TITLE}`,
+      },
+      description: t("siteDescription"),
+      siteName: SITE_TITLE,
+    },
+    metadataBase: SITE_URL,
+    manifest: "/site.webmanifest",
+  };
+}
 
 export default async function RootLayout({
   children,
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: Locale }>;
 }>) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
