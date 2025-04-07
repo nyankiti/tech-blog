@@ -1,6 +1,7 @@
 export type SummaryPost = {
   "tech-feed.md": string;
   "reddit.md": string;
+  "github-trending.md": string;
 };
 
 export const getSummaryPost = async (
@@ -15,8 +16,21 @@ export const getSummaryPost = async (
   }
   const summaryPosts = await response.json();
   return {
-    "tech-feed.md": summaryPosts["tech-feed.md"] ?? "要約が存在しません",
-    "reddit.md": summaryPosts["reddit.md"] ?? "要約が存在しません",
+    "tech-feed.md":
+      typeof summaryPosts["tech-feed.md"] === "string" &&
+      summaryPosts["tech-feed.md"].length > 0
+        ? summaryPosts["tech-feed.md"]
+        : "要約が存在しません",
+    "reddit.md":
+      typeof summaryPosts["reddit.md"] === "string" &&
+      summaryPosts["reddit.md"].length > 0
+        ? summaryPosts["reddit.md"]
+        : "要約が存在しません",
+    "github-trending.md":
+      typeof summaryPosts["github-trending.md"] === "string" &&
+      summaryPosts["github-trending.md"].length > 0
+        ? summaryPosts["github-trending.md"]
+        : "要約が存在しません",
   };
 };
 

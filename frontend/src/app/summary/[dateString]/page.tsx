@@ -37,6 +37,11 @@ export default async function Page({ params, searchParams }: Props) {
       tabContents["reddit"] = code;
     }
 
+    if (activeTab === "github-trending" && summaryPost["github-trending.md"]) {
+      const { code } = await loadMDX(summaryPost["github-trending.md"]);
+      tabContents["github-trending"] = code;
+    }
+
     return (
       <article className="max-w-7xl w-full flex justify-center px-5 mt-12 mb-24 mx-auto lg:px-32">
         <div className="flex w-full md:w-8/12 flex-col mx-auto mb-2 text-left">
