@@ -8,6 +8,8 @@ import { loadMDX } from "./mdx-loader";
 import { PcToc } from "./components/PcToc";
 import { Adsense } from "./components/Adsense";
 import { MDXComponent } from "./components/MdxComponent";
+import { setRequestLocale } from "next-intl/server";
+import { Locale } from "next-intl";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -20,13 +22,15 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: Locale }>;
 };
 
 export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
   const post = await getTechBlogPost(slug);
 
   if (!post || post.isDeleted === true) return notFound();

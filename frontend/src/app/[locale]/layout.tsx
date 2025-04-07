@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "next-themes";
@@ -14,6 +14,10 @@ import { Footer } from "@/components/Footer";
 import { routing } from "@/i18n/routing";
 
 const inter = Inter({ subsets: ["latin"] });
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
 
 export async function generateMetadata({
   params,
@@ -57,6 +61,9 @@ export default async function RootLayout({
 }>) {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
+
+  // 静的レンダリングを有効化
+  setRequestLocale(locale);
 
   return (
     <html lang={locale} suppressHydrationWarning>
