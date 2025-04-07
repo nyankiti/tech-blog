@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import NextLink from "next/link";
+import { NextLink } from "@/i18n/navigation";
 
 export const metadata: Metadata = {
   robots: {

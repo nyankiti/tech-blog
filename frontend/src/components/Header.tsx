@@ -1,6 +1,6 @@
 "use client";
 
-import NextLink from "next/link";
+import { NextLink } from "@/i18n/navigation";
 import { ColorThemeSelector } from "./ColorThemeSelector";
 import { SITE_TITLE } from "@/constants";
 import { usePathname } from "next/navigation";

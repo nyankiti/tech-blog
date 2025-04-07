@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import { NextLink } from "@/i18n/navigation";
 import { Datetime } from "./Datetime";
 import { Tag } from "./Tag";
 import { TechBlogPost } from "@/libs/posts";

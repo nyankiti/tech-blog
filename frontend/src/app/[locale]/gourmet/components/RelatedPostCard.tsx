@@ -1,7 +1,7 @@
 import { unstable_ViewTransition as ViewTransition } from "react";
 import NextImage from "next/image";
-import NextLink from "next/link";
 
+import { NextLink } from "@/i18n/navigation";
 import { GourmetPost } from "@/libs/gourmet";
 import { Datetime } from "@/components/Datetime";
 

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next/types";
-import NextLink from "next/link";
+import { NextLink } from "@/i18n/navigation";
 import {
   getGourmetPost,
   getAllGourmetPosts,

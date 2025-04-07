@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import { NextLink } from "@/i18n/navigation";
 import { getSummaryDates } from "@/libs/summary";
 
 /**

@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import NextLink from "next/link";
+import { NextLink } from "@/i18n/navigation";
 import { useEffect } from "react";
 
 export default function NotFound() {

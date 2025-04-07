@@ -1,5 +1,6 @@
 "use client";
-import NextLink, { LinkProps } from "next/link";
+import { LinkProps } from "next/link";
+import { NextLink } from "@/i18n/navigation";
 import { useState } from "react";
 
 type Props = {
