@@ -18,5 +18,9 @@
   },
   "LanguageSwitcher": {
     "selectLanguage": "言語を選択"
+  },
+  "TagPage": {
+    "description": "{tag}でタグ付けされた記事一覧",
+    "selectedTag": "選択中のタグ:"
   }
 }

@@ -18,5 +18,9 @@
   },
   "LanguageSwitcher": {
     "selectLanguage": "Select language"
+  },
+  "TagPage": {
+    "description": "Articles tagged with {tag}",
+    "selectedTag": "selected Tag:"
   }
 }

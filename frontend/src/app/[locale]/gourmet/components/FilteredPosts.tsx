@@ -6,12 +6,12 @@ import { GourmetPost } from "@/libs/gourmet";
 
 interface FilteredPostsProps {
   initialPosts: GourmetPost[];
-  params: { [key: string]: string | string[] | undefined };
+  sParams: { [key: string]: string | string[] | undefined };
 }
 
 export default function FilteredPosts({
   initialPosts,
-  params: searchParams,
+  sParams: searchParams,
 }: FilteredPostsProps) {
   const [filteredPosts, setFilteredPosts] =
     useState<GourmetPost[]>(initialPosts);

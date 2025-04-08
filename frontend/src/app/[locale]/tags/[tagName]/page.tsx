@@ -5,7 +5,7 @@ import { Tag } from "@/components/Tag";
 import { PostCard } from "@/components/PostCard";
 import { TitleSection } from "@/components/TitleSection";
 import { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 type Props = {
   params: Promise<{ tagName: string; locale: Locale }>;
@@ -20,8 +20,9 @@ export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
   const { locale, tagName: encodedTagName } = await params;
-  setRequestLocale(locale);
   const tagName = decodeURIComponent(encodedTagName);
+
+  const t = await getTranslations({ locale, namespace: "TagPage" });
 
   const articles = (await getSortedPosts()).filter((post) =>
     post.tags.includes(tagName)
@@ -33,7 +34,9 @@ export const generateMetadata = async ({
 
   return {
     title: `tag: ${tagName}`,
-    description: `${tagName} でタグ付けされた記事一覧`,
+    description: t("description", {
+      tag: tagName,
+    }),
     alternates: {
       canonical: `https://sokes-nook.net/${locale}/tags/${tagName}`,
     },
@@ -41,7 +44,9 @@ export const generateMetadata = async ({
       type: "website",
       url: `/${locale}/tags/${tagName}`,
       title: `tag: ${tagName}`,
-      description: `${tagName} でタグ付けされた記事一覧`,
+      description: t("description", {
+        tag: tagName,
+      }),
     },
     twitter: {
       card: "summary_large_image",
@@ -54,7 +59,11 @@ export const generateMetadata = async ({
 };
 
 const TagPage: React.FC<Props> = async ({ params }) => {
-  const tagName = decodeURIComponent((await params).tagName);
+  const { locale, tagName: encodedTagName } = await params;
+  // 静的レンダリングを有効化
+  setRequestLocale(locale);
+  const t = await getTranslations({ locale, namespace: "TagPage" });
+  const tagName = decodeURIComponent(encodedTagName);
 
   const posts = (await getSortedPosts()).filter((post) =>
     post.tags.includes(tagName)
@@ -65,13 +74,13 @@ const TagPage: React.FC<Props> = async ({ params }) => {
   if (posts.length === 0) notFound();
 
   return (
-    <div className="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    <div className="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 mx-auto">
       <TitleSection />
       <div className="grid gap-4 grid-rows-[auto] md:grid-rows-1 md:grid-cols-[7fr_3fr]">
         <div className="order-1 md:order-2">
           {tagName && (
             <>
-              <span>選択中のタグ: </span>
+              <span>{t("selectedTag")} </span>
               <Tag tag={tagName} href="/" />
             </>
           )}

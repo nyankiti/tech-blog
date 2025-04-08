@@ -6,13 +6,20 @@ import {
 
 import TagFilter from "./components/TagFilter";
 import FilteredPosts from "./components/FilteredPosts";
+import { Locale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 
-export default async function GourmetPage({
-  searchParams,
-}: {
+type Props = {
+  params: Promise<{ locale: Locale }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
-  const params = await searchParams;
+};
+
+export default async function GourmetPage({ searchParams, params }: Props) {
+  const { locale } = await params;
+  // 静的レンダリングを有効化
+  setRequestLocale(locale);
+
+  const sParams = await searchParams;
   const gourmetPosts = await getSortedGourmetPosts();
   const locationsTags = await getLocationTags();
   const gourmetTags = await getGourmetTags();
@@ -29,7 +36,7 @@ export default async function GourmetPage({
         <TagFilter locationsTags={locationsTags} gourmetTags={gourmetTags} />
       </div>
 
-      <FilteredPosts initialPosts={gourmetPosts} params={params} />
+      <FilteredPosts initialPosts={gourmetPosts} sParams={sParams} />
     </div>
   );
 }

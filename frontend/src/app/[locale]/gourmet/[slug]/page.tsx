@@ -31,7 +31,6 @@ export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
   const { slug, locale } = await params;
-  setRequestLocale(locale);
 
   const post = await getGourmetPost(slug);
 
@@ -61,7 +60,9 @@ export const generateMetadata = async ({
 };
 
 export default async function Page({ params }: Props) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
   try {
     const post = await getGourmetPost(slug);
 

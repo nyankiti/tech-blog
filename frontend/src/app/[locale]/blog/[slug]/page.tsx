@@ -29,7 +29,6 @@ export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
   const { slug, locale } = await params;
-  setRequestLocale(locale);
 
   const post = await getTechBlogPost(slug);
 
@@ -58,7 +57,10 @@ export const generateMetadata = async ({
 };
 
 export default async function Page({ params }: Props) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  // 静的レンダリングを有効化
+  setRequestLocale(locale);
+
   const post = await getTechBlogPost(slug);
 
   if (!post || post.isDeleted === true) return notFound();
