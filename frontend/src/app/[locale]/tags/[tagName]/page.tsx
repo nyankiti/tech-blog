@@ -4,9 +4,11 @@ import { getSortedPosts, getTags } from "@/libs/posts";
 import { Tag } from "@/components/Tag";
 import { PostCard } from "@/components/PostCard";
 import { TitleSection } from "@/components/TitleSection";
+import { Locale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 
 type Props = {
-  params: Promise<{ tagName: string }>;
+  params: Promise<{ tagName: string; locale: Locale }>;
 };
 
 export const generateStaticParams = async () => {
@@ -17,7 +19,9 @@ export const generateStaticParams = async () => {
 export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
-  const tagName = decodeURIComponent((await params).tagName);
+  const { locale, tagName: encodedTagName } = await params;
+  setRequestLocale(locale);
+  const tagName = decodeURIComponent(encodedTagName);
 
   const articles = (await getSortedPosts()).filter((post) =>
     post.tags.includes(tagName)
@@ -31,11 +35,11 @@ export const generateMetadata = async ({
     title: `tag: ${tagName}`,
     description: `${tagName} でタグ付けされた記事一覧`,
     alternates: {
-      canonical: `https://sokes-nook.net/tags/${tagName}`,
+      canonical: `https://sokes-nook.net/${locale}/tags/${tagName}`,
     },
     openGraph: {
       type: "website",
-      url: `/tags/${tagName}`,
+      url: `/${locale}/tags/${tagName}`,
       title: `tag: ${tagName}`,
       description: `${tagName} でタグ付けされた記事一覧`,
     },

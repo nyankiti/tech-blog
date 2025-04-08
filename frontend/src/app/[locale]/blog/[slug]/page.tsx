@@ -39,11 +39,11 @@ export const generateMetadata = async ({
     title: post.title,
     description: post.description || post.title,
     alternates: {
-      canonical: `https://sokes-nook.net/blog/${slug}`,
+      canonical: `https://sokes-nook.net/${locale}/blog/${slug}`,
     },
     openGraph: {
       type: "article",
-      url: `/blog/${slug}`,
+      url: `/${locale}/blog/${slug}`,
       title: post.title,
       description: post.description || post.title,
       publishedTime: post.publishedAt,

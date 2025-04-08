@@ -13,6 +13,8 @@ import { Datetime } from "@/components/Datetime";
 import { unstable_ViewTransition as ViewTransition } from "react";
 import NextImage from "next/image";
 import RelatedPostCard from "../components/RelatedPostCard";
+import { Locale } from "next-intl";
+import { setRequestLocale } from "next-intl/server";
 
 export async function generateStaticParams() {
   const slugs = (await getAllGourmetPosts()).map((post) => post.slug);
@@ -22,13 +24,15 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: Locale }>;
 };
 
 export const generateMetadata = async ({
   params,
 }: Props): Promise<Metadata> => {
-  const { slug } = await params;
+  const { slug, locale } = await params;
+  setRequestLocale(locale);
+
   const post = await getGourmetPost(slug);
 
   if (!post || post.isDeleted === true) return notFound();
@@ -37,11 +41,11 @@ export const generateMetadata = async ({
     title: post.title,
     description: post.description || post.title,
     alternates: {
-      canonical: `https://sokes-nook.net/gourmet/${slug}`,
+      canonical: `https://sokes-nook.net/${locale}/gourmet/${slug}`,
     },
     openGraph: {
       type: "article",
-      url: `/gourmet/${slug}`,
+      url: `/${locale}/gourmet/${slug}`,
       title: post.title,
       description: post.description || post.title,
       publishedTime: post.publishedAt,
