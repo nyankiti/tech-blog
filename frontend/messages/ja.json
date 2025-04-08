@@ -15,5 +15,8 @@
   },
   "Lab": {
     "description": "気になった技術の実験場。"
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "言語を選択"
   }
 }

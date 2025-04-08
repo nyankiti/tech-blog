@@ -15,5 +15,8 @@
   },
   "Lab": {
     "description": "A small lab for experimenting with technologies that catch my interest."
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "Select language"
   }
 }
