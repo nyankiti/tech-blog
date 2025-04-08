@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import FlexSearch, { Document } from "flexsearch";
 import { BLOG_CONTENTS_URL } from "@/constants";
+import { useTranslations } from "use-intl";
 
 /**
  * blog-contents側で生成したtech-blog-search-index.jsonに基づく
@@ -15,6 +16,7 @@ export type PostDocument = {
 };
 
 export const SearchBar = () => {
+  const t = useTranslations("SearchBar");
   const indexRef = useRef<Document<PostDocument, string[]> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -173,7 +175,7 @@ export const SearchBar = () => {
       <div className="relative">
         <input
           type="text"
-          placeholder="ブログ内を検索..."
+          placeholder={t("placeholder")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

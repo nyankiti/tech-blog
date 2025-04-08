@@ -5,5 +5,15 @@
   "Footer": {
     "privacyPolicy": "プライバシーボリシー",
     "inquiry": "問い合わせ"
+  },
+  "Profile": {
+    "name": "sooooda",
+    "description": "23卒のweb屋さん, 日日是好日 \n実家猫のにゃんきちくんとnook（隅、隠れ家）が好き"
+  },
+  "SearchBar": {
+    "placeholder": "ブログ内を検索..."
+  },
+  "Lab": {
+    "description": "気になった技術の実験場。"
   }
 }

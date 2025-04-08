@@ -1,9 +1,19 @@
 {
   "HomePage": {
-    "siteDescription": "A personal blog to record interesting technologies and readings, and other miscellaneous notes by web developer from Japan."
+    "siteDescription": "A personal blog where I jot down notes on interesting technologies, thought-provoking reads, and the occasional ramble.\n“Nook” means a quiet corner or a little hideaway — a fitting name for a space to think, explore, and experiment.\nBased in Japan, originally from here as well."
   },
   "Footer": {
     "privacyPolicy": "Privacy Policy",
     "inquiry": "Inquiry"
+  },
+  "Profile": {
+    "name": "sooooda",
+    "description": "A web developer who started out in 2023. Living each day with a “every day is a good day“ mindset.\nLover of cozy nooks and my family cat, にゃんきちくん."
+  },
+  "SearchBar": {
+    "placeholder": "Search articles..."
+  },
+  "Lab": {
+    "description": "A small lab for experimenting with technologies that catch my interest."
   }
 }
