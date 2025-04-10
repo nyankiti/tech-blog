@@ -3,12 +3,13 @@ import path from "path";
 import { ImageResponse } from "next/og";
 import { SITE_TITLE } from "@/constants";
 import { getSlugs, getTechBlogPost } from "@/libs/posts";
+import { Locale } from "next-intl";
 
 export const dynamic = "error";
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
-  const slugs = await getSlugs();
+  const slugs = await getSlugs("ja");
   return slugs.map((slug) => {
     return { slug };
   });
@@ -24,12 +25,12 @@ export const size = {
 export const contentType = "image/png";
 
 type Props = {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string; locale: Locale }>;
 };
 
 export default async function Image({ params }: Props) {
-  const { slug } = await params;
-  const frontmatter = await getTechBlogPost(slug);
+  const { slug, locale } = await params;
+  const frontmatter = await getTechBlogPost(slug, locale);
 
   if (!frontmatter) return new Response("Not Found", { status: 404 });
 

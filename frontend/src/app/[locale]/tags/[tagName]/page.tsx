@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const generateStaticParams = async () => {
-  const tags = await getTags();
+  const tags = await getTags("ja");
   return tags.map((tag) => ({ tagName: tag }));
 };
 
@@ -24,7 +24,7 @@ export const generateMetadata = async ({
 
   const t = await getTranslations({ locale, namespace: "TagPage" });
 
-  const articles = (await getSortedPosts()).filter((post) =>
+  const articles = (await getSortedPosts(locale)).filter((post) =>
     post.tags.includes(tagName)
   );
 
@@ -65,11 +65,11 @@ const TagPage: React.FC<Props> = async ({ params }) => {
   const t = await getTranslations({ locale, namespace: "TagPage" });
   const tagName = decodeURIComponent(encodedTagName);
 
-  const posts = (await getSortedPosts()).filter((post) =>
+  const posts = (await getSortedPosts(locale)).filter((post) =>
     post.tags.includes(tagName)
   );
 
-  const tags = await getTags();
+  const tags = await getTags(locale);
 
   if (posts.length === 0) notFound();
 

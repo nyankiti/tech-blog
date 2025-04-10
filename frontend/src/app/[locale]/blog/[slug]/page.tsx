@@ -11,11 +11,8 @@ import { MDXComponent } from "./components/MdxComponent";
 import { setRequestLocale } from "next-intl/server";
 import { Locale } from "next-intl";
 
-export const dynamic = "error";
-export const dynamicParams = false;
-
 export async function generateStaticParams() {
-  const slugs = await getSlugs();
+  const slugs = await getSlugs("ja");
   return slugs.map((slug) => {
     return { slug };
   });
@@ -30,7 +27,7 @@ export const generateMetadata = async ({
 }: Props): Promise<Metadata> => {
   const { slug, locale } = await params;
 
-  const post = await getTechBlogPost(slug);
+  const post = await getTechBlogPost(slug, locale);
 
   if (!post || post.isDeleted === true) return notFound();
 
@@ -61,7 +58,7 @@ export default async function Page({ params }: Props) {
   // 静的レンダリングを有効化
   setRequestLocale(locale);
 
-  const post = await getTechBlogPost(slug);
+  const post = await getTechBlogPost(slug, locale);
 
   if (!post || post.isDeleted === true) return notFound();
 

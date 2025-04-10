@@ -4,10 +4,16 @@ import { SearchBar } from "@/components/SearchBar";
 import { Tag } from "@/components/Tag";
 import { TitleSection } from "@/components/TitleSection";
 import { getSortedPosts, getTags } from "@/libs/posts";
+import { Locale } from "next-intl";
 
-export default async function Page() {
-  const posts = await getSortedPosts();
-  const tags = await getTags();
+type Props = {
+  params: Promise<{ locale: Locale }>;
+};
+
+export default async function Page({ params }: Props) {
+  const { locale } = await params;
+  const posts = await getSortedPosts(locale);
+  const tags = await getTags(locale);
   return (
     <div className="max-w-[85rem] px-4 pb-10 sm:px-6 lg:px-8 mx-auto">
       <TitleSection />
