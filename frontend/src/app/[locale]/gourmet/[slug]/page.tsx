@@ -14,7 +14,7 @@ import { unstable_ViewTransition as ViewTransition } from "react";
 import NextImage from "next/image";
 import RelatedPostCard from "../components/RelatedPostCard";
 import { Locale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 
 export async function generateStaticParams() {
   const slugs = (await getAllGourmetPosts()).map((post) => post.slug);
@@ -62,6 +62,7 @@ export const generateMetadata = async ({
 export default async function Page({ params }: Props) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
+  const t = await getTranslations("GourmetPage");
 
   try {
     const post = await getGourmetPost(slug);
@@ -152,7 +153,7 @@ export default async function Page({ params }: Props) {
             {relatedPosts.length > 0 && (
               <div className="mt-12 md:mt-0">
                 <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">
-                  他の投稿
+                  {t("relatedPosts")}
                 </h2>
                 <div className="grid grid-cols-2 md:grid-cols-1 gap-4">
                   {relatedPosts.map((relatedPost) => (

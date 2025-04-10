@@ -22,5 +22,11 @@
   "TagPage": {
     "description": "Articles tagged with {tag}",
     "selectedTag": "selected Tag:"
+  },
+  "GourmetPage": {
+    "description": "A casual place to keep notes on the places I've visited.\nPhotography skills? Strictly amateur.",
+    "location": "location",
+    "genre": "genre",
+    "relatedPosts": "Related posts"
   }
 }

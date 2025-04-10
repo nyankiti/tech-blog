@@ -22,5 +22,11 @@
   "TagPage": {
     "description": "{tag}でタグ付けされた記事一覧",
     "selectedTag": "選択中のタグ:"
+  },
+  "GourmetPage": {
+    "description": "訪れたお店の記録を何となく残しておこうとする場所。写真は素人。",
+    "location": "場所",
+    "genre": "ジャンル",
+    "relatedPosts": "他の投稿"
   }
 }

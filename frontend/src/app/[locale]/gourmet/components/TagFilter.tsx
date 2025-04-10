@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 type TagFilterProps = {
   locationsTags: string[];
@@ -15,6 +16,7 @@ export default function TagFilter({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations("GourmetPage");
 
   const [selectedLocationTags, setSelectedLocationTags] = useState<string[]>(
     () => {
@@ -74,7 +76,7 @@ export default function TagFilter({
   return (
     <>
       <div className="my-4">
-        <h3>場所</h3>
+        <h3>{t("location")}</h3>
         <div className="flex flex-wrap gap-2">
           {locationsTags.map((tag) => (
             <button
@@ -93,7 +95,7 @@ export default function TagFilter({
       </div>
 
       <div className="mb-4">
-        <h3>ジャンル</h3>
+        <h3>{t("genre")}</h3>
         <div className="flex flex-wrap gap-2">
           {gourmetTags.map((tag) => (
             <button
