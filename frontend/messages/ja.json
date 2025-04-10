@@ -1,0 +1,36 @@
+{
+  "HomePage": {
+    "siteDescription": "気になった技術や読み物の記録、雑記など残す個人ブログです。\nnookは「隅、隠れ家」という意味。"
+  },
+  "Footer": {
+    "privacyPolicy": "プライバシーボリシー",
+    "inquiry": "問い合わせ"
+  },
+  "Profile": {
+    "name": "sooooda",
+    "description": "23卒のweb屋さん, 日日是好日 \n実家猫のにゃんきちくんとnook（隅、隠れ家）が好き"
+  },
+  "SearchBar": {
+    "placeholder": "ブログ内を検索..."
+  },
+  "Lab": {
+    "description": "気になった技術の実験場。"
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "言語を選択"
+  },
+  "TagPage": {
+    "description": "{tag}でタグ付けされた記事一覧",
+    "selectedTag": "選択中のタグ:"
+  },
+  "GourmetPage": {
+    "description": "訪れたお店の記録を何となく残しておこうとする場所。写真は素人。",
+    "location": "場所",
+    "genre": "ジャンル",
+    "relatedPosts": "他の投稿"
+  },
+  "SummaryPage": {
+    "description": "個人的にウォッチしているTech系の情報を生成AIで要約したものを公開する場所。",
+    "title": "{dateString} AI 要約"
+  }
+}

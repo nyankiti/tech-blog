@@ -1,6 +1,7 @@
 import { compareDesc } from "date-fns";
 import { generatePostsDescription } from "./generate-posts-description";
 import { BLOG_CONTENTS_URL } from "@/constants";
+import { Locale } from "next-intl";
 
 export type TechBlogPost = {
   title: string;
@@ -15,18 +16,19 @@ export type TechBlogPost = {
   description?: string;
 };
 
-let cachedTechBlogPosts: TechBlogPost[] | null = null;
-
-export const getAllPosts = async (): Promise<TechBlogPost[]> => {
-  if (cachedTechBlogPosts) return cachedTechBlogPosts;
-
-  const response = await fetch(`${BLOG_CONTENTS_URL}/posts.json`);
+export const getAllPosts = async (locale: Locale): Promise<TechBlogPost[]> => {
+  const fetchUrl =
+    locale === "ja"
+      ? `${BLOG_CONTENTS_URL}/posts.json`
+      : `${BLOG_CONTENTS_URL}/en/posts.json`;
+  const response = await fetch(fetchUrl);
   if (!response.ok) {
     console.error("Failed to fetch posts.json");
     return [];
   }
+
   const posts = (await response.json()) as TechBlogPost[];
-  cachedTechBlogPosts = await Promise.all(
+  const result = await Promise.all(
     posts
       .filter((post) => post.isPublished && !post.isDeleted)
       .map(async (post) => {
@@ -38,30 +40,33 @@ export const getAllPosts = async (): Promise<TechBlogPost[]> => {
         };
       })
   );
-  return cachedTechBlogPosts;
+  return result;
 };
 
 export const getTechBlogPost = async (
-  slug: string
+  slug: string,
+  locale: Locale
 ): Promise<TechBlogPost | null> => {
-  const posts = await getAllPosts();
+  const posts = await getAllPosts(locale);
   return posts.find((post) => post.slug === slug) ?? null;
 };
 
-export const getSortedPosts = async (): Promise<TechBlogPost[]> => {
-  const posts = await getAllPosts();
+export const getSortedPosts = async (
+  locale: Locale
+): Promise<TechBlogPost[]> => {
+  const posts = await getAllPosts(locale);
   return posts.sort((a, b) =>
     compareDesc(new Date(a.publishedAt), new Date(b.publishedAt))
   );
 };
 
-export const getSlugs = async (): Promise<string[]> => {
-  const posts = await getAllPosts();
+export const getSlugs = async (locale: Locale): Promise<string[]> => {
+  const posts = await getAllPosts(locale);
   return posts.map((post) => post.slug);
 };
 
-export const getTags = async (): Promise<string[]> => {
-  const posts = await getAllPosts();
+export const getTags = async (locale: Locale): Promise<string[]> => {
+  const posts = await getAllPosts(locale);
   return Array.from(new Set(posts.flatMap((post) => post.tags))).filter(
     (tag) => tag !== ""
   );

@@ -1,8 +1,11 @@
-import gorouImage from "../../public/gorou.jpg";
+import gorouImage from "../../public/gorou-illust.png";
+import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { IoLogoTwitter, IoLogoGithub } from "react-icons/io5";
 
-export const Profile = () => {
+export const Profile = async () => {
+  const t = await getTranslations("Profile");
+
   return (
     <div className="flex gap-2">
       <button
@@ -22,13 +25,10 @@ export const Profile = () => {
 
       <div className="grow">
         <h1 className="text-lg font-medium text-gray-800 dark:text-neutral-200">
-          管理人
+          {t("name")}
         </h1>
-
-        <p className="text-sm text-gray-600 dark:text-neutral-400">
-          23卒のweb屋さん, 日日是好日
-          <br />
-          実家猫のにゃんきちくんとnook（隅、隠れ家）が好き
+        <p className="text-sm text-gray-600 dark:text-neutral-400 whitespace-pre-wrap">
+          {t("description")}
           <br />
         </p>
 

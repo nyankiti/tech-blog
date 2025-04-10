@@ -1,0 +1,36 @@
+{
+  "HomePage": {
+    "siteDescription": "A personal blog where I jot down notes on interesting technologies, thought-provoking reads, and the occasional ramble.\n“Nook” means a quiet corner or a little hideaway — a fitting name for a space to think, explore, and experiment.\nBased in Japan, originally from here as well."
+  },
+  "Footer": {
+    "privacyPolicy": "Privacy Policy",
+    "inquiry": "Inquiry"
+  },
+  "Profile": {
+    "name": "sooooda",
+    "description": "A web developer who started out in 2023. Living each day with a “every day is a good day“ mindset.\nLover of cozy nooks and my family cat, にゃんきちくん."
+  },
+  "SearchBar": {
+    "placeholder": "Search articles..."
+  },
+  "Lab": {
+    "description": "A small lab for experimenting with technologies that catch my interest."
+  },
+  "LanguageSwitcher": {
+    "selectLanguage": "Select language"
+  },
+  "TagPage": {
+    "description": "Articles tagged with {tag}",
+    "selectedTag": "selected Tag:"
+  },
+  "GourmetPage": {
+    "description": "A casual place to keep notes on the places I've visited.\nPhotography skills? Strictly amateur.",
+    "location": "location",
+    "genre": "genre",
+    "relatedPosts": "Related posts"
+  },
+  "SummaryPage": {
+    "description": "Where I post generative AI summaries of tech topics I’m keeping an eye on.",
+    "title": "{dateString} summaries in Japanese"
+  }
+}

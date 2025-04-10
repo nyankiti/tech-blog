@@ -1,13 +1,12 @@
 import { Feed } from "feed";
+import { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { TechBlogPost } from "./posts";
-import {
-  BLOG_CONTENTS_URL,
-  SITE_DESCRIPTION,
-  SITE_TITLE,
-  SITE_URL,
-} from "@/constants";
+import { BLOG_CONTENTS_URL, SITE_TITLE, SITE_URL } from "@/constants";
 
-export const generateFeed = async () => {
+export const generateFeed = async (locale: Locale) => {
+  const t = await getTranslations({ locale, namespace: "HomePage" });
+
   const response = await fetch(`${BLOG_CONTENTS_URL}/posts.json`);
   if (!response.ok) {
     throw new Error("Failed to fetch posts.json");
@@ -19,7 +18,7 @@ export const generateFeed = async () => {
     title: SITE_TITLE,
     copyright: `All right reserved ${new Date().getFullYear()}, ${SITE_TITLE}`,
     language: "ja",
-    description: SITE_DESCRIPTION,
+    description: t("siteDescription"),
     link: SITE_URL.toString(),
     favicon: new URL("/favicon.ico", SITE_URL).toString(),
   });
