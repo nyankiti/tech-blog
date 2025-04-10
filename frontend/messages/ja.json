@@ -28,5 +28,9 @@
     "location": "場所",
     "genre": "ジャンル",
     "relatedPosts": "他の投稿"
+  },
+  "SummaryPage": {
+    "description": "個人的にウォッチしているTech系の情報を生成AIで要約したものを公開する場所。",
+    "title": "{dateString} AI 要約"
   }
 }

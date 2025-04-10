@@ -28,5 +28,9 @@
     "location": "location",
     "genre": "genre",
     "relatedPosts": "Related posts"
+  },
+  "SummaryPage": {
+    "description": "Where I post generative AI summaries of tech topics I’m keeping an eye on.",
+    "title": "{dateString} summaries in Japanese"
   }
 }

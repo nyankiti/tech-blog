@@ -6,14 +6,17 @@ import SummaryTabs from "./components/SummaryTabs";
 import SummaryTOC from "./components/SummaryTOC";
 import { Suspense } from "react";
 import TabContentLoader from "./components/TabContentLoader";
+import { Locale } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 type Props = {
-  params: Promise<{ dateString: string }>;
+  params: Promise<{ dateString: string; locale: Locale }>;
   searchParams: Promise<{ tab?: string }>;
 };
 
 export default async function Page({ params, searchParams }: Props) {
   const { dateString } = await params;
+  const t = await getTranslations("SummaryPage");
   const { tab } = await searchParams;
   const activeTab = tab || "tech-feed";
 
@@ -48,7 +51,10 @@ export default async function Page({ params, searchParams }: Props) {
           {/* メインコンテンツ */}
           <DateSelector currentDate={dateString} summaryDates={summaryDates} />
           <header className="flex flex-col-reverse gap-1 mb-4">
-            <h1 className="font-bold text-4xl">{dateString} AI 要約</h1>
+            <h1 className="font-bold text-4xl">
+              {/* {dateString} AI 要約 */}
+              {t("title", { dateString })}
+            </h1>
           </header>
           <div className="prose dark:prose-invert break-all">
             <Suspense fallback={<TabContentLoader />}>
