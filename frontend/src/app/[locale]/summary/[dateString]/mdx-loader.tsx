@@ -7,8 +7,7 @@ export const preprocessMDX = (content: string): string => {
   return (
     content
       // JSX風の "<タグ" を含むが、JSXではない可能性のある文字列を検出してエスケープ
-      .replace(/<([a-zA-Z][^>\s]*)/g, (_match, p1) => "`<" + p1)
-      .replace(/>/g, ">`")
+      .replace(/<([a-zA-Z][^>\s]*)/g, (_match, p1) => "\\<" + p1)
       // .{js,ts} をリテラルとして扱うために中括弧をエスケープ
       .replace(/\.{([a-z]+,[a-z]+)}/gi, (_match, p1) => `\`{${p1}}\``)
   );
