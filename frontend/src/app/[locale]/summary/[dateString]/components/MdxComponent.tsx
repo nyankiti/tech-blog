@@ -1,6 +1,5 @@
 "use client";
 import { useMemo } from "react";
-import he from "he";
 import { getMDXComponent } from "mdx-bundler/client";
 import { MDXProvider, useMDXComponents } from "@mdx-js/react";
 import { RiShareBoxFill } from "react-icons/ri";
@@ -9,7 +8,6 @@ const GLOBAL_CONFIG = {
   MdxJsReact: {
     useMDXComponents,
   },
-  he: he,
 };
 
 type Props = {

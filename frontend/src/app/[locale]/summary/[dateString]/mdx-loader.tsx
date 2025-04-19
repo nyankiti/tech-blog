@@ -3,14 +3,21 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import rehypeToc, { HtmlElementNode } from "rehype-toc";
 
+export const preprocessMDX = (content: string): string => {
+  return (
+    content
+      // JSX風の "<タグ" を含むが、JSXではない可能性のある文字列を検出してエスケープ
+      .replace(/<([a-zA-Z][^>\s]*)/g, (_match, p1) => "`<" + p1)
+      .replace(/>/g, ">`")
+      // .{js,ts} をリテラルとして扱うために中括弧をエスケープ
+      .replace(/\.{([a-z]+,[a-z]+)}/gi, (_match, p1) => `\`{${p1}}\``)
+  );
+};
+
 export const loadMDX = async (fileContent: string) => {
   return bundleMDX({
-    source: fileContent,
+    source: preprocessMDX(fileContent),
     globals: {
-      globalMetadataMap: {
-        varName: "globalMetadataMap",
-      },
-      he: "he",
       "@mdx-js/react": {
         varName: "MdxJsReact",
         namedExports: ["useMDXComponents"],
@@ -67,7 +74,7 @@ export const loadMDX = async (fileContent: string) => {
     },
     esbuildOptions(options) {
       options.define = {
-        "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV), // Reactのモードを固定
+        "process.env": JSON.stringify(process.env),
       };
       return options;
     },
