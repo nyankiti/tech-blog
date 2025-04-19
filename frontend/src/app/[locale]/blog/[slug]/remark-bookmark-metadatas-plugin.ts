@@ -1,11 +1,12 @@
 import type { Root } from "mdast";
+import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
 import type { MdxJsxAttribute } from "mdast-util-mdx-jsx";
 import { getImageDimensions } from "@/libs/image";
 import { fetchSiteMetadata } from "@/libs/sitemetadata";
 
-export const remarkBookmarkMetadatasPlugin = () => {
-  return async function transformer(tree: Root) {
+export const remarkBookmarkMetadatasPlugin: Plugin<[], Root> = () => {
+  return async function transformer(tree) {
     const promises: Promise<void>[] = [];
     visit(tree, "mdxJsxFlowElement", (node) => {
       const promise = (async () => {

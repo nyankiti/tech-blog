@@ -1,11 +1,11 @@
-import { Node } from "unist";
-import { Image } from "mdast";
+import { Image, Root } from "mdast";
+import type { Plugin } from "unified";
 import { visit } from "unist-util-visit";
 import { BLOG_CONTENTS_URL } from "@/constants";
 import { getImageDimensions } from "@/libs/image";
 
-export const remarkImageDimesionsPlugin = () => {
-  return async function transformer(tree: Node) {
+export const remarkImageDimesionsPlugin: Plugin<[], Root> = () => {
+  return async function transformer(tree) {
     const promises: Promise<void>[] = [];
     visit(tree, "image", (node: Image) => {
       const promise = (async () => {
