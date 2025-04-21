@@ -6,8 +6,14 @@ import rehypeToc, { HtmlElementNode } from "rehype-toc";
 export const preprocessMDX = (content: string): string => {
   return (
     content
-      // JSX風の "<タグ" を含むが、JSXではない可能性のある文字列を検出してエスケープ
-      .replace(/<([a-zA-Z][^>\s]*)/g, (_match, p1) => "\\<" + p1)
+      // summaryではmdxの機能を利用しないのでパースエラー対策で全てエスケープする
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/=/g, "&#61;")
+      // htmlコメントのエスケープ（例: <!-- comment -->）
+      .replace(/<!--([\s\S]*?)-->/g, (_, content) => {
+        return `{/* ${content.trim()} */}`;
+      })
       // .{js,ts} をリテラルとして扱うために中括弧をエスケープ
       .replace(/\.{([a-z]+,[a-z]+)}/gi, (_match, p1) => `\`{${p1}}\``)
   );
